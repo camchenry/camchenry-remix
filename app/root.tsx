@@ -1,8 +1,13 @@
-import type { LinksFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
 import { Meta, Links, Scripts, useRouteData, LiveReload } from "remix";
 import { Outlet } from "react-router-dom";
 
 import stylesUrl from "./styles/global.css";
+import { defaultMeta } from "./meta";
+
+export const meta: MetaFunction = () => {
+  return defaultMeta;
+};
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
@@ -35,9 +40,16 @@ export default function App() {
   const data = useRouteData();
   return (
     <Document>
+      <nav>
+        <a href="/">Home</a>
+        <a href="/blog">Blog</a>
+      </nav>
       <Outlet />
       <footer>
-        <p>This page was rendered at {data.date.toLocaleString()}</p>
+        <small>© Cameron McHenry 2016-{new Date().getFullYear()}</small>
+        {process.env.NODE_ENV === "development" && (
+          <p>This page was rendered at {data.date.toLocaleString()}</p>
+        )}
       </footer>
     </Document>
   );
