@@ -7,6 +7,7 @@ import parseFrontmatter from "remark-parse-frontmatter";
 import parse from "remark-parse";
 import unified from "unified";
 import gfm from "remark-gfm";
+import highlight from "remark-highlight.js";
 
 export type PostMetadata = {
   title: string;
@@ -89,6 +90,7 @@ export async function getPost(
     .use(parseFrontmatter)
     .use(gfm)
     .use(html)
+    .use(highlight, ["bash"])
     .process(file.toString());
   const metadata = (processed.data as Record<string, unknown> | null)
     ?.frontmatter;

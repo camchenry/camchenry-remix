@@ -2,6 +2,13 @@ import { LoaderFunction, MetaFunction, redirect, useRouteData } from "remix";
 import { defaultMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts";
 
+import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
+import { LinksFunction } from "remix";
+
+export const links: LinksFunction = () => {
+  return [{ rel: "stylesheet", href: highlightStyles }];
+};
+
 export const meta: MetaFunction = ({ data }) => {
   return {
     ...defaultMeta,
