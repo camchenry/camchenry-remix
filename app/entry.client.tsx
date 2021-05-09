@@ -5,5 +5,5 @@ import { RemixBrowser } from "remix";
 // `Element | DocumentFragment | null` but React 16 allows you to pass the
 // `document` object as well. This is a bug in @types/react-dom that we can
 // safely ignore for now.
-// @ts-expect-error
+// @ts-expect-error See above comment
 ReactDOM.hydrate(<RemixBrowser />, document);

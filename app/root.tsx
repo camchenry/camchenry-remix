@@ -4,11 +4,11 @@ import { Outlet } from "react-router-dom";
 
 import stylesUrl from "./styles/global.css";
 
-export let links: LinksFunction = () => {
+export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-export let loader: LoaderFunction = async () => {
+export const loader: LoaderFunction = async () => {
   return { date: new Date() };
 };
 
@@ -32,7 +32,7 @@ function Document({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  let data = useRouteData();
+  const data = useRouteData();
   return (
     <Document>
       <Outlet />
