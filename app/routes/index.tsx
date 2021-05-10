@@ -1,9 +1,12 @@
+import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
+import PostCard from "../components/PostCard";
+import { H1, H2, H3 } from "../components/styled";
 import { defaultMeta } from "../meta";
 import { getPosts, PostData } from "../services/posts";
 
-import stylesUrl from "../styles/index.css";
+import stylesUrl from "../styles/routes/index.css";
 
 export const meta: MetaFunction = () => {
   return { ...defaultMeta };
@@ -26,19 +29,22 @@ export default function Index() {
   const data = useRouteData<RouteData>();
   return (
     <div>
-      <h1>Cameron McHenry</h1>
-      <p>
-        is passionate about building web applications and tools that make the
-        world better.
-      </p>
-      <h2>Posts</h2>
-      <ul>
+      <div className="text-center mb-8">
+        <H1 className="mb-4">Cameron McHenry</H1>
+        <p className="text-gray-700">
+          is passionate about building web applications and tools that make the
+          world better.
+        </p>
+      </div>
+      <H2 className="mb-4">Posts</H2>
+      <ul className="flex flex-col space-y-4">
         {data.posts.map((post) => (
           <li>
-            <h3>
-              <a href={`/blog/${post.id}`}>{post.metadata.title}</a>
-            </h3>
-            <p>{post.metadata.summary}</p>
+            <PostCard
+              id={post.id}
+              title={post.metadata.title}
+              summary={post.metadata.summary}
+            />
           </li>
         ))}
       </ul>

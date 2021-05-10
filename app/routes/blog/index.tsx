@@ -1,4 +1,7 @@
+import React from "react";
 import { LoaderFunction, useRouteData } from "remix";
+import PostCard from "../../components/PostCard";
+import { H2 } from "../../components/styled";
 import { getPosts, PostData } from "../../services/posts";
 
 export const loader: LoaderFunction = async () => {
@@ -10,14 +13,15 @@ export default function BlogPostIndex() {
   const posts = useRouteData<PostData[]>();
   return (
     <div>
-      <h2>Posts</h2>
-      <ul>
+      <H2 className="mb-4">Posts</H2>
+      <ul className="flex flex-col space-y-4">
         {posts.map((post) => (
           <li>
-            <h3>
-              <a href={`/blog/${post.id}`}>{post.metadata.title}</a>
-            </h3>
-            <p>{post.metadata.summary}</p>
+            <PostCard
+              id={post.id}
+              title={post.metadata.title}
+              summary={post.metadata.summary}
+            />
           </li>
         ))}
       </ul>
