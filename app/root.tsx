@@ -41,9 +41,11 @@ export default function App() {
   return (
     <Document>
       <nav className="container mx-auto p-3">
-        <ul className="flex space">
+        <ul className="flex justify-center">
           <li className="mr-4">
-            <a href="/">Home</a>
+            <a href="/">
+              <span className="font-bold">Cameron McHenry</span>
+            </a>
           </li>
           <li>
             <a href="/blog">Blog</a>
