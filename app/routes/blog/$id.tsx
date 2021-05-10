@@ -6,6 +6,13 @@ import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl
 import { LinksFunction } from "remix";
 import React from "react";
 import { H1 } from "../../components/styled";
+import { format, zonedTimeToUtc } from "date-fns-tz";
+
+/**
+ * This is the time zone that is used for interpreting dates in the project, since
+ * I (Cameron McHenry) live on the East Coast.
+ */
+const defaultTimeZone = "America/New_York";
 
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: highlightStyles }];
@@ -32,6 +39,10 @@ export default function BlogPost() {
   const data = useRouteData<PostData>();
   console.log(data);
 
+  const postDate = new Date(
+    zonedTimeToUtc(data.metadata.publishedAt, defaultTimeZone).valueOf()
+  );
+
   return (
     <div className="mx-auto max-w-2xl">
       <H1 className="mb-2 md:mb-4 md:text-4xl md:text-center">
@@ -40,7 +51,7 @@ export default function BlogPost() {
       <div className="mb-4 md:text-center">
         By Cameron McHenry on{" "}
         <time>
-          {new Date(Date.parse(data.metadata.publishedAt)).toLocaleDateString()}
+          {format(postDate, "MMMM d, yyyy", { timeZone: defaultTimeZone })}
         </time>
       </div>
       <hr className="my-4" />
