@@ -29,25 +29,27 @@ export default function Index() {
   const data = useRouteData<RouteData>();
   return (
     <div>
-      <div className="text-center mb-8">
-        <H1 className="mb-4">Cameron McHenry</H1>
+      <header className="text-center mb-8 lg:my-16">
+        <H1 className="mb-4 font-black lg:text-5xl">Cameron McHenry</H1>
         <p className="text-gray-700">
           is passionate about building web applications and tools that make the
           world better.
         </p>
+      </header>
+      <div className="max-w-prose mx-auto">
+        <H2 className="mb-4">Posts</H2>
+        <ul className="flex flex-col space-y-4">
+          {data.posts.map((post) => (
+            <li>
+              <PostCard
+                id={post.id}
+                title={post.metadata.title}
+                summary={post.metadata.summary}
+              />
+            </li>
+          ))}
+        </ul>
       </div>
-      <H2 className="mb-4">Posts</H2>
-      <ul className="flex flex-col space-y-4">
-        {data.posts.map((post) => (
-          <li>
-            <PostCard
-              id={post.id}
-              title={post.metadata.title}
-              summary={post.metadata.summary}
-            />
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

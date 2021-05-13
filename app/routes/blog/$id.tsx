@@ -45,14 +45,16 @@ export default function BlogPost() {
 
   return (
     <div className="mx-auto max-w-2xl">
-      <H1 className="mb-2 md:mb-4 md:text-4xl md:text-center">
-        {data.metadata.title}
-      </H1>
-      <div className="mb-4 md:text-center">
-        By Cameron McHenry on{" "}
-        <time>
-          {format(postDate, "MMMM d, yyyy", { timeZone: defaultTimeZone })}
-        </time>
+      <div className="md:my-8">
+        <H1 className="mb-2 font-bold md:mb-4 md:text-4xl md:text-center">
+          {data.metadata.title}
+        </H1>
+        <div className="mb-4 md:text-center">
+          By Cameron McHenry on{" "}
+          <time>
+            {format(postDate, "MMMM d, yyyy", { timeZone: defaultTimeZone })}
+          </time>
+        </div>
       </div>
       <hr className="my-4" />
       <p className="prose mx-auto">
