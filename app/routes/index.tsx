@@ -29,9 +29,9 @@ export default function Index() {
   const data = useRouteData<RouteData>();
   return (
     <div>
-      <header className="text-center mb-8 lg:my-16">
+      <header className="text-center mb-8 lg:my-16 bg-green-400 flex flex-col align-center justify-center p-16 mx-auto max-w-3xl rounded rounded-lg">
         <H1 className="mb-4 font-black lg:text-5xl">Cameron McHenry</H1>
-        <p className="text-gray-700">
+        <p className="text-green-900">
           is passionate about building web applications and tools that make the
           world better.
         </p>
