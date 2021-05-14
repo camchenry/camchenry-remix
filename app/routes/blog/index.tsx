@@ -12,7 +12,7 @@ export const loader: LoaderFunction = async () => {
 export default function BlogPostIndex() {
   const posts = useRouteData<PostData[]>();
   return (
-    <div className="max-w-prose mx-auto">
+    <div className="max-w-prose mx-auto my-4 lg:my-16">
       <H1 className="mb-4">Posts</H1>
       <ul className="flex flex-col space-y-4">
         {posts.map((post) => (

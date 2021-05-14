@@ -9,3 +9,8 @@ export const H2 = tw.h2`
 export const H3 = tw.h3`
   text-xl
 `;
+
+export const Hr = tw.hr`
+  my-4
+  md:my-6
+`;

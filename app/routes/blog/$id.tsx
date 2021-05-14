@@ -5,7 +5,7 @@ import { getPost, PostData } from "../../services/posts";
 import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
 import { LinksFunction } from "remix";
 import React from "react";
-import { H1 } from "../../components/styled";
+import { H1, Hr } from "../../components/styled";
 import { format, zonedTimeToUtc } from "date-fns-tz";
 
 /**
@@ -44,8 +44,8 @@ export default function BlogPost() {
   );
 
   return (
-    <div className="mx-auto max-w-2xl">
-      <div className="md:my-8">
+    <div>
+      <div className="md:my-12 mx-auto max-w-3xl lg:max-w-4xl">
         <H1 className="mb-2 font-bold md:mb-4 md:text-4xl md:text-center">
           {data.metadata.title}
         </H1>
@@ -56,15 +56,17 @@ export default function BlogPost() {
           </time>
         </div>
       </div>
-      <hr className="my-4" />
-      <p className="prose mx-auto">
-        <span className="font-bold">Summary</span> ❧ {data.metadata.summary}
-      </p>
-      <hr className="my-4" />
-      <main
-        className="prose mx-auto"
-        dangerouslySetInnerHTML={{ __html: data.text }}
-      />
+      <div className="mx-auto max-w-2xl mb-10">
+        <Hr />
+        <p className="prose mx-auto">
+          <span className="font-bold">Summary</span> ❧ {data.metadata.summary}
+        </p>
+        <Hr />
+        <main
+          className="prose mx-auto"
+          dangerouslySetInnerHTML={{ __html: data.text }}
+        />
+      </div>
     </div>
   );
 }

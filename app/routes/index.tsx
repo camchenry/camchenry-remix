@@ -1,6 +1,7 @@
 import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
+import tw from "tailwind-styled-components";
 import PostCard from "../components/PostCard";
 import { H1, H2, H3 } from "../components/styled";
 import { defaultMeta } from "../meta";
@@ -25,17 +26,39 @@ type RouteData = {
   posts: PostData[];
 };
 
+const Header = tw.header`
+  lg:text-center
+  p-6
+  lg:p-16
+  mb-8
+  mx-auto
+  lg:my-16
+  lg:mb-24
+  flex
+  flex-col
+  align-center
+  justify-center
+  max-w-3xl
+  rounded
+  rounded-lg
+  shadow-md
+  lg:shadow-2xl
+`;
+
 export default function Index() {
   const data = useRouteData<RouteData>();
   return (
-    <div>
-      <header className="text-center mb-8 lg:my-16 bg-green-400 flex flex-col align-center justify-center p-16 mx-auto max-w-3xl rounded rounded-lg">
-        <H1 className="mb-4 font-black lg:text-5xl">Cameron McHenry</H1>
-        <p className="text-green-900">
-          is passionate about building web applications and tools that make the
-          world better.
+    <div className="mb-10">
+      <Header>
+        <H1 className="mb-4 py-2  font-black lg:text-5xl bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">
+          Cameron McHenry
+        </H1>
+        <p className="text-white-500 text-lg filter">
+          is passionate about building web applications and tools
+          <br />
+          that make the world better.
         </p>
-      </header>
+      </Header>
       <div className="max-w-prose mx-auto">
         <H2 className="mb-4">Posts</H2>
         <ul className="flex flex-col space-y-4">
