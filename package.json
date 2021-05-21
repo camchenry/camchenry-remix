@@ -35,9 +35,7 @@
     "remark-parse-frontmatter": "^1.0.3",
     "remix": "0.17.0",
     "tailwindcss": "^2.1.2",
-    "to-vfile": "^7.0.0",
-    "unified": "^9.2.1",
-    "vfile": "^5.0.1"
+    "unified": "^9.2.1"
   },
   "devDependencies": {
     "@remix-run/dev": "0.17.0",
