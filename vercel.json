@@ -32,5 +32,10 @@
         }
       ]
     }
-  ]
+  ],
+  "functions": {
+    "server/index.js": {
+      "includeFiles": "../posts"
+    }
+  }
 }
