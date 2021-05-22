@@ -26,12 +26,6 @@
   "functions": {
     "server/index.js": {
       "includeFiles": "../posts"
-    },
-    "public/**/*": {
-      "runtime": "@vercel/static"
-    },
-    "index.js": {
-      "runtime": "@vercel/node"
     }
   }
 }
