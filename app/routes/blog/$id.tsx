@@ -1,5 +1,5 @@
 import { LoaderFunction, MetaFunction, redirect, useRouteData } from "remix";
-import { defaultMeta } from "../../meta";
+import { defaultMeta, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts";
 
 import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
@@ -19,11 +19,10 @@ export const links: LinksFunction = () => {
 };
 
 export const meta: MetaFunction = ({ data }) => {
-  return {
-    ...defaultMeta,
+  return generateMeta({
     title: data?.metadata?.title ?? defaultMeta.title,
     description: data?.metadata?.summary ?? defaultMeta.description,
-  };
+  });
 };
 
 export const loader: LoaderFunction = async ({ params }) => {

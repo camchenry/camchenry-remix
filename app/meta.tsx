@@ -1,12 +1,41 @@
-export const title = "Cameron McHenry";
+export type MetaFields =
+  | "title"
+  | "description"
+  | "twitter:card"
+  | "twitter:title"
+  | "twitter:description"
+  | "twitter:creator"
+  | "og:title"
+  | "og:description"
+  | "og:image";
 
-export const description =
+export const defaultTitle = "Cameron McHenry";
+
+export const defaultDescription =
   "Cameron McHenry is passionate about building web applications and tools that make the world better.";
 
-export const defaultMeta = {
-  title: title,
-  description: description,
+export const defaultMeta: Partial<Record<MetaFields, string>> = {
+  title: defaultTitle,
+  description: defaultDescription,
+  "og:title": defaultTitle,
+  "og:description": defaultDescription,
   "twitter:creator": "@cammchenry",
   "twitter:card": "summary",
-  "twitter:title": title,
+  "twitter:title": defaultTitle,
+  "twitter:description": defaultDescription,
 };
+
+type GenerateMeta = {
+  title: string;
+  description: string;
+};
+
+export const generateMeta = ({ title, description }: GenerateMeta) => ({
+  ...defaultMeta,
+  title,
+  description,
+  "og:title": title,
+  "og:description": description,
+  "twitter:title": title,
+  "twitter:description": description,
+});

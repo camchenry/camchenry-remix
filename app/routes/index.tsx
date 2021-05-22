@@ -10,7 +10,7 @@ import { getPosts, PostData } from "../services/posts";
 import stylesUrl from "../styles/routes/index.css";
 
 export const meta: MetaFunction = () => {
-  return { ...defaultMeta };
+  return defaultMeta;
 };
 
 export const links: LinksFunction = () => {
