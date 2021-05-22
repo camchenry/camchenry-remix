@@ -1,7 +1,7 @@
 {
-  "github": [
+  "github": {
     "enabled": false
-  ],
+  },
   "builds": [
     {
       "src": "public/**/*",
