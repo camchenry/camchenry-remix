@@ -79,7 +79,7 @@ export async function getPost(
   if (!postId) {
     return null;
   }
-  const postPath = path.join(__dirname, `../app/posts/${postId}.md`);
+  const postPath = path.join(__dirname, `../posts/${postId}.md`);
   if (!fs.existsSync(postPath)) {
     return null;
   }
