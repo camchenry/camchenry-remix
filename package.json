@@ -4,7 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
-    "build": "remix build",
+    "build": "npm run build:css && remix build",
     "dev": "remix run",
     "start": "remix-serve build",
     "lint": "eslint --ext js,jsx,ts,tsx app/**",

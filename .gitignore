@@ -6,3 +6,5 @@ build
 /public/build
 
 /app/styles
+
+.vercel
