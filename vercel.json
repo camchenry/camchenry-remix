@@ -2,16 +2,6 @@
   "github": {
     "enabled": false
   },
-  "builds": [
-    {
-      "src": "public/**/*",
-      "use": "@vercel/static"
-    },
-    {
-      "src": "index.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
       "source": "/(.*)",
@@ -36,6 +26,12 @@
   "functions": {
     "server/index.js": {
       "includeFiles": "../posts"
+    },
+    "public/**/*": {
+      "runtime": "@vercel/static"
+    },
+    "index.js": {
+      "runtime": "@vercel/node"
     }
   }
 }
