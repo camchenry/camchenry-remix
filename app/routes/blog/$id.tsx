@@ -36,7 +36,6 @@ export const loader: LoaderFunction = async ({ params }) => {
 
 export default function BlogPost() {
   const data = useRouteData<PostData>();
-  console.log(data);
 
   const postDate = new Date(
     zonedTimeToUtc(data.metadata.publishedAt, defaultTimeZone).valueOf()
