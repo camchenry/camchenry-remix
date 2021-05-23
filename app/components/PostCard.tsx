@@ -9,7 +9,7 @@ type PostCardProps = {
 
 export default function PostCard({ id, title, summary }: PostCardProps) {
   return (
-    <div>
+    <div className="py-5">
       <H3>
         <a href={`/blog/${id}`}>{title}</a>
       </H3>
