@@ -63,7 +63,7 @@ export default function Index() {
         <H2 className="mb-4">Posts</H2>
         <ul className="flex flex-col space-y-4">
           {data.posts.map((post) => (
-            <li>
+            <li key={post.id}>
               <PostCard
                 id={post.id}
                 title={post.metadata.title}
