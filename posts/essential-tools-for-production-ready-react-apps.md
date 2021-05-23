@@ -2,6 +2,10 @@
 title: "Essential Tools for Production-Ready React Apps"
 summary: "In this post, we'll look at the tools and technologies that I would recommend based on my personal experience for building feature packed, maintainable, and production-ready React apps."
 publishedAt: "2021-01-29"
+tags:
+  - react
+  - build-tools
+  - linting
 ---
 
 ## Introduction
