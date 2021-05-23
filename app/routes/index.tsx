@@ -50,7 +50,7 @@ export default function Index() {
   return (
     <div className="mb-10">
       <Header>
-        <H1 className="mb-4 py-2  font-black lg:text-5xl bg-gradient-to-r from-green-400 via-blue-500 to-purple-500">
+        <H1 className="mb-4 py-2  font-black lg:text-5xl bg-gradient-to-r from-green-400 to-green-600">
           Cameron McHenry
         </H1>
         <p className="text-white-500 text-lg filter">

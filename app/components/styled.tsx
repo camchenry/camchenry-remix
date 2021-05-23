@@ -13,4 +13,5 @@ export const H3 = tw.h3`
 export const Hr = tw.hr`
   my-4
   md:my-6
+  border-green-300
 `;

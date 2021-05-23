@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary-color: #10b981;
+}
+
 :focus:not(:focus-visible) {
   outline: none;
 }
@@ -14,4 +18,8 @@ body {
 
 .max-w-prose {
   max-width: 65ch;
+}
+
+.prose a {
+  text-decoration-color: var(--primary-color);
 }
