@@ -69,7 +69,12 @@ export async function getPosts(): Promise<PostData[]> {
       .map((postName) => getPost(postName))
       .filter(notNullOrUndefined)
   );
-  const filtered = posts.filter(notNullOrUndefined);
+  const filtered = posts
+    .filter(notNullOrUndefined)
+    .sort(
+      (a, b) =>
+        -1 * a.metadata.publishedAt.localeCompare(b.metadata.publishedAt)
+    );
   return filtered;
 }
 
