@@ -1,12 +1,16 @@
 ---
 title: "Performing Surgery on Types with Modify"
 summary: "The Modify type can be used to replace properties in types, which can be useful when working with libraries that have non-generic types."
-publishedAt: "2021-05-20"
+publishedAt: "2021-05-24"
 tags:
   - typescript
 ---
 
-If you would like to follow along this article's code: [TypeScript playground](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgIilQ3wG4AocmATzCTgFkIATYTagHgBVakAaREjAAbdEgB8cALxwA8iGAxuvAQGsk1CJkEixkgGQ7RaJBSq84ABSRQAzhAB20uAG9ycOA5QgkALji2MFDADgDmFB4ooX6eAK4gAEY2EXAozMxEtrb+gcFhFAC+ZjR0RmLOLqnpmdkBQSGhcAA+cBAJAFZIGHBFlCX0AILO8ooc1naOahpaZSbipHAA9ItwQzKVXj459fmp0f4O8UlQCwXmpQBCzsi6JgvLcFfrVRlIWdt5jS1tnRin5-QmKxMMAkMxnENDBd7isgWxQeDnpsYrkGgsojFDolki8ah8Gs1Wh0ujB-uQHgN4DAABbAWxwSAhGACOEgsHSGSszjjewOAQ3YwSchoRyBBk2XkVdyebwxfAwN4wfB8aUY-wAZgADCrItU3rVKrkkEgYP58ABGABM6rgSAAHt4RPQjSb8D0Vb0HhcIDTUkQ5ABpXzC0XwOgTBzm-yshHOcO8igihxi+OOS3RlhsbkSyazCRxnMOMwPKSlsvliuVqvVyvklYDMBgW0O8DCJB1jk1rvdruUB4AdUU1IgsXgXI7PcnU7LlCZNkw5S4tKgzEsKFg1AAkgq8G4PA8AHKy1raGn0RRIEDS5H4-LSh5LulwZgoGAoOBoFBOJKpBzUGkEposRwAA7l+zJwIoADk9LtLEYooFkEBoMAr5gveKwgUOcBnpBO4CAko6eD6cDweyIS-tQoEoNQ0ovm+-hftQhSzg4CpQAuJhwI+K5rhuAAydIwJYOBgPSe54ZetQ8au640Nul4ANoALopI4ADCwjAGgqgAPz+AAFBeID+DJfHyTuACU0iSAAbhAwDMCx5CYLEDgYMAjjccuskCUJBmVMZ9IFKZPnmdQgmBCJEBidZElEDAsRQE4HCsLZSzzEs9ZZPE9AAfSrnuTAnlOOgiUoMIwhUVpgTsiOVLUueO70tAAS4CatJhOQZwhsmWBQLEigACKvigCSIfQ6yqo2bb+JUIrCNAZpEMwboFDqcDjV4XhzR+ECLVAZrUEglUQCBa0baEUAoHQu0LUtBBgElToXd1xYrFw13Jpg0B4COUBwNgg3wPRY0TZBbEQKkgO-Th1Kvh+X6bfQSa2Ll4IJFRZ4dvg6orgycnUG6IrgI4SBsaB9DrvQ8ENL1YpA4o9IyLIxIYAAdOT9RvAZjMwCNb7jbYSCWezIA3QZBmKXzR4+AIIQ-cp1lSJIAXXrK-gy7KG2g-4CsQB6lmWWYhUeV5DZgOaBlxRhcAAAIwLYAC09p0BgLtQDgh3cRYtgoJgJpUSB0CqLYACE3n0GAok2DQcAAAaIcwmDx5Bti2w4jgu3aQlc60Ti4XzEM-VA4vFV5-Ts9KqP7Ug7OLaEvMDUzimasp7Og+zSeYMblAeAlSVOAZ0oeNwYWE5FMAjx4kkgLYUguHzthnDPM8PLIsiWAAyhHB5QzYXvs3A-b0ItYr-Thvv+4HcCNf6SSfmRcN5T5BMbtP+4rCTkAOHnIG0mgakpFhb0njqDVOiEE5MXjh-fOmltKqAXk3YGytJA1zbPXCAjc+Yd1Gl3WwydLIrzXuIaUvceoPAAKq2AJOOEs04GG9gBHABSIAOACxQJITkmZ2AcGlGZQmrCNoSQ8LrOAHCUhnHmH0Cwk9opiXYaNLhjAeGcH4ePPyUVRK2GEdPIK-hWGKLfOIFSKQPAaS0jpfScAjI7gMTuIxnDUFwHso5SR5BpEdn7NdRsNg9qk1-hTGAUNxbqGhtEX+wQ0AuIlCVE83lgC8QnkJFybkzZOEntwcQBlo4xVqHI7RWSbb9xNIPOAY9Em+RoJPVw7M6m5LEgUDKzlTblycBbS01tXC2wds7V2JIPZe1MlfAOcdg5QFDhHJcUcY4bigQQlOacM5Z3tLnCmFdGqA2bvAfWpdXxxMrtXUUtdMHYO2bYVu7dO7d17tKAeyUbHTw4JPWBQUF5L2IavB4vTs5uxgIMh6PBSh+1GUHEO9IogoBCFMzZ-R4lgNGjA1en807FwPuybAuAE5BSRciixCCkF82ceguuDdkGKFwW+fBhDPkZTISxIAA).
+If you've worked in a large codebase with a large team, you'll know that sometimes working with less-than-ideal 3rd
+party library code can be inevitable sometimes. In a TypeScript project, this can often take the form of code that works,
+but does not have the proper typings. So, how do you ensure type safety in this case? Enter the `Modify` type.
+
+(If you would like to follow along with this article's code: [TypeScript playground](https://www.typescriptlang.org/play?#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgIilQ3wG4AocmATzCTgFkIATYTagHgBVakAaREjAAbdEgB8cALxwA8iGAxuvAQGsk1CJkEixkgGQ7RaJBSq84ABSRQAzhAB20uAG9ycOA5QgkALji2MFDADgDmFB4ooX6eAK4gAEY2EXAozMxEtrb+gcFhFAC+ZjR0RmLOLqnpmdkBQSGhcAA+cBAJAFZIGHBFlCX0AILO8ooc1naOahpaZSbipHAA9ItwQzKVXj459fmp0f4O8UlQCwXmpQBCzsi6JgvLcFfrVRlIWdt5jS1tnRin5-QmKxMMAkMxnENDBd7isgWxQeDnpsYrkGgsojFDolki8ah8Gs1Wh0ujB-uQHgN4DAABbAWxwSAhGACOEgsHSGSszjjewOAQ3YwSchoRyBBk2XkVdyebwxfAwN4wfB8aUY-wAZgADCrItU3rVKrkkEgYP58ABGABM6rgSAAHt4RPQjSb8D0Vb0HhcIDTUkQ5ABpXzC0XwOgTBzm-yshHOcO8igihxi+OOS3RlhsbkSyazCRxnMOMwPKSlsvliuVqvVyvklYDMBgW0O8DCJB1jk1rvdruUB4AdUU1IgsXgXI7PcnU7LlCZNkw5S4tKgzEsKFg1AAkgq8G4PA8AHKy1raGn0RRIEDS5H4-LSh5LulwZgoGAoOBoFBOJKpBzUGkEposRwAA7l+zJwIoADk9LtLEYooFkEBoMAr5gveKwgUOcBnpBO4CAko6eD6cDweyIS-tQoEoNQ0ovm+-hftQhSzg4CpQAuJhwI+K5rhuAAydIwJYOBgPSe54ZetQ8au640Nul4ANoALopI4ADCwjAGgqgAPz+AAFBeID+DJfHyTuACU0iSAAbhAwDMCx5CYLEDgYMAjjccuskCUJBmVMZ9IFKZPnmdQgmBCJEBidZElEDAsRQE4HCsLZSzzEs9ZZPE9AAfSrnuTAnlOOgiUoMIwhUVpgTsiOVLUueO70tAAS4CatJhOQZwhsmWBQLEigACKvigCSIfQ6yqo2bb+JUIrCNAZpEMwboFDqcDjV4XhzR+ECLVAZrUEglUQCBa0baEUAoHQu0LUtBBgElToXd1xYrFw13Jpg0B4COUBwNgg3wPRY0TZBbEQKkgO-Th1Kvh+X6bfQSa2Ll4IJFRZ4dvg6orgycnUG6IrgI4SBsaB9DrvQ8ENL1YpA4o9IyLIxIYAAdOT9RvAZjMwCNb7jbYSCWezIA3QZBmKXzR4+AIIQ-cp1lSJIAXXrK-gy7KG2g-4CsQB6lmWWYhUeV5DZgOaBlxRhcAAAIwLYAC09p0BgLtQDgh3cRYtgoJgJpUSB0CqLYACE3n0GAok2DQcAAAaIcwmDx5Bti2w4jgu3aQlc60Ti4XzEM-VA4vFV5-Ts9KqP7Ug7OLaEvMDUzimasp7Og+zSeYMblAeAlSVOAZ0oeNwYWE5FMAjx4kkgLYUguHzthnDPM8PLIsiWAAyhHB5QzYXvs3A-b0ItYr-Thvv+4HcCNf6SSfmRcN5T5BMbtP+4rCTkAOHnIG0mgakpFhb0njqDVOiEE5MXjh-fOmltKqAXk3YGytJA1zbPXCAjc+Yd1Gl3WwydLIrzXuIaUvceoPAAKq2AJOOEs04GG9gBHABSIAOACxQJITkmZ2AcGlGZQmrCNoSQ8LrOAHCUhnHmH0Cwk9opiXYaNLhjAeGcH4ePPyUVRK2GEdPIK-hWGKLfOIFSKQPAaS0jpfScAjI7gMTuIxnDUFwHso5SR5BpEdn7NdRsNg9qk1-hTGAUNxbqGhtEX+wQ0AuIlCVE83lgC8QnkJFybkzZOEntwcQBlo4xVqHI7RWSbb9xNIPOAY9Em+RoJPVw7M6m5LEgUDKzlTblycBbS01tXC2wds7V2JIPZe1MlfAOcdg5QFDhHJcUcY4bigQQlOacM5Z3tLnCmFdGqA2bvAfWpdXxxMrtXUUtdMHYO2bYVu7dO7d17tKAeyUbHTw4JPWBQUF5L2IavB4vTs5uxgIMh6PBSh+1GUHEO9IogoBCFMzZ-R4lgNGjA1en807FwPuybAuAE5BSRciixCCkF82ceguuDdkGKFwW+fBhDPkZTISxIAA))
 
 ## The Modify Type
 
@@ -97,7 +101,7 @@ function ThirdPartyList({ items }: ThirdPartyListProps) {
 ```
 
 All of the code that comes from the library is prefixed with `ThirdParty`, to show that we cannot change it. The
-`ThirdPartyList` component accepts an array of items, and a click event handler for when the user clicks on an item.
+`ThirdPartyList` component accepts an array of items and a click event handler for when the user clicks on an item.
 
 However, we will now see how the `any` type for the `data` property can cause some type safety problems.
 
@@ -133,7 +137,7 @@ function App() {
 
 When we access `fruits[0]`, TypeScript can infer the full type and ensure we cannot misuse the object. On the other
 hand, when we access the `fruit` argument in the `onClick` handler, the type is given by the definition of `ThirdPartyItem`
-which has `data` typed as `any`.
+which has `data` typed as `any`. This allows us to write code that can crash at run-time, which is never what we want.
 
 It would be great if we could just change the relevant props of `ThirdPartyList` to be generic so that TypeScript
 could infer all of the types and prevent us from making a mistake. We can do exactly that with `Modify`!
@@ -184,8 +188,8 @@ a property which does not exist.
 
 ## Caveats
 
-Modify is useful for overriding external types from libraries and creating safe wrappers around them, but it should not
-be the first thing to try.
+Modify is useful for overriding external types from libraries and creating safe wrappers around them, but it should
+probably not be the first thing that you try.
 
 If it is available, it is better to use a generic interface from the library that allows you to accomplish the same thing. Using
 `Modify` means maintaining an additional interface every time that the underlying library type updates too. Even more dangerously,
