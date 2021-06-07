@@ -8,6 +8,7 @@ import {
   registerFont,
 } from "canvas";
 import { getPost } from "./services/posts";
+import path from "./path";
 
 const getLines = (
   ctx: NodeCanvasRenderingContext2D,
@@ -156,11 +157,11 @@ export default async function handleRequest(
     if (!post) {
       return new Response("", { status: 404 });
     }
-    registerFont("assets/fonts/Inter-Regular.otf", {
+    registerFont(path.join(__dirname, "../../assets/fonts/Inter-Regular.otf"), {
       family: "Inter",
       weight: "400",
     });
-    registerFont("assets/fonts/Inter-Bold.otf", {
+    registerFont(path.join(__dirname, "../../assets/fonts/Inter-Bold.otf"), {
       family: "Inter",
       weight: "700",
     });
