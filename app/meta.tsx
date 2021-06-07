@@ -47,5 +47,6 @@ export const generateMeta = ({
   ...(image !== undefined && {
     "og:image": image,
     "twitter:image": image,
+    "twitter:card": "summary_large_image",
   }),
 });
