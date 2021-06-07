@@ -3,6 +3,7 @@ import type { EntryContext } from "remix";
 import { RemixServer } from "remix";
 import {
   createCanvas,
+  loadImage,
   NodeCanvasRenderingContext2D,
   registerFont,
 } from "canvas";
@@ -32,48 +33,107 @@ const getLines = (
 };
 
 type GenerateSocialImage = {
+  /**
+   * The name of the content.
+   */
   title: string;
+  /**
+   * Author name to display.
+   */
+  author?: string;
+  /**
+   * Width of the social image.
+   */
   width?: number;
+  /**
+   * Height of the social image.
+   */
   height?: number;
+  /**
+   * Font size to use for the title and author name.
+   */
   fontSize?: number;
+  /**
+   * How much margin to leave around the edges of the image.
+   */
   margin?: number;
+  /**
+   * Path to the author profile image to display.
+   */
+  profileImage?: string;
+  /**
+   * The radius of the author's profile image, if an image is supplied.
+   */
+  profileRadius?: number;
+  /**
+   * The font to use for all text in the social image.
+   */
+  font?: string;
 };
-const generateImage = ({
+const generateImage = async ({
   title,
   width = 1200,
   height = 630,
-  fontSize = 64,
+  fontSize = 72,
   margin = 60,
+  profileImage,
+  profileRadius = 120,
+  author = "Cameron McHenry",
+  font,
 }: GenerateSocialImage) => {
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  ctx.font = `${fontSize}px Inter`;
+  // Draw background gradient
+  const gradient = ctx.createLinearGradient(0, width, width, height);
+  gradient.addColorStop(0.3, "#6ee7b7");
+  gradient.addColorStop(1, "#60A5FA");
+  ctx.fillStyle = gradient;
+  ctx.fillRect(0, 0, width, height);
 
-  const text =
-    "The Ultimate Blog Post About Quintessential Random Topics for Long Titles";
-  const lines = getLines(ctx, text, width - margin * 2);
+  // Calculate font sizes and metrics
+  ctx.font = `bold ${fontSize}px ${font}`;
+  const titleLines = getLines(ctx, title, width - margin * 2);
   const lineHeight = fontSize * 1.2;
-  const textHeight = lines.length * lineHeight;
-
-  const bottomOfTitleText = height / 2 + textHeight / 2;
+  const textHeight = titleLines.length * lineHeight;
+  // Vertical spacing after the title before drawing the author info
+  const spacingAfterTitle = 50;
+  // Where to start drawing author info
+  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
 
   // Draw title text
-  lines
+  titleLines
     .map((line, index) => ({
       text: line,
       x: margin,
       y: (height - textHeight) / 2 + index * lineHeight,
     }))
     .forEach(({ text, x, y }) => {
+      ctx.fillStyle = "#000";
       ctx.fillText(text, x, y);
     });
 
-  ctx.font = "";
-  ctx.fillText("Cameron McHenry", margin, bottomOfTitleText + 25);
+  // Draw the author's profile picture
+  if (profileImage) {
+    const img = await loadImage(profileImage);
+    const x = margin;
+    const y = bottomOfTitleText - profileRadius + lineHeight / 2;
+    ctx.drawImage(img, x, y, profileRadius, profileRadius);
+  }
 
-  const png = canvas.toBuffer("image/png");
-  return png;
+  // Draw the author's name
+  const authorNameImageSpacing = 25;
+  const authorNamePosition = {
+    x:
+      profileImage === undefined
+        ? margin + authorNameImageSpacing
+        : margin + profileRadius + authorNameImageSpacing,
+    y: bottomOfTitleText,
+  };
+  ctx.font = `${fontSize}px ${font}`;
+  ctx.fillText(author, authorNamePosition.x, authorNamePosition.y);
+
+  return canvas.toBuffer("image/png");
 };
 
 export default async function handleRequest(
@@ -96,14 +156,28 @@ export default async function handleRequest(
     if (!post) {
       return new Response("", { status: 404 });
     }
-    registerFont("fonts/Inter-Regular.ttf", { family: "Inter" });
-    return new Response(generateImage({ title: post.metadata.title }), {
-      status: responseStatusCode,
-      headers: {
-        ...Object.fromEntries(responseHeaders),
-        "Content-Type": "image/png",
-      },
+    registerFont("assets/fonts/Inter-Regular.otf", {
+      family: "Inter",
+      weight: "400",
     });
+    registerFont("assets/fonts/Inter-Bold.otf", {
+      family: "Inter",
+      weight: "700",
+    });
+    return new Response(
+      await generateImage({
+        title: post.metadata.title,
+        profileImage: "assets/images/camchenry.png",
+        font: "Inter",
+      }),
+      {
+        status: 200,
+        headers: {
+          ...Object.fromEntries(responseHeaders),
+          "Content-Type": "image/png",
+        },
+      }
+    );
   }
 
   return new Response("<!DOCTYPE html>" + markup, {
