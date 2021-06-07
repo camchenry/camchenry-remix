@@ -18,10 +18,11 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: highlightStyles }];
 };
 
-export const meta: MetaFunction = ({ data }) => {
+export const meta: MetaFunction = ({ data }: { data: PostData }) => {
   return generateMeta({
     title: data?.metadata?.title ?? defaultMeta.title,
     description: data?.metadata?.summary ?? defaultMeta.description,
+    image: `https://camchenry.com/social-image?id=${data.id}`,
   });
 };
 
