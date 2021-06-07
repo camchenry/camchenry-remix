@@ -5,6 +5,7 @@ export type MetaFields =
   | "twitter:title"
   | "twitter:description"
   | "twitter:creator"
+  | "twitter:image"
   | "og:title"
   | "og:description"
   | "og:image";
@@ -31,7 +32,11 @@ type GenerateMeta = {
   image?: string;
 };
 
-export const generateMeta = ({ title, description, image }: GenerateMeta) => ({
+export const generateMeta = ({
+  title,
+  description,
+  image,
+}: GenerateMeta): Partial<Record<MetaFields, string>> => ({
   ...defaultMeta,
   title,
   description,
@@ -39,5 +44,8 @@ export const generateMeta = ({ title, description, image }: GenerateMeta) => ({
   "og:description": description,
   "twitter:title": title,
   "twitter:description": description,
-  ...(image !== undefined && { "og-image": image }),
+  ...(image !== undefined && {
+    "og:image": image,
+    "twitter:image": image,
+  }),
 });
