@@ -15,13 +15,13 @@ const getLines = (
   text: string,
   maxWidth: number
 ) => {
-  var words = text.split(" ");
-  var lines = [];
-  var currentLine = words[0];
+  const words = text.split(" ");
+  const lines = [];
+  let currentLine = words[0];
 
-  for (var i = 1; i < words.length; i++) {
-    var word = words[i];
-    var width = ctx.measureText(currentLine + " " + word).width;
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    const width = ctx.measureText(currentLine + " " + word).width;
     if (width < maxWidth) {
       currentLine += " " + word;
     } else {
@@ -75,7 +75,7 @@ const generateImage = async ({
   title,
   width = 1200,
   height = 630,
-  fontSize = 72,
+  fontSize = 80,
   margin = 60,
   profileImage,
   profileRadius = 120,
@@ -97,10 +97,6 @@ const generateImage = async ({
   const titleLines = getLines(ctx, title, width - margin * 2);
   const lineHeight = fontSize * 1.2;
   const textHeight = titleLines.length * lineHeight;
-  // Vertical spacing after the title before drawing the author info
-  const spacingAfterTitle = 50;
-  // Where to start drawing author info
-  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
 
   // Draw title text
   titleLines
@@ -113,6 +109,11 @@ const generateImage = async ({
       ctx.fillStyle = "#000";
       ctx.fillText(text, x, y);
     });
+
+  // Vertical spacing after the title before drawing the author info
+  const spacingAfterTitle = 50;
+  // Where to start drawing author info
+  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
 
   // Draw the author's profile picture
   if (profileImage) {
