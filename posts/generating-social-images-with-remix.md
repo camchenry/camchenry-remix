@@ -15,15 +15,20 @@ tags:
 
 Social images are an important part of every website's online presence, because it is
 typically the first thing that users or customers will see, before they even click on
-a link to your website. The best social images are made by hand and carefully designed
-for every piece of content. Unfortunately, that is not practically for a large website
-or a site where the pages are dynamically generated.
+a link to your website. Adding a social image will help your website to stand out
+from others and provide additional information beyond just the title and URL.
+
+The best social images are made by hand and carefully designed
+for every piece of content. Unfortunately, that is not practical for a large website
+or a site where the pages are dynamically generated. The most practical way is to
+dynamically generate social images from metadata.
 
 React applications often have tons of dynamically generated pages, but many frameworks
 do not give us the level of control needed to generate social images dynamically,
-control caching, and embed them in the page via server-rendered HTML.
+control caching, and embed them in the page via server-rendered HTML. So, services like [Cloudinary](https://cloudinary.com/)
+are often used to fill this role.
 
-But, [Remix](https://remix.run) is a different kind of React framework.
+But, [Remix](https://remix.run) is not at all like other React frameworks.
 
 ## Remix
 
@@ -42,6 +47,9 @@ To generate our social images, we will:
 1. Create a [canvas](https://developer.mozilla.org/en-US/docs/Web/API/Canvas_API) using the [node-canvas](https://www.npmjs.com/package/canvas) library
 2. Draw on it (title, author, profile image, etc.)
 3. Convert the canvas to a PNG
+
+If you'd like to just copy and paste all of the code for this, I have created a [GitHub Gist](https://gist.github.com/camchenry/0c58cee48bcb0a9d74a412e7e73b4ca9)
+with all of the important code.
 
 To install the canvas library, run:
 
@@ -127,13 +135,14 @@ Now, let's draw the most important thing: the title. Since titles can be longer
 than a few words, we will want to enable word wrapping. However, the canvas API
 does not specify word wrapping, so you will have to write your own.
 
-Fortunately, others have already done some of the hard work for us, so I have simply
-adapted [an answer from Stack Overflow](https://stackoverflow.com/a/16599668). Credit to
+Fortunately, others have already done some of the hard work of writing this code, so I have
+adapted [this answer from Stack Overflow](https://stackoverflow.com/a/16599668). Credit to
 the original authors there.
 
 ```typescript
 import { NodeCanvasRenderingContext2D } from "canvas";
 
+// Taken from: https://stackoverflow.com/a/16599668
 const getLines = (
   ctx: NodeCanvasRenderingContext2D,
   text: string,
@@ -199,3 +208,87 @@ There's a lot of math and other processing going on here, but the gist of it is:
 - Set the font, then figure out which text should be wrapped
 - Calculate some metrics about the font and text, like line height and the total text height
 - For each line, draw it so that it is vertically centered in the image
+
+If you'd like to position the title elsewhere, you can change the `x` and `y` properties inside the call to `map`.
+
+### Drawing the Author
+
+Finally, many sites have authors associated with social images, so we will draw the author's name as well as their
+profile image in the social image.
+
+```typescript
+import { loadImage, NodeCanvasRenderingContext2D } from "canvas";
+
+const generateImage = async ({
+  title,
+  width = 1200,
+  height = 630,
+  fontSize = 80,
+  margin = 60,
+  profileImage,
+  profileRadius = 120,
+  author = "Cameron McHenry",
+  font,
+}: GenerateSocialImage) => {
+  // ...
+
+  // Vertical spacing after the title before drawing the author info
+  const spacingAfterTitle = 50;
+  // Where to start drawing author info
+  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
+
+  // Draw the author's profile picture
+  if (profileImage) {
+    const img = await loadImage(profileImage);
+    const x = margin;
+    const y = bottomOfTitleText - profileRadius + lineHeight / 2;
+    ctx.drawImage(img, x, y, profileRadius, profileRadius);
+  }
+
+  // ...
+};
+```
+
+First, we calculate some positioning numbers that we will use to draw the author's image and name. Then,
+if there was a profile image displayed, we the load the image from the given path using `loadImage` and render
+it using `ctx.drawImage`.
+
+Finally, we can render the author's name right next to the profile image:
+
+```typescript
+const generateImage = async ({
+  title,
+  width = 1200,
+  height = 630,
+  fontSize = 80,
+  margin = 60,
+  profileImage,
+  profileRadius = 120,
+  author = "Cameron McHenry",
+  font,
+}: GenerateSocialImage) => {
+  // ...
+
+  // Draw the author's name
+  const authorNameImageSpacing = 25;
+  const authorNamePosition = {
+    x:
+      profileImage === undefined
+        ? margin + authorNameImageSpacing
+        : margin + profileRadius + authorNameImageSpacing,
+    y: bottomOfTitleText,
+  };
+  ctx.font = `${fontSize}px ${font}`;
+  ctx.fillText(author, authorNamePosition.x, authorNamePosition.y);
+
+  // ...
+};
+```
+
+If a profile image is passed in, then we position the author's name more to the right, so that there is enough
+room to draw the profile image. Otherwise, we use the same text drawing call that we used for drawing the title,
+except this time there is no wrapping.
+
+To see the full code for this article, check out the [GitHub Gist](https://gist.github.com/camchenry/0c58cee48bcb0a9d74a412e7e73b4ca9).
+
+## Creating Social Images from Remix
