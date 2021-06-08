@@ -140,11 +140,11 @@ adapted [this answer from Stack Overflow](https://stackoverflow.com/a/16599668).
 the original authors there.
 
 ```typescript
-import { NodeCanvasRenderingContext2D } from "canvas";
+import { CanvasRenderingContext2D } from "canvas";
 
 // Taken from: https://stackoverflow.com/a/16599668
 const getLines = (
-  ctx: NodeCanvasRenderingContext2D,
+  ctx: CanvasRenderingContext2D,
   text: string,
   maxWidth: number
 ) => {
@@ -236,12 +236,14 @@ const generateImage = async ({
   const spacingAfterTitle = 50;
   // Where to start drawing author info
   const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
+  // Height of the author name text, used for vertically centering with image
+  const authorNameHeight = ctx.measureText(author).actualBoundingBoxAscent;
 
   // Draw the author's profile picture
   if (profileImage) {
     const img = await loadImage(profileImage);
     const x = margin;
-    const y = bottomOfTitleText - profileRadius + lineHeight / 2;
+    const y = bottomOfTitleText - profileRadius / 2;
     ctx.drawImage(img, x, y, profileRadius, profileRadius);
   }
 
@@ -274,9 +276,9 @@ const generateImage = async ({
   const authorNamePosition = {
     x:
       profileImage === undefined
-        ? margin + authorNameImageSpacing
+        ? margin
         : margin + profileRadius + authorNameImageSpacing,
-    y: bottomOfTitleText,
+    y: bottomOfTitleText + authorNameHeight / 2,
   };
   ctx.font = `${fontSize}px ${font}`;
   ctx.fillText(author, authorNamePosition.x, authorNamePosition.y);
@@ -292,3 +294,96 @@ except this time there is no wrapping.
 To see the full code for this article, check out the [GitHub Gist](https://gist.github.com/camchenry/0c58cee48bcb0a9d74a412e7e73b4ca9).
 
 ## Creating Social Images from Remix
+
+OK, now that we've figured out how to generate images, the most complex part is over. Now we need to
+integrate it with Remix, which is the fun part 😊.
+
+Recall from earlier in this post, I said that Remix gives us complete control of the endpoints in our application. The
+way that we can integrate our social image generation function is via a custom endpoint in our server code, which should
+be located in `app/entry.server.tsx` (if you are using a standard Remix template).
+
+Inside of `entry.server.tsx` there is a `handleRequest` function which lets us return _anything_ we want _whenever_. By
+default it will look something like this:
+
+```typescript
+export default async function handleRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext
+) {
+  const markup = ReactDOMServer.renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  );
+
+  return new Response("<!DOCTYPE html>" + markup, {
+    status: responseStatusCode,
+    headers: {
+      ...Object.fromEntries(responseHeaders),
+      "Content-Type": "text/html",
+    },
+  });
+}
+```
+
+We are going to insert some code _before we render the DOM_, to see if we should generate an image instead. To make this
+check easier, my social image function endpoint is going to exist at the root of my app under `/social-image`.
+
+```typescript
+export default async function handleRequest(
+  request: Request,
+  responseStatusCode: number,
+  responseHeaders: Headers,
+  remixContext: EntryContext
+) {
+  const url = new URL(request.url);
+  if (url.pathname.startsWith("/social-image")) {
+    // TODO: Generate the image!
+  }
+
+  const markup = ReactDOMServer.renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  );
+
+  return new Response("<!DOCTYPE html>" + markup, {
+    status: responseStatusCode,
+    headers: {
+      ...Object.fromEntries(responseHeaders),
+      "Content-Type": "text/html",
+    },
+  });
+}
+```
+
+To generate our image, we just need to the call `generateImage` with some data relevant to the requested URL and
+then return a response containing that image.
+
+```typescript
+const url = new URL(request.url);
+if (url.pathname.startsWith("/social-image")) {
+  const socialImage = await generateImage({
+    title: "Generating Social Images with Remix",
+    author: "Cameron McHenry",
+    profileImage: "assets/images/camchenry.png",
+  });
+  return new Response(socialImage, {
+    headers: {
+      ...Object.fromEntries(responseHeaders),
+      "Content-Type": "image/png",
+    },
+  });
+}
+```
+
+Now if we run `npm run dev` and go to `http://localhost:3000/social-image`, we should see our image in the browser! 🎉
+
+### Changing Fonts
+
+TODO: how to register fonts
+TODO: where assets / fonts are stored relative to app
+
+### Note for Vercel Users
+
+TODO: how to add assets
+TODO: installing correct canvas@2.6.1
+TODO: running libuuid install

@@ -4,14 +4,14 @@ import { RemixServer } from "remix";
 import {
   createCanvas,
   loadImage,
-  NodeCanvasRenderingContext2D,
+  CanvasRenderingContext2D,
   registerFont,
 } from "canvas";
 import { getPost } from "./services/posts";
 import path from "./path";
 
 const getLines = (
-  ctx: NodeCanvasRenderingContext2D,
+  ctx: CanvasRenderingContext2D,
   text: string,
   maxWidth: number
 ) => {
@@ -114,12 +114,14 @@ const generateImage = async ({
   const spacingAfterTitle = 50;
   // Where to start drawing author info
   const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
+  // Height of the author name text, used for vertically centering with image
+  const authorNameHeight = ctx.measureText(author).actualBoundingBoxAscent;
 
   // Draw the author's profile picture
   if (profileImage) {
     const img = await loadImage(profileImage);
     const x = margin;
-    const y = bottomOfTitleText - profileRadius + lineHeight / 2;
+    const y = bottomOfTitleText - profileRadius / 2;
     ctx.drawImage(img, x, y, profileRadius, profileRadius);
   }
 
@@ -128,9 +130,9 @@ const generateImage = async ({
   const authorNamePosition = {
     x:
       profileImage === undefined
-        ? margin + authorNameImageSpacing
+        ? margin
         : margin + profileRadius + authorNameImageSpacing,
-    y: bottomOfTitleText,
+    y: bottomOfTitleText + authorNameHeight / 2,
   };
   ctx.font = `${fontSize}px ${font}`;
   ctx.fillText(author, authorNamePosition.x, authorNamePosition.y);
@@ -144,10 +146,6 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  const markup = ReactDOMServer.renderToString(
-    <RemixServer context={remixContext} url={request.url} />
-  );
-
   const url = new URL(request.url);
   if (url.pathname.startsWith("/social-image")) {
     const id = url.searchParams.get("id");
@@ -166,21 +164,23 @@ export default async function handleRequest(
       family: "Inter",
       weight: "700",
     });
-    return new Response(
-      await generateImage({
-        title: post.metadata.title,
-        profileImage: "assets/images/camchenry.png",
-        font: "Inter",
-      }),
-      {
-        status: 200,
-        headers: {
-          ...Object.fromEntries(responseHeaders),
-          "Content-Type": "image/png",
-        },
-      }
-    );
+
+    const socialImage = await generateImage({
+      title: "Generating Social Images with Remix",
+      author: "Cameron McHenry",
+      font: "Inter",
+      profileImage: "assets/images/camchenry.png",
+    });
+    return new Response(socialImage, {
+      headers: {
+        "Content-Type": "image/png",
+      },
+    });
   }
+
+  const markup = ReactDOMServer.renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  );
 
   return new Response("<!DOCTYPE html>" + markup, {
     status: responseStatusCode,
