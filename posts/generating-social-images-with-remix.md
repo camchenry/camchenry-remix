@@ -379,8 +379,56 @@ Now if we run `npm run dev` and go to `http://localhost:3000/social-image`, we s
 
 ### Changing Fonts
 
-TODO: how to register fonts
-TODO: where assets / fonts are stored relative to app
+The big thing missing in the code so far is: how do we handle rendering different kinds of fonts?
+We can set the font correctly with the `font` property, but since the server will (probably) not
+have the font installed, it will default to the operating system default font.
+
+So, we need to load the font into the canvas renderer so that it understands our custom fonts.
+For this example, I will be using the [Inter font family](https://rsms.me/inter/).
+
+Once you have the font files you want to use (in a format like OTF or TTF), we can place them
+adjacent from our application code. In my case, I structure the assets like this:
+
+```
+/
+  app/
+    entry.server.tsx
+  assets/
+    images/
+      camchenry.png
+    fonts/
+  server/
+    build/
+    index.js
+```
+
+The assets will be loaded relative to the `server/build` directory, so we will need to
+set the paths accordingly.
+
+To use custom fonts, we need to import the `registerFont` function from the `canvas` library.
+Then, we will load the font files right before we generate the image.
+
+```typescript
+import { registerFont } from "canvas";
+
+registerFont("assets/fonts/Inter-Regular.otf", {
+  family: "Inter",
+  weight: "400",
+});
+registerFont("assets/fonts/Inter-Bold.otf", {
+  family: "Inter",
+  weight: "700",
+});
+
+const socialImage = await generateImage({
+  title: "Generating Social Images with Remix",
+  author: "Cameron McHenry",
+  font: "Inter",
+  profileImage: "assets/images/camchenry.png",
+});
+```
+
+Now if we set the font for `generateImage`, we should get our custom font!
 
 ### Note for Vercel Users
 
