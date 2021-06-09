@@ -368,8 +368,8 @@ if (url.pathname.startsWith("/social-image")) {
   });
   return new Response(socialImage, {
     headers: {
-      ...Object.fromEntries(responseHeaders),
       "Content-Type": "image/png",
+      "Cache-Control": "public, max-age=2419200",
     },
   });
 }

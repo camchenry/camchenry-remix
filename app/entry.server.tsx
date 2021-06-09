@@ -173,6 +173,7 @@ export default async function handleRequest(
     return new Response(socialImage, {
       headers: {
         "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=2419200",
       },
     });
   }
