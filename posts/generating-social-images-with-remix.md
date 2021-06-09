@@ -1,7 +1,7 @@
 ---
 title: Generating Social Images with Remix
-summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+summary: "Social images are a great way to enhance your website's online presence and Remix makes dynamically generating images for your website much simpler compared to other React frameworks."
+publishedAt: "2021-06-09"
 tags:
   - remix
   - node
@@ -499,4 +499,11 @@ Now when our server code is built and deployed, it will also include all files i
 
 ## Conclusion
 
-TODO
+Social images are a great way to introduce users to a link on your website, before they even click on it. Remix
+makes dynamically generating images and adding it to your website much simpler compared to other React frameworks.
+By generating images using the `canvas` library, we can add lots of dynamic behavior to our images, in combination
+with the power that Remix gives us to control how it gets accessed and cached.
+
+---
+
+To see the full code for this article, check out the [GitHub Gist](https://gist.github.com/camchenry/0c58cee48bcb0a9d74a412e7e73b4ca9).

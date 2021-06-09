@@ -165,7 +165,7 @@ export default async function handleRequest(
     });
 
     const socialImage = await generateImage({
-      title: "Generating Social Images with Remix",
+      title: post.metadata.title,
       author: "Cameron McHenry",
       font: "Inter",
       profileImage: "assets/images/camchenry.png",
