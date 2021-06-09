@@ -4,24 +4,23 @@ import { RemixServer } from "remix";
 import {
   createCanvas,
   loadImage,
-  NodeCanvasRenderingContext2D,
+  CanvasRenderingContext2D,
   registerFont,
 } from "canvas";
 import { getPost } from "./services/posts";
-import path from "./path";
 
 const getLines = (
-  ctx: NodeCanvasRenderingContext2D,
+  ctx: CanvasRenderingContext2D,
   text: string,
   maxWidth: number
 ) => {
-  var words = text.split(" ");
-  var lines = [];
-  var currentLine = words[0];
+  const words = text.split(" ");
+  const lines = [];
+  let currentLine = words[0];
 
-  for (var i = 1; i < words.length; i++) {
-    var word = words[i];
-    var width = ctx.measureText(currentLine + " " + word).width;
+  for (let i = 1; i < words.length; i++) {
+    const word = words[i];
+    const width = ctx.measureText(currentLine + " " + word).width;
     if (width < maxWidth) {
       currentLine += " " + word;
     } else {
@@ -75,7 +74,7 @@ const generateImage = async ({
   title,
   width = 1200,
   height = 630,
-  fontSize = 72,
+  fontSize = 80,
   margin = 60,
   profileImage,
   profileRadius = 120,
@@ -97,10 +96,6 @@ const generateImage = async ({
   const titleLines = getLines(ctx, title, width - margin * 2);
   const lineHeight = fontSize * 1.2;
   const textHeight = titleLines.length * lineHeight;
-  // Vertical spacing after the title before drawing the author info
-  const spacingAfterTitle = 50;
-  // Where to start drawing author info
-  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
 
   // Draw title text
   titleLines
@@ -114,11 +109,18 @@ const generateImage = async ({
       ctx.fillText(text, x, y);
     });
 
+  // Vertical spacing after the title before drawing the author info
+  const spacingAfterTitle = 50;
+  // Where to start drawing author info
+  const bottomOfTitleText = height / 2 + textHeight / 2 + spacingAfterTitle;
+  // Height of the author name text, used for vertically centering with image
+  const authorNameHeight = ctx.measureText(author).actualBoundingBoxAscent;
+
   // Draw the author's profile picture
   if (profileImage) {
     const img = await loadImage(profileImage);
     const x = margin;
-    const y = bottomOfTitleText - profileRadius + lineHeight / 2;
+    const y = bottomOfTitleText - profileRadius / 2;
     ctx.drawImage(img, x, y, profileRadius, profileRadius);
   }
 
@@ -127,9 +129,9 @@ const generateImage = async ({
   const authorNamePosition = {
     x:
       profileImage === undefined
-        ? margin + authorNameImageSpacing
+        ? margin
         : margin + profileRadius + authorNameImageSpacing,
-    y: bottomOfTitleText,
+    y: bottomOfTitleText + authorNameHeight / 2,
   };
   ctx.font = `${fontSize}px ${font}`;
   ctx.fillText(author, authorNamePosition.x, authorNamePosition.y);
@@ -143,10 +145,6 @@ export default async function handleRequest(
   responseHeaders: Headers,
   remixContext: EntryContext
 ) {
-  const markup = ReactDOMServer.renderToString(
-    <RemixServer context={remixContext} url={request.url} />
-  );
-
   const url = new URL(request.url);
   if (url.pathname.startsWith("/social-image")) {
     const id = url.searchParams.get("id");
@@ -157,29 +155,31 @@ export default async function handleRequest(
     if (!post) {
       return new Response("", { status: 404 });
     }
-    registerFont(path.join(__dirname, "../../assets/fonts/Inter-Regular.otf"), {
+    registerFont("assets/fonts/Inter-Regular.otf", {
       family: "Inter",
       weight: "400",
     });
-    registerFont(path.join(__dirname, "../../assets/fonts/Inter-Bold.otf"), {
+    registerFont("assets/fonts/Inter-Bold.otf", {
       family: "Inter",
       weight: "700",
     });
-    return new Response(
-      await generateImage({
-        title: post.metadata.title,
-        profileImage: "assets/images/camchenry.png",
-        font: "Inter",
-      }),
-      {
-        status: 200,
-        headers: {
-          ...Object.fromEntries(responseHeaders),
-          "Content-Type": "image/png",
-        },
-      }
-    );
+
+    const socialImage = await generateImage({
+      title: post.metadata.title,
+      author: "Cameron McHenry",
+      font: "Inter",
+      profileImage: "assets/images/camchenry.png",
+    });
+    return new Response(socialImage, {
+      headers: {
+        "Content-Type": "image/png",
+      },
+    });
   }
+
+  const markup = ReactDOMServer.renderToString(
+    <RemixServer context={remixContext} url={request.url} />
+  );
 
   return new Response("<!DOCTYPE html>" + markup, {
     status: responseStatusCode,
