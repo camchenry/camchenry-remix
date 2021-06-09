@@ -389,7 +389,7 @@ For this example, I will be using the [Inter font family](https://rsms.me/inter/
 Once you have the font files you want to use (in a format like OTF or TTF), we can place them
 adjacent from our application code. In my case, I structure the assets like this:
 
-```
+```text
 /
   app/
     entry.server.tsx
@@ -397,13 +397,7 @@ adjacent from our application code. In my case, I structure the assets like this
     images/
       camchenry.png
     fonts/
-  server/
-    build/
-    index.js
 ```
-
-The assets will be loaded relative to the `server/build` directory, so we will need to
-set the paths accordingly.
 
 To use custom fonts, we need to import the `registerFont` function from the `canvas` library.
 Then, we will load the font files right before we generate the image.
@@ -428,10 +422,81 @@ const socialImage = await generateImage({
 });
 ```
 
-Now if we set the font for `generateImage`, we should get our custom font!
+Now if we set the font for `generateImage`, we should see our custom font in the social image!
 
 ### Note for Vercel Users
 
-TODO: how to add assets
-TODO: installing correct canvas@2.6.1
-TODO: running libuuid install
+If you are not hosting an application Vercel, you can skip this section.
+
+This section is relevant to people that are hosting their Remix app on [Vercel](https://vercel.com/).
+Unfortunately as of the publishing date of this post there are some common issues related to
+hosting a Remix app on Vercel and dynamically generating images using the `canvas` library.
+
+To save you some time, I have listed out all of the Vercel-specific steps I needed to take to
+get it deployed successfully.
+
+#### 1. Install `canvas@2.6.1`
+
+If you try to use the latest version of the `canvas` library, you will likely run into an error
+about some version of `ZLIB` not existing. The easiest fix for this is to just downgrade to `canvas@2.6.1`
+for the time being by running:
+
+```bash
+npm install canvas@2.6.1
+```
+
+#### 2. Add command to install missing packages
+
+There are some missing dependencies in the Vercel container used to run your apps, but they
+can be installed by adding a `vercel-build` command to `package.json`:
+
+```json
+{
+  "scripts": {
+    "vercel-build": "yum install libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
+  }
+}
+```
+
+#### 3. Add Assets to Serverless Function
+
+The serverless function that gets deployed to Vercel will not include other assets like fonts
+and images by default, unless you specify them in `vercel.json`. That means it will look OK on
+your local machine, but will fail when deployed on Vercel.
+
+To add the assets to our serverless function deployment, we need to specify the files that we
+would like to include in the `builds` section in `vercel.json`. The basic configuration for
+deploying a Remix app on Vercel looks something like this:
+
+```json
+{
+  "builds": [
+    {
+      "src": "public/**/*",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "server/index.js",
+      "use": "@vercel/node"
+    }
+  ]
+}
+```
+
+To include assets, we can add an extra config for `server/index.js`:
+
+```json
+{
+  "src": "server/index.js",
+  "use": "@vercel/node",
+  "config": {
+    "includeFiles": ["assets/**"]
+  }
+}
+```
+
+Now when our server code is built and deployed, it will also include all files in the `assets/` directory.
+
+## Conclusion
+
+TODO
