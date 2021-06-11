@@ -1,13 +1,10 @@
-import type { MetaFunction } from "remix";
-
-export const meta: MetaFunction = () => {
-  return { title: "Ain't nothing here" };
-};
-
 export default function FourOhFour() {
   return (
-    <div>
-      <h1>404</h1>
+    <div className="text-center my-6 md:my-32">
+      <h1 className="text-4xl mb-4">
+        <span className="font-bold">404</span> Not Found
+      </h1>
+      <p>The link that you requested is either invalid or no longer exists.</p>
     </div>
   );
 }
