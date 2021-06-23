@@ -18,7 +18,7 @@ are nuanced, so let's see how they are similar and how they differ.
 At a glance, both `parseFloat` and the `Number` constructor generally do the same thing. They can each:
 
 - produce numbers from values
-- handle exponentials (like `4.5e3`)
+- handle exponents (like `4.5e3`)
 - handle decimals (like `-9.8`)
 
 If the input is strongly validated already to ensure that there's nothing radical (like `NaN`, non-number types, etc.)
