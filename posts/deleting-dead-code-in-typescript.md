@@ -1,6 +1,6 @@
 ---
 title: "How to Delete Dead Code in TypeScript Projects"
-summary: "TODO: Summary"
+summary: "Deleting dead code is a worthwhile effort that reduces the amount of that code that has to be downloaded, compiled, and maintained. Using automated tools, we can simplify the process of identifying dead code and removing it."
 publishedAt: "2021-08-30"
 tags:
   - typescript
