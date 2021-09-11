@@ -119,7 +119,7 @@ It does a great job of recognizing the pattern initially, but eventually gets st
 
 ### Not context-aware
 
-One issue that I run into frequently is: when writing test code, I'm writing more-or-less the same sort of code, but Copilot isn't able to infer patterns across files. Once I've written at least one example test in the file, Copilot is able to start autocompleting, but I wish that it was able to infer across multiple files (that is, look at all my `*.test.ts` files) and suggest code based on that.
+One issue that I run into frequently is: when writing test code, I'm writing more-or-less the same sort of code, but Copilot isn't able to infer patterns across files. Once I've written at least one example test in the file, Copilot is able to start auto-completing, but I wish that it was able to infer across multiple files (that is, look at all my `*.test.ts` files) and suggest code based on that.
 
 In addition, sometimes Copilot will suggest code that is completely valid, but totally wrong. For example, if I ask it to do something that looks like an Angular project, it will generate a bunch of imports for Angular libraries and patterns, even though I'm using React and _I do not reference Angular anywhere at all_.
 
