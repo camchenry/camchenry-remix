@@ -84,18 +84,20 @@ const generateImage = async ({
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  // Draw background gradient
-  const gradient = ctx.createLinearGradient(0, width, width, height);
-  gradient.addColorStop(0.3, "#6ee7b7");
-  gradient.addColorStop(1, "#60A5FA");
-  ctx.fillStyle = gradient;
-  ctx.fillRect(0, 0, width, height);
+  const primaryColor = "#6ee7b7";
 
   // Calculate font sizes and metrics
   ctx.font = `bold ${fontSize}px ${font}`;
   const titleLines = getLines(ctx, title, width - margin * 2);
   const lineHeight = fontSize * 1.2;
   const textHeight = titleLines.length * lineHeight;
+
+  ctx.save();
+  // Draw a border around the image with width 5% of the width of the image
+  ctx.lineWidth = width * 0.04;
+  ctx.strokeStyle = primaryColor;
+  ctx.strokeRect(0, 0, width, height);
+  ctx.restore();
 
   // Draw title text
   titleLines
