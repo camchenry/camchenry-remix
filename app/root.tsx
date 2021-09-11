@@ -62,7 +62,6 @@ export default function App() {
         <Outlet />
       </div>
       <footer className="container mx-auto p-3 text-center">
-        <span className="block my-5 text-gray-500">&lt;/&gt;</span>
         <div className="flex my-4 align-center justify-center">
           <a
             aria-label="Twitter"
