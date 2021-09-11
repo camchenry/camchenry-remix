@@ -1,7 +1,7 @@
 ---
 title: "Why I'm Not Worried About GitHub Copilot Taking My Software Job"
-summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+summary: "Tools like Copilot are extremely powerful natural language interfaces for writing code, but there are very real limitations to it, as well as legal and ethical issues. Ultimately, it is a tool for developers, not a replacement for a developer."
+publishedAt: "2021-09-11"
 tags:
   - ai
   - programming
@@ -117,6 +117,22 @@ Here is an example where we're defining a specification for a simple password va
 
 It does a great job of recognizing the pattern initially, but eventually gets stuck in an infinite loop of suggesting to add more restricted words unless I intervene. To its credit though, given the right prompting, it will generate a function that actually validates the generated rules.
 
+### Not context-aware
+
+One issue that I run into frequently is: when writing test code, I'm writing more-or-less the same sort of code, but Copilot isn't able to infer patterns across files. Once I've written at least one example test in the file, Copilot is able to start autocompleting, but I wish that it was able to infer across multiple files (that is, look at all my `*.test.ts` files) and suggest code based on that.
+
+In addition, sometimes Copilot will suggest code that is completely valid, but totally wrong. For example, if I ask it to do something that looks like an Angular project, it will generate a bunch of imports for Angular libraries and patterns, even though I'm using React and _I do not reference Angular anywhere at all_.
+
 ## Copilot: the ugly
 
 ### The legal and ethical implications
+
+Probably the biggest controversy surrounding Copilot is its legal and ethical implications for using it for software development. Most of this revolves around the fact that Copilot is trained on publicly available datasets. This means that [Copilot can regurgitate secret API keys](https://www.theregister.com/2021/07/06/github_copilot_autocoder_caught_spilling/) that were accidentally leaked, or [generate licensed code](https://twitter.com/alexjc/status/1410524416660889607), which GitHub considers "fair use."
+
+Personally, I have not experienced any of these issues. However, just because I haven't personally experienced it, doesn't mean that it isn't a problem. (That is true of _many_ things). We must consider the impact that normalizing this behavior will have. I don't know what the solution is, so I will defer to experts on that one. I think this is the biggest problem that must be solved before this can be widely adopted.
+
+## Conclusion
+
+Overall, I am excited by AI code completion like GitHub Copilot. The natural language interface of Copilot is powerful, and allows infinitely more possibilities than something like [IntelliSense](https://code.visualstudio.com/docs/editor/intellisense) alone. The legal/ethical issues surrounding it make me hesitant to keep using it though. I think if these issues could be overcome, I would be more likely to recommend it to everyone. For the time being though, I am much more positive on AI code completion tools like [TabNine](https://www.tabnine.com/) in general. I think that they hold a lot of promise, especially as a tool for newer developers.
+
+For now though, I'm not worried about Copilot taking my job (yet).
