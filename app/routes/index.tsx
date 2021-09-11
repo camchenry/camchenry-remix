@@ -68,6 +68,7 @@ export default function Index() {
                 id={post.id}
                 title={post.metadata.title}
                 summary={post.metadata.summary}
+                date={post.metadata.publishedAt}
               />
             </li>
           ))}
