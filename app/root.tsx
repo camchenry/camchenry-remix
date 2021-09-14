@@ -1,5 +1,5 @@
 import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
-import { Meta, Links, Scripts, useRouteData, LiveReload } from "remix";
+import { Meta, Links, LiveReload } from "remix";
 import { Outlet } from "react-router-dom";
 
 import styles from "./styles/app.css";
@@ -14,7 +14,7 @@ export const links: LinksFunction = () => {
 };
 
 export const loader: LoaderFunction = async () => {
-  return { date: new Date() };
+  return {};
 };
 
 function Document({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ function Document({ children }: { children: React.ReactNode }) {
       <body>
         {children}
 
-        <Scripts />
+        {/* disabled for now: <Scripts /> */}
         {process.env.NODE_ENV === "development" && <LiveReload />}
       </body>
     </html>
@@ -43,7 +43,6 @@ function Document({ children }: { children: React.ReactNode }) {
 }
 
 export default function App() {
-  const data = useRouteData();
   return (
     <Document>
       <nav className="container mx-auto p-3">
