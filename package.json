@@ -16,9 +16,9 @@
   "dependencies": {
     "@netlify/functions": "^0.7.2",
     "@remix-run/netlify": "^0.18.1",
-    "@remix-run/node": "0.17.0",
-    "@remix-run/react": "0.17.0",
-    "@remix-run/serve": "0.17.0",
+    "@remix-run/node": "^0.18.1",
+    "@remix-run/react": "^0.18.1",
+    "@remix-run/serve": "^0.18.1",
     "@tailwindcss/typography": "^0.4.0",
     "autoprefixer": "^10.2.5",
     "canvas": "2.6.1",

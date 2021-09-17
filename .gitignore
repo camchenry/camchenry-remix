@@ -8,3 +8,7 @@ build
 /app/styles
 
 .vercel
+
+# Local Netlify folder
+.netlify
+/netlify/functions/server/build

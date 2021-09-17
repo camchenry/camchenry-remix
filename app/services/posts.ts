@@ -60,7 +60,7 @@ export function notNullOrUndefined<TValue>(
 }
 
 export async function getPosts(): Promise<PostData[]> {
-  const postsPath = path.join(__dirname, `../../posts`);
+  const postsPath = path.join(__dirname, `../../../../posts`);
   const entries = fs.readdirSync(postsPath);
   const posts = await Promise.all(
     entries
@@ -84,7 +84,7 @@ export async function getPost(
   if (!postId) {
     return null;
   }
-  const postPath = path.join(__dirname, `../../posts/${postId}.md`);
+  const postPath = path.join(__dirname, `../../../../posts/${postId}.md`);
   if (!fs.existsSync(postPath)) {
     return null;
   }
