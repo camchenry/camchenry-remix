@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@netlify/functions": "^0.7.2",
+    "@remix-run/dev": "^0.18.1",
     "@remix-run/netlify": "^0.18.1",
     "@remix-run/node": "^0.18.1",
     "@remix-run/react": "^0.18.1",
@@ -43,7 +44,6 @@
     "unified": "^9.2.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "^0.18.1",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
