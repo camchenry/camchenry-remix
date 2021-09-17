@@ -4,6 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
+    "postinstall": "remix setup",
     "build": "npm run build:css && remix build",
     "dev": "remix run",
     "dev:netlify": "cross-env NODE_ENV=development netlify dev",
