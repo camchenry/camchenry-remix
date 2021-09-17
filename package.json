@@ -7,7 +7,7 @@
     "postinstall": "remix setup",
     "build": "npm run build:css && remix build",
     "dev": "remix run",
-    "start": "remix-serve build",
+    "start": "remix-serve netlify/functions/server/build",
     "lint": "eslint --ext js,jsx,ts,tsx app/**",
     "lint:fix": "eslint --ext js,jsx,ts,tsx --fix app/**",
     "watch:css": "postcss styles --base styles --dir app/styles -w",
