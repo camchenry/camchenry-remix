@@ -11,7 +11,7 @@
     "lint:fix": "eslint --ext js,jsx,ts,tsx --fix app/**",
     "watch:css": "postcss styles --base styles --dir app/styles -w",
     "build:css": "postcss styles --base styles --dir app/styles --env production",
-    "vercel-build": "yum install libpixman-1-dev gcc-c++ cairo-devel pango-devel libjpeg-turbo-devel giflib-devel libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
+    "vercel-build": "yum install libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
   },
   "dependencies": {
     "@remix-run/node": "0.17.0",
