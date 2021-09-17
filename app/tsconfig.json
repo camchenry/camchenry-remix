@@ -8,5 +8,6 @@
     "strict": true,
     "strictNullChecks": true,
     "skipLibCheck": true
-  }
+  },
+  "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
 }
