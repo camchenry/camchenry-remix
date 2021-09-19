@@ -16,7 +16,7 @@ export default function BlogPostIndex() {
       <H1 className="mb-4">Posts</H1>
       <ul className="flex flex-col space-y-4">
         {posts.map((post) => (
-          <li>
+          <li key={post.id}>
             <PostCard
               id={post.id}
               title={post.metadata.title}

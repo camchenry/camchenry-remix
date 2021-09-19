@@ -24,6 +24,7 @@
     "canvas": "2.6.1",
     "date-fns": "^2.21.3",
     "date-fns-tz": "^1.1.4",
+    "globby": "^11.0.4",
     "highlight.js": "^10.7.2",
     "postcss": "^8.3.0",
     "postcss-cli": "^8.3.1",

@@ -7,7 +7,8 @@ import {
   CanvasRenderingContext2D,
   registerFont,
 } from "canvas";
-import { getPost } from "./services/posts";
+import { getPost, getPosts } from "./services/posts";
+import globby from "globby";
 
 const getLines = (
   ctx: CanvasRenderingContext2D,
@@ -175,6 +176,79 @@ export default async function handleRequest(
     return new Response(socialImage, {
       headers: {
         "Content-Type": "image/png",
+        "Cache-Control": "public, max-age=2419200",
+      },
+    });
+  }
+
+  if (url.pathname.startsWith("/sitemap.xml")) {
+    const DOMAIN = "https://camchenry.com";
+    const getDate = new Date().toISOString();
+
+    const staticPages = (
+      await globby([
+        // include
+        "./app/routes/**/*.tsx",
+        "./app/routes/*.tsx",
+        // exclude
+        "!./app/routes/**/$*", // skips dynamic routes
+        "!./app/routes/404.tsx",
+      ])
+    ).map((path) => {
+      return {
+        url: path,
+        lastmod: getDate,
+      };
+    });
+
+    const dynamicPages = [await getPosts()].flatMap((posts) => {
+      return posts.map((post) => {
+        return {
+          url: `posts/${post.id}`,
+          lastmod: new Date(post.metadata.publishedAt).toISOString(),
+        };
+      });
+    });
+
+    const pages = [...staticPages, ...dynamicPages];
+
+    const formattedPages = pages.map(({ ...page }) => {
+      return {
+        ...page,
+        url: page.url
+          .replace("./app/routes/", "")
+          .replace(".tsx", "")
+          .replace(/\/index/g, ""),
+      };
+    });
+
+    // remove duplicates (such as /projects.tsx and /projects/index.tsx)
+    const filteredPages = Array.from(new Set(formattedPages));
+
+    const pagesSitemap = `${filteredPages
+      .map(({ url, lastmod }) => {
+        const routePath = url === "index" ? "" : url;
+        return `\n  <url>
+    <loc>${DOMAIN}/${routePath}</loc>
+    <lastmod>${lastmod}</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.7</priority>
+  </url>`;
+      })
+      .join("")}`;
+
+    const generatedSitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
+>${pagesSitemap}
+</urlset>
+  `;
+
+    return new Response(generatedSitemap, {
+      headers: {
+        "Content-Type": "application/xml",
         "Cache-Control": "public, max-age=2419200",
       },
     });
