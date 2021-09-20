@@ -53,8 +53,11 @@ export default function App() {
               <span className="font-bold">Cameron McHenry</span>
             </a>
           </li>
-          <li>
+          <li className="mr-4">
             <a href="/blog">Blog</a>
+          </li>
+          <li>
+            <a href="/tools">Tools</a>
           </li>
         </ul>
       </nav>
