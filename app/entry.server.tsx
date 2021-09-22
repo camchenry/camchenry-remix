@@ -204,7 +204,7 @@ export default async function handleRequest(
     const dynamicPages = [await getPosts()].flatMap((posts) => {
       return posts.map((post) => {
         return {
-          url: `posts/${post.id}`,
+          url: `blog/${post.id}`,
           lastmod: new Date(post.metadata.publishedAt).toISOString(),
         };
       });
