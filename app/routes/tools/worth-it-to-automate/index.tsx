@@ -1,124 +1,178 @@
-import { Button, H1, H2, Input, Label } from "../../../components/styled";
-import { LoaderFunction, useRouteData } from "remix";
-import { getTimeProfit } from "./time-profit";
+import { registerFont } from "canvas";
+import { useForm } from "react-hook-form";
+import {
+  Button,
+  H1,
+  H2,
+  Input,
+  Label,
+  Select,
+} from "../../../components/styled";
+import { DurationUnit, getTimeProfit } from "./time-profit";
+import { formatDistance } from "date-fns";
 
-type LoaderData = {
-  profit?: number;
-};
+type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
 
-export const loader: LoaderFunction = ({ params, request }): LoaderData => {
-  const url = new URL(request.url);
-  const taskTime = url.searchParams.get("taskTime");
-  const taskRepetitions = url.searchParams.get("taskRepetitions");
-  const timeToAutomate = url.searchParams.get("timeToAutomate");
-  const resources = url.searchParams.get("resources");
-  if (taskTime && taskRepetitions && timeToAutomate && resources) {
-    return {
-      profit: getTimeProfit({
-        taskTime: Number(taskTime),
-        taskRepetitions: Number(taskRepetitions),
-        timeToAutomate: Number(timeToAutomate),
-        resource: Number(resources),
-      }),
-    };
+const WorthItDisplay = ({
+  taskRepetitions,
+  taskTime,
+  timeToAutomate,
+}: TimeProfitParameters) => {
+  console.log({ taskRepetitions, taskTime, timeToAutomate });
+
+  if (!taskTime.value || !timeToAutomate.value) {
+    return null;
   }
-  return {};
+
+  const profit = getTimeProfit({ taskRepetitions, taskTime, timeToAutomate });
+
+  if (profit > 0) {
+    return (
+      <div>
+        <H2>You should automate this task!</H2>
+        <p>
+          Automating this task would save{" "}
+          <strong>
+            {formatDistance(profit * 1000, 0, {
+              includeSeconds: true,
+            })}
+          </strong>{" "}
+          of time.
+        </p>
+      </div>
+    );
+  } else if (profit === 0) {
+    return (
+      <div>
+        <H2>You could automate this task.</H2>
+        <p>
+          However, automating this task will not save any time, but it will not
+          waste any time either.
+        </p>
+      </div>
+    );
+  } else if (profit < 0) {
+    return (
+      <div>
+        <H2>You should not automate this task!</H2>
+        <p>
+          Automating this task would waste{" "}
+          <strong>
+            {formatDistance(profit * 1000, 0, {
+              includeSeconds: true,
+            })}
+          </strong>{" "}
+          of time.
+        </p>
+      </div>
+    );
+  }
+
+  return null;
 };
 
 export default function WorthItToAutomate() {
-  const { profit } = useRouteData<LoaderData>();
+  const { register, watch, handleSubmit } = useForm<TimeProfitParameters>({
+    defaultValues: {
+      taskTime: {
+        unit: "hours",
+      },
+      timeToAutomate: {
+        unit: "hours",
+      },
+      taskRepetitions: 1,
+    },
+    shouldUseNativeValidation: true,
+  });
 
-  const header = <H1 className="mb-4">Is it worth it to automate?</H1>;
+  const values = watch();
 
-  if (profit) {
-    if (profit > 0) {
-      return (
-        <div>
-          {header}
-          <H2>You can automate this task!</H2>
-          <p>You can automate this task to save {profit} seconds.</p>
-        </div>
-      );
-    } else if (profit === 0) {
-      return (
-        <div>
-          {header}
-          <H2>You can automate this task!</H2>
-          <p>
-            However, automating this task will not save any time, but it will
-            not waste any time either.
-          </p>
-        </div>
-      );
-    } else if (profit < 0) {
-      return (
-        <div>
-          {header}
-          <H2>You cannot automate this task!</H2>
-          <p>
-            You cannot automate this task for {-profit} seconds. This is because
-            you will not be able to save any time.
-          </p>
-        </div>
-      );
-    }
-  }
   return (
     <div>
       <H1 className="mb-4">Is it worth it to automate?</H1>
-      <form>
-        <div className="mb-5">
-          <Label htmlFor="taskTime">Task time (seconds): </Label>
-          <Input id="taskTime" type="number" name="taskTime" className="mb-1" />
-          <p className="text-gray-500">
-            This is how long the task takes to complete each time it occurs.
-          </p>
-        </div>
-        <div className="mb-5">
-          <Label htmlFor="taskRepetitions" className="mb-1">
-            Task repetitions:{" "}
-          </Label>
-          <Input
-            id="taskRepetitions"
-            type="number"
-            name="taskRepetitions"
-            className="mb-1"
+      <div className="flex">
+        <form onSubmit={handleSubmit(() => {})}>
+          <div className="mb-5">
+            <div className="flex mb-1">
+              <div className="mr-4">
+                <Label htmlFor="taskTime">Task time</Label>
+                <Input
+                  {...register("taskTime.value", { valueAsNumber: true })}
+                  id="taskTime"
+                  type="number"
+                  required
+                  min={0}
+                />
+              </div>
+              <div>
+                <Label htmlFor="taskTimeUnit">Unit</Label>
+                <Select id="taskTimeUnit" {...register("taskTime.unit")}>
+                  {Object.entries(DurationUnit).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+            <p className="text-gray-500">
+              This is how long the task takes to complete each time it occurs.
+            </p>
+          </div>
+          <div className="mb-5">
+            <Label htmlFor="taskRepetitions" className="mb-1">
+              Task repetitions
+            </Label>
+            <Input
+              {...register("taskRepetitions", { valueAsNumber: true })}
+              id="taskRepetitions"
+              type="number"
+              required
+              min={1}
+            />
+            <p className="text-gray-500">
+              This is the number of times that the task will be done.
+            </p>
+          </div>
+          <div className="mb-5">
+            <div className="flex mb-1">
+              <div className="mr-4">
+                <Label htmlFor="timeToAutomate" className="mb-1">
+                  Time to automate
+                </Label>
+                <Input
+                  {...register("timeToAutomate.value", { valueAsNumber: true })}
+                  id="timeToAutomate"
+                  type="number"
+                  required
+                  min={0}
+                />
+              </div>
+              <div>
+                <Label htmlFor="taskTimeUnit">Unit</Label>
+                <Select {...register("timeToAutomate.unit")} id="taskTimeUnit">
+                  {Object.entries(DurationUnit).map(([key, value]) => (
+                    <option key={key} value={key}>
+                      {value}
+                    </option>
+                  ))}
+                </Select>
+              </div>
+            </div>
+            <p className="text-gray-500">
+              This is amount of time that it will take to automate the task.
+            </p>
+          </div>
+          <Button>Calculate</Button>
+        </form>
+        <div>
+          <WorthItDisplay
+            taskTime={values.taskTime}
+            timeToAutomate={values.timeToAutomate}
+            taskRepetitions={values.taskRepetitions}
           />
-          <p className="text-gray-500">
-            This is the number of times that the task will be done.
-          </p>
         </div>
-        <div className="mb-5">
-          <Label htmlFor="timeToAutomate" className="mb-1">
-            Time to automate (seconds):
-          </Label>
-          <Input
-            id="timeToAutomate"
-            type="number"
-            name="timeToAutomate"
-            className="mb-1"
-          />
-          <p className="text-gray-500">
-            This is amount of time that it will take to automate the task.
-          </p>
-        </div>
-        <div className="mb-5">
-          <Label htmlFor="resources" className="mb-1">
-            Resources (people):
-          </Label>
-          <Input
-            id="resources"
-            type="number"
-            name="resources"
-            className="mb-1"
-          />
-          <p className="text-gray-500">
-            This is the number of resources that will be needed to automate the
-            task.
-          </p>
-        </div>
-        <Button>Calculate</Button>
-      </form>
+      </div>
     </div>
   );
 }

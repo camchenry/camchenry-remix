@@ -29,6 +29,18 @@ export const Input = tw.input`
   rounded
   py-2
   px-4
+  h-12
+`;
+
+export const Select = tw.select`
+  border-2
+  border-gray-300
+  border-solid
+  rounded
+  py-2
+  px-4
+  m-0
+  h-12
 `;
 
 export const Button = tw.button`
