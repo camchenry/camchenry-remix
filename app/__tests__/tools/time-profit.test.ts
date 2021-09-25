@@ -1,6 +1,9 @@
 import {
+  Frequency,
   getRepetitionsFromFrequency,
   getTimeProfit,
+  Duration,
+  getSecondsFromDuration,
 } from "../../routes/tools/worth-it-to-automate/time-profit";
 
 it("calculates time profit correctly", () => {
@@ -86,6 +89,65 @@ it("handles unit conversions correctly", () => {
   );
 });
 
+// see: https://xkcd.com/1205/
+const tests: {
+  freq: [Frequency["value"], Frequency["frequency"]];
+  timeShaved: [Duration["value"], Duration["unit"]];
+  profit: [Duration["value"], Duration["unit"]];
+}[] = [
+  { freq: [50, "daily"], timeShaved: [1, "seconds"], profit: [1, "days"] },
+  { freq: [50, "daily"], timeShaved: [5, "seconds"], profit: [5, "days"] },
+  { freq: [50, "daily"], timeShaved: [30, "seconds"], profit: [4, "weeks"] },
+  { freq: [50, "daily"], timeShaved: [1, "minutes"], profit: [8, "weeks"] },
+  { freq: [50, "daily"], timeShaved: [5, "minutes"], profit: [9, "months"] },
+  { freq: [50, "daily"], timeShaved: [5, "minutes"], profit: [9, "months"] },
+  { freq: [5, "daily"], timeShaved: [1, "seconds"], profit: [2, "hours"] },
+  { freq: [5, "daily"], timeShaved: [5, "seconds"], profit: [12, "hours"] },
+  { freq: [5, "daily"], timeShaved: [30, "seconds"], profit: [3, "days"] },
+  { freq: [5, "daily"], timeShaved: [1, "minutes"], profit: [6, "days"] },
+  { freq: [5, "daily"], timeShaved: [1, "minutes"], profit: [6, "days"] },
+  { freq: [5, "daily"], timeShaved: [5, "minutes"], profit: [4, "weeks"] },
+  { freq: [5, "daily"], timeShaved: [30, "minutes"], profit: [6, "months"] },
+  { freq: [5, "daily"], timeShaved: [1, "hours"], profit: [10, "months"] },
+  { freq: [1, "daily"], timeShaved: [1, "seconds"], profit: [30, "minutes"] },
+  { freq: [1, "daily"], timeShaved: [5, "seconds"], profit: [2, "hours"] },
+  { freq: [1, "daily"], timeShaved: [30, "seconds"], profit: [12, "hours"] },
+  { freq: [1, "daily"], timeShaved: [1, "minutes"], profit: [1, "days"] },
+  { freq: [1, "daily"], timeShaved: [5, "minutes"], profit: [6, "days"] },
+  { freq: [1, "daily"], timeShaved: [30, "minutes"], profit: [5, "weeks"] },
+  { freq: [1, "daily"], timeShaved: [1, "hours"], profit: [2, "months"] },
+  { freq: [1, "weekly"], timeShaved: [1, "seconds"], profit: [4, "minutes"] },
+  { freq: [1, "weekly"], timeShaved: [5, "seconds"], profit: [21, "minutes"] },
+  { freq: [1, "weekly"], timeShaved: [30, "seconds"], profit: [2, "hours"] },
+  { freq: [1, "weekly"], timeShaved: [1, "minutes"], profit: [4, "hours"] },
+  { freq: [1, "weekly"], timeShaved: [5, "minutes"], profit: [21, "hours"] },
+  { freq: [1, "weekly"], timeShaved: [30, "minutes"], profit: [5, "days"] },
+  { freq: [1, "weekly"], timeShaved: [1, "hours"], profit: [10, "days"] },
+  { freq: [1, "weekly"], timeShaved: [6, "hours"], profit: [2, "months"] },
+  // TODO: Monthly and yearly
+];
+it.each(tests)(
+  "shaving $timeShaved off a task done $freq will save $profit (over 5yrs)",
+  ({ freq, timeShaved, profit }) => {
+    expect(
+      getTimeProfit({
+        taskTimeSaved: {
+          value: timeShaved[0],
+          unit: timeShaved[1],
+        },
+        taskRepetitions: getRepetitionsFromFrequency({
+          frequency: { value: freq[0], frequency: freq[1] },
+          interval: { value: 5, unit: "years" },
+        }),
+        timeToAutomate: {
+          value: 0,
+          unit: "seconds",
+        },
+      })
+    ).toEqual(getSecondsFromDuration({ value: profit[0], unit: profit[1] }));
+  }
+);
+
 describe("getRepetitionsFromFrequency", () => {
   it("calculates daily repetitions correctly", () => {
     expect(
@@ -111,7 +173,7 @@ describe("getRepetitionsFromFrequency", () => {
         frequency: { value: 50, frequency: "daily" },
         interval: { value: 5, unit: "years" },
       })
-    ).toEqual(91250);
+    ).toEqual(91310);
   });
   it("calculates weekly repetitions correctly", () => {
     expect(
@@ -125,7 +187,7 @@ describe("getRepetitionsFromFrequency", () => {
         frequency: { value: 7, frequency: "weekly" },
         interval: { value: 1, unit: "months" },
       })
-    ).toEqual(28);
+    ).toEqual(30);
     expect(
       getRepetitionsFromFrequency({
         frequency: { value: 2, frequency: "weekly" },
