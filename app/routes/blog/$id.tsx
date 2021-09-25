@@ -1,16 +1,22 @@
-import { LoaderFunction, MetaFunction, redirect, useRouteData } from "remix";
+import React from "react";
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  redirect,
+  useRouteData,
+} from "remix";
+import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
+import PostDate from "../../components/PostDate";
+import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts";
 
-import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
-import { LinksFunction } from "remix";
-import React from "react";
-import { H1, Hr } from "../../components/styled";
-import { format, zonedTimeToUtc } from "date-fns-tz";
-import PostDate from "../../components/PostDate";
-
-export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: highlightStyles }];
+export const links: LinksFunction = ({ data }: { data: PostData }) => {
+  return [
+    { rel: "canonical", href: `https://camchenry.com/blog/${data.id}` },
+    { rel: "stylesheet", href: highlightStyles },
+  ];
 };
 
 export const meta: MetaFunction = ({ data }: { data: PostData }) => {
