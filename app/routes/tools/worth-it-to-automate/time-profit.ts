@@ -39,7 +39,7 @@ export const getSecondsFromDuration = (duration: Duration): number => {
   }
 };
 
-const getDaysInDuration = (duration: Duration) => {
+export const getDaysInDuration = (duration: Duration) => {
   switch (duration.unit) {
     case "seconds":
       return duration.value / 60 / 60 / 24;
@@ -60,7 +60,7 @@ const getDaysInDuration = (duration: Duration) => {
   }
 };
 
-const getWeeksInDuration = (duration: Duration) => {
+export const getWeeksInDuration = (duration: Duration) => {
   switch (duration.unit) {
     case "seconds":
       return duration.value / 60 / 60 / 24 / 7;
@@ -81,7 +81,7 @@ const getWeeksInDuration = (duration: Duration) => {
   }
 };
 
-const getMonthsInDuration = (duration: Duration) => {
+export const getMonthsInDuration = (duration: Duration) => {
   switch (duration.unit) {
     case "seconds":
       return duration.value / 60 / 60 / 24 / 30;
@@ -102,7 +102,7 @@ const getMonthsInDuration = (duration: Duration) => {
   }
 };
 
-const getYearsInDuration = (duration: Duration) => {
+export const getYearsInDuration = (duration: Duration) => {
   switch (duration.unit) {
     case "seconds":
       return duration.value / 60 / 60 / 24 / daysInYear;
