@@ -1,16 +1,28 @@
-import { LoaderFunction, MetaFunction, redirect, useRouteData } from "remix";
+import React from "react";
+import {
+  json,
+  LinksFunction,
+  LoaderFunction,
+  HeadersFunction,
+  MetaFunction,
+  redirect,
+  useRouteData,
+} from "remix";
+import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
+import PostDate from "../../components/PostDate";
+import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts";
 
-import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
-import { LinksFunction } from "remix";
-import React from "react";
-import { H1, Hr } from "../../components/styled";
-import { format, zonedTimeToUtc } from "date-fns-tz";
-import PostDate from "../../components/PostDate";
-
 export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: highlightStyles }];
+};
+
+export const headers: HeadersFunction = ({ loaderHeaders }) => {
+  const canonicalUrl = loaderHeaders.get("Link");
+  return {
+    ...(canonicalUrl && { Link: canonicalUrl }),
+  };
 };
 
 export const meta: MetaFunction = ({ data }: { data: PostData }) => {
@@ -27,7 +39,11 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!postData) {
     return redirect("/404");
   }
-  return postData;
+  return json(postData, {
+    headers: {
+      Link: `<https://camchenry.com/blog/${postData.id}>; rel="canonical"`,
+    },
+  });
 };
 
 export default function BlogPost() {
