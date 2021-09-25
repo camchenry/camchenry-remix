@@ -97,6 +97,27 @@ const getMonthsInDuration = (duration: Duration) => {
   }
 };
 
+const getYearsInDuration = (duration: Duration) => {
+  switch (duration.unit) {
+    case "seconds":
+      return duration.value / 60 / 60 / 24 / 365;
+    case "minutes":
+      return duration.value / 60 / 24 / 365;
+    case "hours":
+      return duration.value / 24 / 365;
+    case "days":
+      return duration.value / 365;
+    case "weeks":
+      return duration.value / (365 / 7);
+    case "months":
+      return duration.value / (365 / 30);
+    case "years":
+      return duration.value;
+    default:
+      throw new Error(`Unknown duration unit: ${duration.unit}`);
+  }
+};
+
 export type Frequency = {
   value: number;
   frequency: "daily" | "weekly" | "monthly" | "yearly";
@@ -125,6 +146,10 @@ export const getRepetitionsFromFrequency = ({
     case "monthly": {
       const monthsInInterval = Math.floor(getMonthsInDuration(interval));
       return monthsInInterval * frequency.value;
+    }
+    case "yearly": {
+      const yearsInInterval = Math.floor(getYearsInDuration(interval));
+      return yearsInInterval * frequency.value;
     }
     default:
       throw new Error(`Unknown frequency: ${frequency.frequency}`);

@@ -91,27 +91,21 @@ describe("getRepetitionsFromFrequency", () => {
     expect(
       getRepetitionsFromFrequency({
         frequency: { value: 50, frequency: "daily" },
-        interval: { value: 1, unit: "days" },
-      })
-    ).toEqual(50);
-    expect(
-      getRepetitionsFromFrequency({
-        frequency: { value: 50, frequency: "daily" },
         interval: { value: 10, unit: "days" },
       })
     ).toEqual(500);
     expect(
       getRepetitionsFromFrequency({
         frequency: { value: 50, frequency: "daily" },
-        interval: { value: 1, unit: "months" },
+        interval: { value: 2, unit: "weeks" },
       })
-    ).toEqual(30 * 50);
+    ).toEqual(700);
     expect(
       getRepetitionsFromFrequency({
         frequency: { value: 50, frequency: "daily" },
-        interval: { value: 1, unit: "weeks" },
+        interval: { value: 1, unit: "months" },
       })
-    ).toEqual(350);
+    ).toEqual(30 * 50);
     expect(
       getRepetitionsFromFrequency({
         frequency: { value: 50, frequency: "daily" },
@@ -152,5 +146,13 @@ describe("getRepetitionsFromFrequency", () => {
         interval: { value: 10, unit: "years" },
       })
     ).toEqual(240);
+  });
+  it("calculates yearly repetitions correctly", () => {
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: { value: 4, frequency: "yearly" },
+        interval: { value: 2, unit: "years" },
+      })
+    ).toEqual(8);
   });
 });
