@@ -15,7 +15,7 @@ type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
 
 const WorthItDisplay = ({
   taskRepetitions,
-  taskTime,
+  taskTimeSaved: taskTime,
   timeToAutomate,
 }: TimeProfitParameters) => {
   console.log({ taskRepetitions, taskTime, timeToAutomate });
@@ -24,7 +24,11 @@ const WorthItDisplay = ({
     return null;
   }
 
-  const profit = getTimeProfit({ taskRepetitions, taskTime, timeToAutomate });
+  const profit = getTimeProfit({
+    taskRepetitions,
+    taskTimeSaved: taskTime,
+    timeToAutomate,
+  });
 
   if (profit > 0) {
     return (
@@ -74,7 +78,7 @@ const WorthItDisplay = ({
 export default function WorthItToAutomate() {
   const { register, watch, handleSubmit } = useForm<TimeProfitParameters>({
     defaultValues: {
-      taskTime: {
+      taskTimeSaved: {
         unit: "hours",
       },
       timeToAutomate: {
@@ -95,7 +99,7 @@ export default function WorthItToAutomate() {
           <div className="mb-5">
             <div className="flex mb-1">
               <div className="mr-4">
-                <Label htmlFor="taskTime">Task time</Label>
+                <Label htmlFor="taskTime">Time saved</Label>
                 <Input
                   {...register("taskTime.value", { valueAsNumber: true })}
                   id="taskTime"
@@ -116,7 +120,7 @@ export default function WorthItToAutomate() {
               </div>
             </div>
             <p className="text-gray-500">
-              This is how long the task takes to complete each time it occurs.
+              This is how much time would be saved by automating the task.
             </p>
           </div>
           <div className="mb-5">
@@ -167,7 +171,7 @@ export default function WorthItToAutomate() {
         </form>
         <div>
           <WorthItDisplay
-            taskTime={values.taskTime}
+            taskTimeSaved={values.taskTimeSaved}
             timeToAutomate={values.timeToAutomate}
             taskRepetitions={values.taskRepetitions}
           />

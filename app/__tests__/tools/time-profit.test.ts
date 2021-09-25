@@ -1,9 +1,12 @@
-import { getTimeProfit } from "../../routes/tools/worth-it-to-automate/time-profit";
+import {
+  getRepetitionsFromFrequency,
+  getTimeProfit,
+} from "../../routes/tools/worth-it-to-automate/time-profit";
 
 it("calculates time profit correctly", () => {
   expect(
     getTimeProfit({
-      taskTime: {
+      taskTimeSaved: {
         value: 5 * 60 /* 5 mins per day */,
         unit: "seconds",
       },
@@ -16,7 +19,7 @@ it("calculates time profit correctly", () => {
   ).toEqual(405 * 60 /* 405 minutes saved */);
   expect(
     getTimeProfit({
-      taskTime: {
+      taskTimeSaved: {
         value: /* 30 minutes */ 30 * 60,
         unit: "seconds",
       },
@@ -35,7 +38,7 @@ it("calculates time profit correctly", () => {
 it("handles unit conversions correctly", () => {
   expect(
     getTimeProfit({
-      taskTime: {
+      taskTimeSaved: {
         value: 5 * 60 /* 5 mins per day */,
         unit: "seconds",
       },
@@ -47,7 +50,7 @@ it("handles unit conversions correctly", () => {
     })
   ).toEqual(
     getTimeProfit({
-      taskTime: {
+      taskTimeSaved: {
         value: 5 /* 5 mins per day */,
         unit: "minutes",
       },
@@ -61,7 +64,7 @@ it("handles unit conversions correctly", () => {
 
   expect(
     getTimeProfit({
-      taskTime: {
+      taskTimeSaved: {
         value: /* 30 minutes */ 30 * 60,
         unit: "seconds",
       },
@@ -76,9 +79,112 @@ it("handles unit conversions correctly", () => {
     })
   ).toEqual(
     getTimeProfit({
-      taskTime: { value: 30, unit: "minutes" },
+      taskTimeSaved: { value: 30, unit: "minutes" },
       taskRepetitions: 6 * 4 * 12,
       timeToAutomate: { value: 60, unit: "hours" },
     })
   );
+});
+
+describe("getRepetitionsFromFrequency", () => {
+  it("calculates daily repetitions correctly", () => {
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 50,
+          frequency: "daily",
+        },
+        interval: {
+          value: 1,
+          unit: "days",
+        },
+      })
+    ).toEqual(50);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 50,
+          frequency: "daily",
+        },
+        interval: {
+          value: 10,
+          unit: "days",
+        },
+      })
+    ).toEqual(500);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 50,
+          frequency: "daily",
+        },
+        interval: {
+          value: 1,
+          unit: "months",
+        },
+      })
+    ).toEqual(30 * 50);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 50,
+          frequency: "daily",
+        },
+        interval: {
+          value: 1,
+          unit: "weeks",
+        },
+      })
+    ).toEqual(350);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 50,
+          frequency: "daily",
+        },
+        interval: {
+          value: 5,
+          unit: "years",
+        },
+      })
+    ).toEqual(91250);
+  });
+  it("calculates weekly repetitions correctly", () => {
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 3,
+          frequency: "weekly",
+        },
+        interval: {
+          value: 1,
+          unit: "weeks",
+        },
+      })
+    ).toEqual(3);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 7,
+          frequency: "weekly",
+        },
+        interval: {
+          value: 1,
+          unit: "months",
+        },
+      })
+    ).toEqual(28);
+    expect(
+      getRepetitionsFromFrequency({
+        frequency: {
+          value: 2,
+          frequency: "weekly",
+        },
+        interval: {
+          value: 1,
+          unit: "years",
+        },
+      })
+    ).toEqual(104);
+  });
 });
