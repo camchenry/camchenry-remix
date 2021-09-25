@@ -4,6 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
+    "postinstall": "remix setup",
     "build": "npm run build:css && remix build",
     "dev": "remix run",
     "start": "remix-serve build",
@@ -14,10 +15,10 @@
     "vercel-build": "yum install --skip-broken libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
   },
   "dependencies": {
-    "@remix-run/node": "0.17.0",
-    "@remix-run/react": "0.17.0",
-    "@remix-run/serve": "0.17.0",
-    "@remix-run/vercel": "^0.17.3",
+    "@remix-run/node": "^0.18.2",
+    "@remix-run/react": "^0.18.2",
+    "@remix-run/serve": "^0.18.2",
+    "@remix-run/vercel": "^0.18.2",
     "@tailwindcss/typography": "^0.4.0",
     "@vercel/node": "^1.10.0",
     "autoprefixer": "^10.2.5",
@@ -38,13 +39,13 @@
     "remark-html": "^13.0.1",
     "remark-parse": "^9.0.0",
     "remark-parse-frontmatter": "^1.0.3",
-    "remix": "0.17.0",
+    "remix": "^0.18.2",
     "tailwind-styled-components": "^2.0.2",
     "tailwindcss": "^2.1.2",
     "unified": "^9.2.1"
   },
   "devDependencies": {
-    "@remix-run/dev": "0.17.0",
+    "@remix-run/dev": "^0.18.2",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.24.0",
