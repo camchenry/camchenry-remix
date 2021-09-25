@@ -1,3 +1,8 @@
+/**
+ * The number of days in a mean year, for the Gregorian calendar.
+ */
+const daysInYear = 365.2425;
+
 export enum DurationUnit {
   seconds = "seconds",
   minutes = "minutes",
@@ -13,7 +18,7 @@ export type Duration = {
   unit: DurationUnit | keyof typeof DurationUnit;
 };
 
-const getSecondsFromDuration = (duration: Duration): number => {
+export const getSecondsFromDuration = (duration: Duration): number => {
   switch (duration.unit) {
     case "seconds":
       return duration.value;
@@ -28,7 +33,7 @@ const getSecondsFromDuration = (duration: Duration): number => {
     case "months":
       return duration.value * 60 * 60 * 24 * 30;
     case "years":
-      return duration.value * 60 * 60 * 24 * 365;
+      return duration.value * 60 * 60 * 24 * daysInYear;
     default:
       throw new Error(`Unknown duration unit: ${duration.unit}`);
   }
@@ -49,7 +54,7 @@ const getDaysInDuration = (duration: Duration) => {
     case "months":
       return duration.value * 30;
     case "years":
-      return duration.value * 365;
+      return duration.value * daysInYear;
     default:
       throw new Error(`Unknown duration unit: ${duration.unit}`);
   }
@@ -70,7 +75,7 @@ const getWeeksInDuration = (duration: Duration) => {
     case "months":
       return (duration.value * 30) / 7;
     case "years":
-      return (duration.value * 365) / 7;
+      return (duration.value * daysInYear) / 7;
     default:
       throw new Error(`Unknown duration unit: ${duration.unit}`);
   }
@@ -100,17 +105,17 @@ const getMonthsInDuration = (duration: Duration) => {
 const getYearsInDuration = (duration: Duration) => {
   switch (duration.unit) {
     case "seconds":
-      return duration.value / 60 / 60 / 24 / 365;
+      return duration.value / 60 / 60 / 24 / daysInYear;
     case "minutes":
-      return duration.value / 60 / 24 / 365;
+      return duration.value / 60 / 24 / daysInYear;
     case "hours":
-      return duration.value / 24 / 365;
+      return duration.value / 24 / daysInYear;
     case "days":
-      return duration.value / 365;
+      return duration.value / daysInYear;
     case "weeks":
-      return duration.value / (365 / 7);
+      return duration.value / (daysInYear / 7);
     case "months":
-      return duration.value / (365 / 30);
+      return duration.value / (daysInYear / 30);
     case "years":
       return duration.value;
     default:
@@ -136,20 +141,20 @@ export const getRepetitionsFromFrequency = ({
 }) => {
   switch (frequency.frequency) {
     case "daily": {
-      const daysInInterval = Math.floor(getDaysInDuration(interval));
-      return daysInInterval * frequency.value;
+      const daysInInterval = getDaysInDuration(interval);
+      return Math.floor(daysInInterval * frequency.value);
     }
     case "weekly": {
-      const weeksInInterval = Math.floor(getWeeksInDuration(interval));
-      return weeksInInterval * frequency.value;
+      const weeksInInterval = getWeeksInDuration(interval);
+      return Math.floor(weeksInInterval * frequency.value);
     }
     case "monthly": {
-      const monthsInInterval = Math.floor(getMonthsInDuration(interval));
-      return monthsInInterval * frequency.value;
+      const monthsInInterval = getMonthsInDuration(interval);
+      return Math.floor(monthsInInterval * frequency.value);
     }
     case "yearly": {
-      const yearsInInterval = Math.floor(getYearsInDuration(interval));
-      return yearsInInterval * frequency.value;
+      const yearsInInterval = getYearsInDuration(interval);
+      return Math.floor(yearsInInterval * frequency.value);
     }
     default:
       throw new Error(`Unknown frequency: ${frequency.frequency}`);
