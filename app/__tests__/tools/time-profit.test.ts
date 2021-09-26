@@ -133,7 +133,33 @@ const tests: {
   { freq: [1, "weekly"], timeShaved: [30, "minutes"], profit: [5, "days"] },
   { freq: [1, "weekly"], timeShaved: [1, "hours"], profit: [10, "days"] },
   { freq: [1, "weekly"], timeShaved: [6, "hours"], profit: [2, "months"] },
-  // TODO: Monthly and yearly
+  { freq: [1, "monthly"], timeShaved: [1, "seconds"], profit: [1, "minutes"] },
+  { freq: [1, "monthly"], timeShaved: [5, "seconds"], profit: [5, "minutes"] },
+  {
+    freq: [1, "monthly"],
+    timeShaved: [30, "seconds"],
+    profit: [30, "minutes"],
+  },
+  { freq: [1, "monthly"], timeShaved: [1, "minutes"], profit: [1, "hours"] },
+  { freq: [1, "monthly"], timeShaved: [5, "minutes"], profit: [5, "hours"] },
+  { freq: [1, "monthly"], timeShaved: [30, "minutes"], profit: [1, "days"] },
+  { freq: [1, "monthly"], timeShaved: [1, "hours"], profit: [2, "days"] },
+  { freq: [1, "monthly"], timeShaved: [6, "hours"], profit: [2, "weeks"] },
+  { freq: [1, "monthly"], timeShaved: [1, "days"], profit: [8, "weeks"] },
+
+  { freq: [1, "yearly"], timeShaved: [1, "seconds"], profit: [5, "seconds"] },
+  { freq: [1, "yearly"], timeShaved: [5, "seconds"], profit: [25, "seconds"] },
+  {
+    freq: [1, "yearly"],
+    timeShaved: [30, "seconds"],
+    profit: [2, "minutes"],
+  },
+  { freq: [1, "yearly"], timeShaved: [1, "minutes"], profit: [5, "minutes"] },
+  { freq: [1, "yearly"], timeShaved: [5, "minutes"], profit: [25, "minutes"] },
+  { freq: [1, "yearly"], timeShaved: [30, "minutes"], profit: [2, "hours"] },
+  { freq: [1, "yearly"], timeShaved: [1, "hours"], profit: [5, "hours"] },
+  { freq: [1, "yearly"], timeShaved: [6, "hours"], profit: [1, "days"] },
+  { freq: [1, "yearly"], timeShaved: [1, "days"], profit: [5, "days"] },
 ];
 it.each(tests)(
   "shaving $timeShaved off a task done $freq will save $profit (over 5yrs)",
