@@ -1,0 +1,17 @@
+body {
+  counter-reset: steps;
+}
+.step-header {
+  position: relative;
+}
+.step-header::before {
+  counter-increment: steps;
+  content: counter(steps) ". ";
+}
+
+@media (min-width: 768px) {
+  .step-header::before {
+    position: absolute;
+    transform: translateX(-150%);
+  }
+}
