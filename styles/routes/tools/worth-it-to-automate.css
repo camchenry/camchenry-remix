@@ -7,6 +7,11 @@ body {
 .step-header::before {
   counter-increment: steps;
   content: counter(steps) ". ";
-  position: absolute;
-  transform: translateX(-150%);
+}
+
+@media (min-width: 768px) {
+  .step-header::before {
+    position: absolute;
+    transform: translateX(-150%);
+  }
 }

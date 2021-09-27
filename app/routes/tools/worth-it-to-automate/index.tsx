@@ -112,7 +112,7 @@ export default function WorthItToAutomate() {
         <div className="mb-8">
           <section className="mb-5">
             <StepHeader>How much time is saved?</StepHeader>
-            <div className="flex mb-1">
+            <div className="flex flex-wrap mb-1">
               <div className="mr-4">
                 <Label htmlFor="taskTimeSaved">Time saved</Label>
                 <Input
@@ -150,7 +150,7 @@ export default function WorthItToAutomate() {
           <section>
             <StepHeader>How often is the task done?</StepHeader>
             <div className="mb-5">
-              <div className="flex mb-1">
+              <div className="flex flex-wrap mb-1">
                 <div className="mr-4">
                   <Label htmlFor="frequency" className="mb-1">
                     Task occurrences
@@ -191,7 +191,7 @@ export default function WorthItToAutomate() {
               </p>
             </div>
             <div className="mb-5">
-              <div className="flex mb-1">
+              <div className="flex flex-wrap mb-1">
                 <div className="mr-4">
                   <Label htmlFor="duration" className="mb-1">
                     Time period
@@ -232,8 +232,8 @@ export default function WorthItToAutomate() {
             </div>
           </section>
           <section className="mb-5">
-            <StepHeader>How long it will take to automate</StepHeader>
-            <div className="flex mb-1">
+            <StepHeader>How long it will take to automate?</StepHeader>
+            <div className="flex flex-wrap mb-1">
               <div className="mr-4">
                 <Label htmlFor="timeToAutomate" className="mb-1">
                   Time to automate
