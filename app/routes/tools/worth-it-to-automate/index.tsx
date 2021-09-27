@@ -11,7 +11,13 @@ import {
   Select,
   Summary,
 } from "../../../components/styled";
-import { DurationUnit, FrequencyUnit, getTimeProfit } from "./time-profit";
+import {
+  DurationUnit,
+  FrequencyUnit,
+  getRepetitionsFromFrequency,
+  getSecondsFromDuration,
+  getTimeProfit,
+} from "./time-profit";
 import styles from "../../../../styles/routes/tools/worth-it-to-automate.css";
 import { LinksFunction } from "remix";
 
@@ -86,7 +92,7 @@ const WorthItDisplay = ({
 };
 
 const StepHeader = ({ children }: { children: React.ReactNode }) => (
-  <H2 className="py-4 border-t step-header">{children}</H2>
+  <H2 className="py-6 border-t step-header">{children}</H2>
 );
 
 export default function WorthItToAutomate() {
@@ -103,13 +109,138 @@ export default function WorthItToAutomate() {
   const [timeToAutomateUnit, setTimeToAutomateUnit] =
     useState<keyof typeof DurationUnit>("hours");
 
-  const taskRepetitions = 0;
+  const taskRepetitions = getRepetitionsFromFrequency({
+    frequency: {
+      value: frequency,
+      frequency: frequencyUnit,
+    },
+    interval: {
+      value: duration,
+      unit: durationUnit,
+    },
+  });
+
+  const timePeriod = (() => {
+    if (Number.isNaN(duration)) {
+      return undefined;
+    }
+    try {
+      return formatDistance(
+        getSecondsFromDuration({
+          value: duration,
+          unit: durationUnit,
+        }) * 1000,
+        0,
+        {
+          includeSeconds: true,
+        }
+      );
+    } catch (e) {
+      return undefined;
+    }
+  })();
 
   return (
     <main>
       <Container>
-        <H1 className="mb-4">Is it worth it to automate?</H1>
+        <H1 className="mb-8">Is it worth it to automate?</H1>
         <div className="mb-8">
+          <section>
+            <StepHeader>How often is the task done?</StepHeader>
+            <div className="mb-5">
+              <div className="flex flex-wrap mb-1">
+                <div className="mr-4">
+                  <Label htmlFor="frequency" className="mb-1">
+                    Task occurrences
+                  </Label>
+                  <Input
+                    name="frequency"
+                    id="frequency"
+                    placeholder="Enter number of times"
+                    type="number"
+                    required
+                    min={1}
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.valueAsNumber)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="taskTimeSavedUnit">Frequency</Label>
+                  <Select
+                    id="frequencyUnit"
+                    name="frequencyUnit"
+                    value={frequencyUnit}
+                    onChange={(e) =>
+                      setFrequencyUnit(e.target.value as FrequencyUnit)
+                    }
+                  >
+                    {Object.entries(FrequencyUnit).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <p className="text-gray-500">
+                This is the number of times that the task will be done, and on
+                what schedule it will occur. For example, something done each
+                business day (Monday through Friday) would have 5 occurrences
+                weekly.
+              </p>
+            </div>
+            <Details className="mb-4">
+              <Summary>Time period: {timePeriod ?? "⚠️ unknown"}</Summary>
+              <div className="mb-5">
+                <div className="flex flex-wrap mb-1">
+                  <div className="mr-4">
+                    <Label htmlFor="duration" className="mb-1">
+                      Time period
+                    </Label>
+                    <Input
+                      name="duration"
+                      id="duration"
+                      placeholder="Enter time period"
+                      type="number"
+                      required
+                      min={1}
+                      value={duration}
+                      onChange={(e) => setDuration(e.target.valueAsNumber)}
+                    />
+                  </div>
+                  <div>
+                    <Label htmlFor="durationUnit">Unit</Label>
+                    <Select
+                      id="durationUnit"
+                      name="durationUnit"
+                      value={durationUnit}
+                      onChange={(e) =>
+                        setDurationUnit(e.target.value as DurationUnit)
+                      }
+                    >
+                      {Object.entries(DurationUnit).map(([key, value]) => (
+                        <option key={key} value={key}>
+                          {value}
+                        </option>
+                      ))}
+                    </Select>
+                  </div>
+                </div>
+                <p className="text-gray-500">
+                  This is the period over which to calculate the total number of
+                  tasks. For example, a value of "1 year" would find how much
+                  time can be saved from automation in a year.
+                </p>
+              </div>
+            </Details>
+            {taskRepetitions !== undefined && (
+              <p className="mb-4 text-gray-500">
+                With the current frequency and time period, this task will occur{" "}
+                <strong>{taskRepetitions}</strong> times over{" "}
+                {timePeriod ?? "an ⚠️ unknown amount of time"}.
+              </p>
+            )}
+          </section>
           <section className="mb-5">
             <StepHeader>How much time is saved?</StepHeader>
             <div className="flex flex-wrap mb-1">
@@ -146,90 +277,6 @@ export default function WorthItToAutomate() {
             <p className="text-gray-500">
               This is how much time would be saved by automating the task.
             </p>
-          </section>
-          <section>
-            <StepHeader>How often is the task done?</StepHeader>
-            <div className="mb-5">
-              <div className="flex flex-wrap mb-1">
-                <div className="mr-4">
-                  <Label htmlFor="frequency" className="mb-1">
-                    Task occurrences
-                  </Label>
-                  <Input
-                    name="frequency"
-                    id="frequency"
-                    type="number"
-                    required
-                    min={1}
-                    value={frequency}
-                    onChange={(e) => setFrequency(e.target.valueAsNumber)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="taskTimeSavedUnit">Frequency</Label>
-                  <Select
-                    id="frequencyUnit"
-                    name="frequencyUnit"
-                    value={frequencyUnit}
-                    onChange={(e) =>
-                      setFrequencyUnit(e.target.value as FrequencyUnit)
-                    }
-                  >
-                    {Object.entries(FrequencyUnit).map(([key, value]) => (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-              </div>
-              <p className="text-gray-500">
-                This is the number of times that the task will be done, and on
-                what schedule it will occur. For example, something done each
-                business day (Monday through Friday) would have 5 occurrences
-                weekly.
-              </p>
-            </div>
-            <div className="mb-5">
-              <div className="flex flex-wrap mb-1">
-                <div className="mr-4">
-                  <Label htmlFor="duration" className="mb-1">
-                    Time period
-                  </Label>
-                  <Input
-                    name="duration"
-                    id="duration"
-                    type="number"
-                    required
-                    min={1}
-                    value={duration}
-                    onChange={(e) => setDuration(e.target.valueAsNumber)}
-                  />
-                </div>
-                <div>
-                  <Label htmlFor="durationUnit">Unit</Label>
-                  <Select
-                    id="durationUnit"
-                    name="durationUnit"
-                    value={durationUnit}
-                    onChange={(e) =>
-                      setDurationUnit(e.target.value as DurationUnit)
-                    }
-                  >
-                    {Object.entries(DurationUnit).map(([key, value]) => (
-                      <option key={key} value={key}>
-                        {value}
-                      </option>
-                    ))}
-                  </Select>
-                </div>
-              </div>
-              <p className="text-gray-500">
-                This is the period over which to calculate the total number of
-                tasks. For example, a value of "1 year" would find how much time
-                can be saved from automation in a year.
-              </p>
-            </div>
           </section>
           <section className="mb-5">
             <StepHeader>How long it will take to automate?</StepHeader>
@@ -271,8 +318,11 @@ export default function WorthItToAutomate() {
             </p>
           </section>
         </div>
+        <Hr />
         <div className="mb-8">
-          {taskTimeSaved !== undefined && timeToAutomate !== undefined ? (
+          {taskTimeSaved !== undefined &&
+          timeToAutomate !== undefined &&
+          taskRepetitions !== undefined ? (
             <WorthItDisplay
               taskTimeSaved={{
                 value: taskTimeSaved,
@@ -291,7 +341,28 @@ export default function WorthItToAutomate() {
             </p>
           )}
         </div>
-        <Hr />
+        <Hr className="pb-12" />
+        <section className="mb-8">
+          <H2 className="mb-4">About</H2>
+          <div className="prose">
+            <p>
+              This tool calculates whether a task is worth automating or not. It
+              was inspired by the XKCD comic "
+              <a href="https://xkcd.com/1205/">Is It Worth the Time?</a>"
+              created by Randall Munroe. This calculator can help determine
+              whether it would be premature optimization to automate a task,
+              before actually starting any work.
+            </p>
+            <p>
+              The ideal way to use this tool is to start with a task in mind
+              that will have to be completed, and with an (approximately) known
+              frequency. Then, simply take a rough guess at how much time could
+              be saved by automation, and how long it would take to automate the
+              task. Then, the calculator will inform you whether it is worth it
+              to automate or not.
+            </p>
+          </div>
+        </section>
         <section>
           <H2 className="mb-4">Frequently Asked Questions</H2>
           <Details className="prose">

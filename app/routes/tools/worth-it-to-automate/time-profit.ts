@@ -146,6 +146,9 @@ export const getRepetitionsFromFrequency = ({
   frequency: Frequency;
   interval: Duration;
 }) => {
+  if (Number.isNaN(frequency.value) || Number.isNaN(interval.value)) {
+    return undefined;
+  }
   switch (frequency.frequency) {
     case "daily": {
       const daysInInterval = getDaysInDuration(interval);

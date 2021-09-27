@@ -69,8 +69,8 @@ export const Details = tw.details`
 `;
 
 export const Summary = tw.summary`
-  font-bold
   cursor-pointer
+  py-2
 `;
 
 export const Container = tw.div`
