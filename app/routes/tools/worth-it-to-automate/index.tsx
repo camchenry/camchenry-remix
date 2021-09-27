@@ -1,6 +1,16 @@
 import { formatDistance } from "date-fns";
 import { useState } from "react";
-import { H1, H2, Input, Label, Select } from "../../../components/styled";
+import {
+  Container,
+  Details,
+  H1,
+  H2,
+  Hr,
+  Input,
+  Label,
+  Select,
+  Summary,
+} from "../../../components/styled";
 import { DurationUnit, getTimeProfit } from "./time-profit";
 
 type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
@@ -11,15 +21,7 @@ const WorthItDisplay = ({
   timeToAutomate,
 }: TimeProfitParameters) => {
   if (Number.isNaN(taskTimeSaved.value) || Number.isNaN(timeToAutomate.value)) {
-    return (
-      <div>
-        <p>
-          Enter information about the task that you want to automate, and then
-          the recommendation for whether you should automate or not will show up
-          here.
-        </p>
-      </div>
-    );
+    return null;
   }
 
   const profit = getTimeProfit({
@@ -30,8 +32,10 @@ const WorthItDisplay = ({
 
   if (profit > 0) {
     return (
-      <div>
-        <H2>You should automate this task!</H2>
+      <section>
+        <H2 className="mb-2">
+          ✅ <strong>Yes</strong>, automate the task!
+        </H2>
         <p>
           Automating this task would save{" "}
           <strong>
@@ -41,22 +45,26 @@ const WorthItDisplay = ({
           </strong>{" "}
           of time.
         </p>
-      </div>
+      </section>
     );
   } else if (profit === 0) {
     return (
-      <div>
-        <H2>You could automate this task.</H2>
+      <section>
+        <H2 className="mb-2">
+          ❓ <strong>Maybe</strong> automate the task.
+        </H2>
         <p>
           However, automating this task will not save any time, but it will not
           waste any time either.
         </p>
-      </div>
+      </section>
     );
   } else if (profit < 0) {
     return (
-      <div>
-        <H2>You should not automate this task!</H2>
+      <section>
+        <H2 className="mb-2">
+          ❌ <strong>No</strong>, don't automate the task.
+        </H2>
         <p>
           Automating this task would waste{" "}
           <strong>
@@ -66,7 +74,7 @@ const WorthItDisplay = ({
           </strong>{" "}
           of time.
         </p>
-      </div>
+      </section>
     );
   }
 
@@ -83,10 +91,10 @@ export default function WorthItToAutomate() {
     useState<keyof typeof DurationUnit>("hours");
 
   return (
-    <div>
-      <H1 className="mb-4">Is it worth it to automate?</H1>
-      <div className="md:flex">
-        <div className="md:max-w-lg w-full md:mr-8 mb-8">
+    <main>
+      <Container>
+        <H1 className="mb-4">Is it worth it to automate?</H1>
+        <div className="mb-8">
           <div className="mb-5">
             <div className="flex mb-1">
               <div className="mr-4">
@@ -179,8 +187,8 @@ export default function WorthItToAutomate() {
             </p>
           </div>
         </div>
-        <div>
-          {taskTimeSaved !== undefined && timeToAutomate !== undefined && (
+        <div className="mb-8">
+          {taskTimeSaved !== undefined && timeToAutomate !== undefined ? (
             <WorthItDisplay
               taskTimeSaved={{
                 value: taskTimeSaved,
@@ -192,9 +200,32 @@ export default function WorthItToAutomate() {
               }}
               taskRepetitions={taskRepetitions}
             />
+          ) : (
+            <p>
+              Enter information about the task that you want to automate, and
+              then a recommendation for automation will show up here.
+            </p>
           )}
         </div>
-      </div>
-    </div>
+        <Hr />
+        <section>
+          <H2 className="mb-4">Frequently Asked Questions</H2>
+          <Details className="prose">
+            <Summary>How is this calculated?</Summary>
+            <p>
+              The recommendation is calculated using a simple formula: <br />
+              <var>time profit</var> = (<var>time saved</var> ✖️{" "}
+              <var>number of repetitions</var>) - <var>time to automate</var>.
+            </p>
+            <p>
+              If the time profit is greater than 0, then it is worth automating.
+              If it is less than zero, then it is not worth automating. If the
+              time profit is exactly equal zero, then it is the same amount of
+              time, whether the task is automated or not.
+            </p>
+          </Details>
+        </section>
+      </Container>
+    </main>
   );
 }

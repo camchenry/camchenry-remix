@@ -57,3 +57,25 @@ export const Button = tw.button`
   focus:outline-none
   focus:shadow-outline
 `;
+
+export const Details = tw.details`
+  border-2
+  border-gray-300
+  border-solid
+  rounded
+  py-2
+  px-4
+  m-0
+`;
+
+export const Summary = tw.summary`
+  font-bold
+  cursor-pointer
+`;
+
+export const Container = tw.div`
+  max-w-prose
+  mx-auto
+  my-4
+  lg:my-16
+`;

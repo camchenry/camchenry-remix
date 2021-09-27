@@ -1,6 +1,6 @@
 import React from "react";
 import type { LoaderFunction } from "remix";
-import { H1, H3 } from "../../components/styled";
+import { Container, H1, H3 } from "../../components/styled";
 
 export const loader: LoaderFunction = async () => {
   return {};
@@ -8,7 +8,7 @@ export const loader: LoaderFunction = async () => {
 
 export default function ToolsIndex() {
   return (
-    <div className="max-w-prose mx-auto my-4 lg:my-16">
+    <Container>
       <H1 className="mb-4">Tools</H1>
       <ul className="flex flex-col space-y-4">
         <li>
@@ -23,6 +23,6 @@ export default function ToolsIndex() {
           </div>
         </li>
       </ul>
-    </div>
+    </Container>
   );
 }
