@@ -2,7 +2,7 @@ import React from "react";
 import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
 import { useRouteData } from "remix";
 import tw from "tailwind-styled-components";
-import PostCard from "../components/PostCard";
+import PageCard from "../components/PageCard";
 import { H1, H2, H3 } from "../components/styled";
 import { defaultMeta } from "../meta";
 import { getPosts, PostData } from "../services/posts";
@@ -64,8 +64,8 @@ export default function Index() {
         <ul className="flex flex-col space-y-4">
           {data.posts.map((post) => (
             <li key={post.id}>
-              <PostCard
-                id={post.id}
+              <PageCard
+                url={`/blog/${post.id}`}
                 title={post.metadata.title}
                 summary={post.metadata.summary}
                 date={post.metadata.publishedAt}

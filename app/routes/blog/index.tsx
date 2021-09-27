@@ -1,6 +1,6 @@
 import React from "react";
 import { LoaderFunction, useRouteData } from "remix";
-import PostCard from "../../components/PostCard";
+import PageCard from "../../components/PageCard";
 import { Container, H1 } from "../../components/styled";
 import { getPosts, PostData } from "../../services/posts";
 
@@ -17,8 +17,8 @@ export default function BlogPostIndex() {
       <ul className="flex flex-col space-y-4">
         {posts.map((post) => (
           <li key={post.id}>
-            <PostCard
-              id={post.id}
+            <PageCard
+              url={`/blog/${post.id}`}
               title={post.metadata.title}
               summary={post.metadata.summary}
               date={post.metadata.publishedAt}

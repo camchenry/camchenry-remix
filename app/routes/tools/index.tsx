@@ -1,3 +1,4 @@
+import PageCard from "../../components/PageCard";
 import React from "react";
 import type { LoaderFunction } from "remix";
 import { Container, H1, H3 } from "../../components/styled";
@@ -12,15 +13,11 @@ export default function ToolsIndex() {
       <H1 className="mb-4">Tools</H1>
       <ul className="flex flex-col space-y-4">
         <li>
-          <div className="py-5">
-            <H3>
-              <a href={`/tools/worth-it-to-automate`}>
-                Is it worth it to automate?
-              </a>
-            </H3>
-
-            <p className="text-gray-600"></p>
-          </div>
+          <PageCard
+            title="Is It Worth It To Automate?"
+            summary="This calculator helps to determine whether it saves times or wastes time to prematurely optimize a process with automation."
+            url="/tools/worth-it-to-automate"
+          />
         </li>
       </ul>
     </Container>
