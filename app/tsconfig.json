@@ -10,7 +10,8 @@
     "skipLibCheck": true,
     "paths": {
       "~/*": ["./app/*"]
-    }
+    },
+    "baseUrl": "./"
   },
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
 }

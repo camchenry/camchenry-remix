@@ -13,6 +13,13 @@ export enum DurationUnit {
   years = "years",
 }
 
+export enum FrequencyUnit {
+  daily = "daily",
+  weekly = "weekly",
+  monthly = "monthly",
+  yearly = "yearly",
+}
+
 export type Duration = {
   value: number;
   unit: DurationUnit | keyof typeof DurationUnit;
@@ -125,7 +132,7 @@ export const getYearsInDuration = (duration: Duration) => {
 
 export type Frequency = {
   value: number;
-  frequency: "daily" | "weekly" | "monthly" | "yearly";
+  frequency: FrequencyUnit | keyof typeof FrequencyUnit;
 };
 
 /**

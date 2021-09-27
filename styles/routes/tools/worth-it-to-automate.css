@@ -1,0 +1,12 @@
+body {
+  counter-reset: steps;
+}
+.step-header {
+  position: relative;
+}
+.step-header::before {
+  counter-increment: steps;
+  content: counter(steps) ". ";
+  position: absolute;
+  transform: translateX(-150%);
+}

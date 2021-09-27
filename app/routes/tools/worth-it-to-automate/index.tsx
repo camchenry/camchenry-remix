@@ -11,9 +11,13 @@ import {
   Select,
   Summary,
 } from "../../../components/styled";
-import { DurationUnit, getTimeProfit } from "./time-profit";
+import { DurationUnit, FrequencyUnit, getTimeProfit } from "./time-profit";
+import styles from "../../../../styles/routes/tools/worth-it-to-automate.css";
+import { LinksFunction } from "remix";
 
 type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
+
+export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
 
 const WorthItDisplay = ({
   taskRepetitions,
@@ -81,21 +85,33 @@ const WorthItDisplay = ({
   return null;
 };
 
+const StepHeader = ({ children }: { children: React.ReactNode }) => (
+  <H2 className="py-4 border-t step-header">{children}</H2>
+);
+
 export default function WorthItToAutomate() {
   const [taskTimeSaved, setTaskTimeSaved] = useState<number | undefined>();
   const [taskTimeSavedUnit, setTaskTimeSavedUnit] =
     useState<keyof typeof DurationUnit>("hours");
-  const [taskRepetitions, setTaskRepetitions] = useState<number>(1);
+  const [frequency, setFrequency] = useState<number>(5);
+  const [frequencyUnit, setFrequencyUnit] =
+    useState<keyof typeof FrequencyUnit>("weekly");
+  const [duration, setDuration] = useState<number>(1);
+  const [durationUnit, setDurationUnit] =
+    useState<keyof typeof DurationUnit>("years");
   const [timeToAutomate, setTimeToAutomate] = useState<number | undefined>();
   const [timeToAutomateUnit, setTimeToAutomateUnit] =
     useState<keyof typeof DurationUnit>("hours");
+
+  const taskRepetitions = 0;
 
   return (
     <main>
       <Container>
         <H1 className="mb-4">Is it worth it to automate?</H1>
         <div className="mb-8">
-          <div className="mb-5">
+          <section className="mb-5">
+            <StepHeader>How much time is saved?</StepHeader>
             <div className="flex mb-1">
               <div className="mr-4">
                 <Label htmlFor="taskTimeSaved">Time saved</Label>
@@ -130,25 +146,93 @@ export default function WorthItToAutomate() {
             <p className="text-gray-500">
               This is how much time would be saved by automating the task.
             </p>
-          </div>
-          <div className="mb-5">
-            <Label htmlFor="taskRepetitions" className="mb-1">
-              Task repetitions
-            </Label>
-            <Input
-              name="taskRepetitions"
-              id="taskRepetitions"
-              type="number"
-              required
-              min={1}
-              value={taskRepetitions}
-              onChange={(e) => setTaskRepetitions(e.target.valueAsNumber)}
-            />
-            <p className="text-gray-500">
-              This is the number of times that the task will be done.
-            </p>
-          </div>
-          <div className="mb-5">
+          </section>
+          <section>
+            <StepHeader>How often is the task done?</StepHeader>
+            <div className="mb-5">
+              <div className="flex mb-1">
+                <div className="mr-4">
+                  <Label htmlFor="frequency" className="mb-1">
+                    Task occurrences
+                  </Label>
+                  <Input
+                    name="frequency"
+                    id="frequency"
+                    type="number"
+                    required
+                    min={1}
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.valueAsNumber)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="taskTimeSavedUnit">Frequency</Label>
+                  <Select
+                    id="frequencyUnit"
+                    name="frequencyUnit"
+                    value={frequencyUnit}
+                    onChange={(e) =>
+                      setFrequencyUnit(e.target.value as FrequencyUnit)
+                    }
+                  >
+                    {Object.entries(FrequencyUnit).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <p className="text-gray-500">
+                This is the number of times that the task will be done, and on
+                what schedule it will occur. For example, something done each
+                business day (Monday through Friday) would have 5 occurrences
+                weekly.
+              </p>
+            </div>
+            <div className="mb-5">
+              <div className="flex mb-1">
+                <div className="mr-4">
+                  <Label htmlFor="duration" className="mb-1">
+                    Time period
+                  </Label>
+                  <Input
+                    name="duration"
+                    id="duration"
+                    type="number"
+                    required
+                    min={1}
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.valueAsNumber)}
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="durationUnit">Unit</Label>
+                  <Select
+                    id="durationUnit"
+                    name="durationUnit"
+                    value={durationUnit}
+                    onChange={(e) =>
+                      setDurationUnit(e.target.value as DurationUnit)
+                    }
+                  >
+                    {Object.entries(DurationUnit).map(([key, value]) => (
+                      <option key={key} value={key}>
+                        {value}
+                      </option>
+                    ))}
+                  </Select>
+                </div>
+              </div>
+              <p className="text-gray-500">
+                This is the period over which to calculate the total number of
+                tasks. For example, a value of "1 year" would find how much time
+                can be saved from automation in a year.
+              </p>
+            </div>
+          </section>
+          <section className="mb-5">
+            <StepHeader>How long it will take to automate</StepHeader>
             <div className="flex mb-1">
               <div className="mr-4">
                 <Label htmlFor="timeToAutomate" className="mb-1">
@@ -185,7 +269,7 @@ export default function WorthItToAutomate() {
             <p className="text-gray-500">
               This is amount of time that it will take to automate the task.
             </p>
-          </div>
+          </section>
         </div>
         <div className="mb-8">
           {taskTimeSaved !== undefined && timeToAutomate !== undefined ? (
