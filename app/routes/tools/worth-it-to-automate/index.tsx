@@ -1,32 +1,30 @@
-import { registerFont } from "canvas";
-import { useForm } from "react-hook-form";
-import {
-  Button,
-  H1,
-  H2,
-  Input,
-  Label,
-  Select,
-} from "../../../components/styled";
-import { DurationUnit, getTimeProfit } from "./time-profit";
 import { formatDistance } from "date-fns";
+import { useState } from "react";
+import { H1, H2, Input, Label, Select } from "../../../components/styled";
+import { DurationUnit, getTimeProfit } from "./time-profit";
 
 type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
 
 const WorthItDisplay = ({
   taskRepetitions,
-  taskTimeSaved: taskTime,
+  taskTimeSaved,
   timeToAutomate,
 }: TimeProfitParameters) => {
-  console.log({ taskRepetitions, taskTime, timeToAutomate });
-
-  if (!taskTime.value || !timeToAutomate.value) {
-    return null;
+  if (Number.isNaN(taskTimeSaved.value) || Number.isNaN(timeToAutomate.value)) {
+    return (
+      <div>
+        <p>
+          Enter information about the task that you want to automate, and then
+          the recommendation for whether you should automate or not will show up
+          here.
+        </p>
+      </div>
+    );
   }
 
   const profit = getTimeProfit({
     taskRepetitions,
-    taskTimeSaved: taskTime,
+    taskTimeSaved,
     timeToAutomate,
   });
 
@@ -76,41 +74,43 @@ const WorthItDisplay = ({
 };
 
 export default function WorthItToAutomate() {
-  const { register, watch, handleSubmit } = useForm<TimeProfitParameters>({
-    defaultValues: {
-      taskTimeSaved: {
-        unit: "hours",
-      },
-      timeToAutomate: {
-        unit: "hours",
-      },
-      taskRepetitions: 1,
-    },
-    shouldUseNativeValidation: true,
-  });
-
-  const values = watch();
+  const [taskTimeSaved, setTaskTimeSaved] = useState<number | undefined>();
+  const [taskTimeSavedUnit, setTaskTimeSavedUnit] =
+    useState<keyof typeof DurationUnit>("hours");
+  const [taskRepetitions, setTaskRepetitions] = useState<number>(1);
+  const [timeToAutomate, setTimeToAutomate] = useState<number | undefined>();
+  const [timeToAutomateUnit, setTimeToAutomateUnit] =
+    useState<keyof typeof DurationUnit>("hours");
 
   return (
     <div>
       <H1 className="mb-4">Is it worth it to automate?</H1>
-      <div className="flex">
-        <form onSubmit={handleSubmit(() => {})}>
+      <div className="md:flex">
+        <div className="md:max-w-lg w-full md:mr-8 mb-8">
           <div className="mb-5">
             <div className="flex mb-1">
               <div className="mr-4">
-                <Label htmlFor="taskTime">Time saved</Label>
+                <Label htmlFor="taskTimeSaved">Time saved</Label>
                 <Input
-                  {...register("taskTime.value", { valueAsNumber: true })}
-                  id="taskTime"
+                  name="taskTimeSaved"
+                  id="taskTimeSaved"
                   type="number"
                   required
                   min={0}
+                  value={taskTimeSaved}
+                  onChange={(e) => setTaskTimeSaved(e.target.valueAsNumber)}
                 />
               </div>
               <div>
-                <Label htmlFor="taskTimeUnit">Unit</Label>
-                <Select id="taskTimeUnit" {...register("taskTime.unit")}>
+                <Label htmlFor="taskTimeSavedUnit">Unit</Label>
+                <Select
+                  id="taskTimeSavedUnit"
+                  name="taskTimeSavedUnit"
+                  value={taskTimeSavedUnit}
+                  onChange={(e) =>
+                    setTaskTimeSavedUnit(e.target.value as DurationUnit)
+                  }
+                >
                   {Object.entries(DurationUnit).map(([key, value]) => (
                     <option key={key} value={key}>
                       {value}
@@ -128,11 +128,13 @@ export default function WorthItToAutomate() {
               Task repetitions
             </Label>
             <Input
-              {...register("taskRepetitions", { valueAsNumber: true })}
+              name="taskRepetitions"
               id="taskRepetitions"
               type="number"
               required
               min={1}
+              value={taskRepetitions}
+              onChange={(e) => setTaskRepetitions(e.target.valueAsNumber)}
             />
             <p className="text-gray-500">
               This is the number of times that the task will be done.
@@ -145,16 +147,25 @@ export default function WorthItToAutomate() {
                   Time to automate
                 </Label>
                 <Input
-                  {...register("timeToAutomate.value", { valueAsNumber: true })}
+                  name="timeToAutomate"
                   id="timeToAutomate"
                   type="number"
                   required
                   min={0}
+                  value={timeToAutomate}
+                  onChange={(e) => setTimeToAutomate(e.target.valueAsNumber)}
                 />
               </div>
               <div>
-                <Label htmlFor="taskTimeUnit">Unit</Label>
-                <Select {...register("timeToAutomate.unit")} id="taskTimeUnit">
+                <Label htmlFor="taskTimeSavedUnit">Unit</Label>
+                <Select
+                  name="timeToAutomateUnit"
+                  id="timeToAutomateUnit"
+                  value={timeToAutomateUnit}
+                  onChange={(e) =>
+                    setTimeToAutomateUnit(e.target.value as DurationUnit)
+                  }
+                >
                   {Object.entries(DurationUnit).map(([key, value]) => (
                     <option key={key} value={key}>
                       {value}
@@ -167,14 +178,21 @@ export default function WorthItToAutomate() {
               This is amount of time that it will take to automate the task.
             </p>
           </div>
-          <Button>Calculate</Button>
-        </form>
+        </div>
         <div>
-          <WorthItDisplay
-            taskTimeSaved={values.taskTimeSaved}
-            timeToAutomate={values.timeToAutomate}
-            taskRepetitions={values.taskRepetitions}
-          />
+          {taskTimeSaved !== undefined && timeToAutomate !== undefined && (
+            <WorthItDisplay
+              taskTimeSaved={{
+                value: taskTimeSaved,
+                unit: taskTimeSavedUnit,
+              }}
+              timeToAutomate={{
+                unit: timeToAutomateUnit,
+                value: timeToAutomate,
+              }}
+              taskRepetitions={taskRepetitions}
+            />
+          )}
         </div>
       </div>
     </div>

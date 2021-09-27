@@ -1,4 +1,4 @@
-import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
+import { LinksFunction, LoaderFunction, MetaFunction, Scripts } from "remix";
 import { Meta, Links, LiveReload } from "remix";
 import { Outlet } from "react-router-dom";
 
@@ -37,6 +37,7 @@ function Document({ children }: { children: React.ReactNode }) {
 
         {/* disabled for now: <Scripts /> */}
         {process.env.NODE_ENV === "development" && <LiveReload />}
+        <Scripts />
       </body>
     </html>
   );
