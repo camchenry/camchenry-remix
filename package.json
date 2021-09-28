@@ -9,6 +9,7 @@
     "dev": "remix run",
     "start": "remix-serve build",
     "test": "jest --watch",
+    "test:ci": "jest --ci",
     "lint": "eslint --ext js,jsx,ts,tsx app/**",
     "lint:fix": "eslint --ext js,jsx,ts,tsx --fix app/**",
     "watch:css": "postcss styles --base styles --dir app/styles -w",
