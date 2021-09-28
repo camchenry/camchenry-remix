@@ -11,3 +11,5 @@ jobs:
           REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
       - name: Run tests
         run: npm run test:ci
+        env:
+          REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
