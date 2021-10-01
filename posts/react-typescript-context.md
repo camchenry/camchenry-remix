@@ -9,23 +9,58 @@ tags:
 
 ## What is the React Context API?
 
-- React.createContext
-- React.useContext
-
-### A note about class-based Context
-
-- There is a class-based method of using Context
-- We will not cover that because Hooks is a much simple API (and easier to reuse/compose too)
+React Context is one of the core React APIs that can be used anytime you are developing with React. Context allows us to create a piece of state that is globally shared among many different components.
+For example, an application might have a context for the current locale, language, or theme, because that data will be used by
+many different components. Context is ideal for globally shared values.
 
 ### What problems does React Context solve?
 
-- Context helps to pass a piece of global state to an entire render tree.
-  - That is, any component under a context can access its state and will be rerendered when the context changes.
-  - Pro: It prevents having to pass the same prop in many different components
-  - Pro: By not requiring props to be passed, the component can be used more flexibly
-  - Con: Since the component _requires_ context, it must always be wrapped
+At its core, Context helps to solve one main issue: "prop drilling." Prop drilling is the name for when a property
+must be passed down through an entire component tree in order to render the application.
 
-### How does context work?
+For example, suppose that we store information about a user's application preferences (language, timezone, privacy, etc.) and need to use that to render the application correctly. To render the application, we must write something like:
+
+```jsx
+<App preferences={preferences} />
+// Inside App:
+<Profile preferences={preferences} />
+// Inside Profile:
+<Settings preferences={preferences} />
+// ... and so on
+```
+
+Ultimately, we end up writing the same code repeatedly in order to pass that state down. Now, if we ever have to rename `preferences` or change its type, we have to change it for every component that passes that state down.
+
+**That's a huge pain**, especially for large applications, where it's not unheard of to have components that are nested dozens of layers deep inside of other components.
+
+In addition to the increased effort, this sort of behavior also makes components less flexible, because they are expected to take certain properties, and be nested in certain ways. So, restructuring and moving components around becomes more difficult.
+
+So, how can we solve the prop drilling problem?
+
+Enter React Context.
+
+### How Context solves the problems with prop drilling
+
+Context solves the problems that come from prop drilling by allowing components to "skip" an arbitrary number of layers in the component tree. In this way, components can access directly shared state directly.
+
+In a context, there are two main pieces: the **provider** and the **consumer**.
+
+- The provider is the component where the shared state is defined. All components under a provider will be rerendered when the state changes.
+- A consumer is the component where the state from the provider is accessed and used. As long as it is a descendent of the provider, it can access the provider's state. **A consumer always reads the value of the nearest provider.**
+
+#### An Analogy for Context
+
+Imagine a context like a wireless network, where the provider is a 🌐 WiFi router, and the consumer is a device like a 💻 laptop.
+
+A laptop that is connected to the network is like a consumer component that is nested under the provider. As long as the
+laptop is connected, it can communicate and receive data regardless of where it is physically located. In the same way, as long as a consumer is under the provider, it can exist anywhere in the component tree and access state directly.
+
+Similarly, a laptop always tries to find the closest access point in order to get the best signal possible. This is like the behavior of the consumer, which always reads the value of the nearest (least nested) provider.
+
+### How do we define a context?
+
+- React.createContext
+- React.useContext
 
 - Two parts (potentially two components):
   - Consumer
@@ -33,6 +68,11 @@ tags:
 - Consumer can access the state given by the Provider.
   - The state is read from the closest provider in the tree.
 - When the Provider state changes, the entire tree under the Provider updates.
+
+### A note about class-based Context
+
+- There is a class-based method of using Context
+- We will not cover that because Hooks is a much simple API (and easier to reuse/compose too)
 
 ## How TypeScript helps us work with contexts
 
