@@ -9,7 +9,6 @@ import {
 } from "canvas";
 import { getPost, getPosts } from "./services/posts";
 import globby from "globby";
-import { getTools } from "./services/tools";
 
 const getLines = (
   ctx: CanvasRenderingContext2D,
@@ -207,12 +206,6 @@ export default async function handleRequest(
         return {
           url: `blog/${post.id}`,
           lastmod: new Date(post.metadata.publishedAt).toISOString(),
-        };
-      }),
-      ...(await getTools()).map((tool) => {
-        return {
-          url: `tools/${tool}`,
-          lastmod: getDate,
         };
       }),
     ];

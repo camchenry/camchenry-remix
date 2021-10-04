@@ -7,7 +7,7 @@
     "postinstall": "remix setup",
     "build": "npm run build:css && remix build",
     "dev": "remix run",
-    "start": "remix-serve build",
+    "start": "remix-serve server/build",
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint --ext js,jsx,ts,tsx app/**",
