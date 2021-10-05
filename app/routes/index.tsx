@@ -17,13 +17,24 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-export const loader: LoaderFunction = async () => {
-  const posts = await getPosts();
-  return { posts };
+const getMessage = (messageId: string | null): string | undefined => {
+  if (messageId === "confirm-email-subscription") {
+    return "Your subscription has been confirmed. Thanks for subscribing!";
+  }
 };
 
-type RouteData = {
+type LoaderData = {
   posts: PostData[];
+  message?: string;
+};
+
+export const loader: LoaderFunction = async ({
+  request,
+}): Promise<LoaderData> => {
+  const posts = await getPosts();
+  const messageId = new URL(request.url).searchParams.get("messageId");
+  const message = getMessage(messageId);
+  return { posts, message };
 };
 
 const Header = tw.header`
@@ -46,9 +57,14 @@ const Header = tw.header`
 `;
 
 export default function Index() {
-  const data = useRouteData<RouteData>();
+  const { posts, message } = useRouteData<LoaderData>();
   return (
     <div className="mb-10">
+      {message !== undefined && (
+        <div className="text-center bg-gradient-to-r from-green-400 to-green-600 rounded px-4 py-8 mb-4 text-xl text-white">
+          {message}
+        </div>
+      )}
       <Header>
         <H1 className="mb-4 py-2  font-black lg:text-5xl bg-gradient-to-r from-green-400 to-green-600">
           Cameron McHenry
@@ -62,7 +78,7 @@ export default function Index() {
       <div className="max-w-prose mx-auto">
         <H2 className="mb-4">Posts</H2>
         <ul className="flex flex-col space-y-4">
-          {data.posts.map((post) => (
+          {posts.map((post) => (
             <li key={post.id}>
               <PageCard
                 url={`/blog/${post.id}`}
