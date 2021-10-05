@@ -1,7 +1,7 @@
 ---
 title: "How to power up the React Context API with TypeScript"
-summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+summary: "Context is a simple, but powerful feature that can be used in any React project. Using Context we can solve issues with prop drilling, and then by adding TypeScript, we can dramatically improve safety when using a context."
+publishedAt: "2021-10-05"
 tags:
   - typescript
   - react
@@ -74,6 +74,10 @@ Imagine that a context is like a wireless network, where the provider is a 🌐 
     <tr>
       <td>A laptop will try to find the closest access point in the network to get the best wireless signal.</td>
       <td>A consumer will try to find the closest provider (nearest ancestor) to get the current state.</td>
+    </tr>
+    <tr>
+      <td>If there is no wireless access point, devices will not work.</td>
+      <td>If there is no context provider, then consumers will only get the default value.</td>
     </tr>
   </tbody>
 </table>
@@ -156,12 +160,14 @@ To answer that, let's look at some of the issues that we might experience when u
 
 - Accessing a non-existent property in the context could cause an error
 - Renaming a property in the context, or change its type (e.g., from `string` to `object`) means we have to check every instance where that context is used
+- May be possible to put context into invalid states (misspelled string literals, wrong types, etc.)
 - Have to reference where the context is defined originally to figure out what properties it contains
 
 Most or all of these issues are typical with any JavaScript application, not just ones that use Context. However, TypeScript can solve or mitigate all of these issues:
 
 - Accessing a non-existent property in a context will cause a **compile error**, preventing any misuse of the context
 - Renaming a property or changing the type of a property in the context will cause a **compile error**, if any code relied on the old name or type
+- All types are checked, so invalid context states will **not compile**, preventing many classes of bugs
 - A typed context enables IDEs (like Visual Studio Code) to autocomplete what properties are available in a context
 
 Furthermore, we don't incur any run-time cost for these benefits. That is, using TypeScript doesn't make our bundle size any larger because all of the types will be removed when compiled.
@@ -171,9 +177,9 @@ Furthermore, we don't incur any run-time cost for these benefits. That is, using
 Let's revisit how we defined the theme context example earlier. Now we are going to add explicit types for the context.
 
 ```tsx
-type ThemeContextValue = "light" | "dark";
+type ThemeState = "light" | "dark";
 
-const ThemeContext = React.createContext<ThemeContextValue>("light");
+const ThemeContext = React.createContext<ThemeState>("light");
 ```
 
 Now if we try to provide an invalid value to the context, the application will not compile.
@@ -181,7 +187,7 @@ Now if we try to provide an invalid value to the context, the application will n
 ```tsx
 // ❌ This will NOT compile:
 const App = () => (
-  // ERROR: Type '"tomato"' is not assignable to type 'ThemeContextValue'
+  // ERROR: Type '"tomato"' is not assignable to type 'ThemeState'
   //                     ⬇️
   <ThemeContext.Provider value="tomato">
     <CurrentThemeDisplay />
@@ -198,7 +204,7 @@ const CurrentThemeDisplay = () => {
   if (theme === "peach") {
     // ~~~~~~~~~~~~~~~~
     // ERROR: This condition will always return 'false' since the
-    // types 'ThemeContextValue' and '"peach"' have no overlap.
+    // types 'ThemeState' and '"peach"' have no overlap.
     return "🍑 Peach";
   }
   return <div>{theme}</div>;
@@ -218,65 +224,111 @@ What if we don't want to provide a default value though? This may come up if we 
 
 To do this, we still have to provide a default value to `createContext`, but we can throw an error if there was no value in the context (which means that no provider was rendered).
 
-#### Authentication context example
+#### Theme context example with "no default value"
 
-As an example, let's create an authentication context which tells the application about the current login state. Let's suppose that we want to enforce an authentication provider to exist.
+As an example, let's create a new version of the theme context which tells the application about the current theme. In this case, it's perhaps a bit contrived for a theme provider why you might want to have "no default value," but there are good reasons to do so for something like an authentication context or other context that might make API calls.
+
+To keep things simple though, we will build from our previous theme example.
+
+We will use `null` as a sentinel value that indicates that no provider provided a value and consumers should consider this default value as invalid. So, if the `value` is null, we will throw an error. This will then allow TypeScript to infer that the value from the context is definitely defined.
 
 ```tsx
-type User = { id: string; name: string };
-type AuthContextValue =
-  | { state: "logged-out" }
-  | { state: "logged-in"; user: User };
+type ThemeState = "light" | "dark";
 
-const AuthContext = React.createContext<AuthContextValue | null>(null);
+const ThemeContext = React.createContext<ThemeState | null>(null);
 ```
 
-Then, where we consume the context, we can check if the value is `null`, and throw an error.
+The context value can either be our expected set of values for the context, or `null` (if no provider is created). Then, where we consume the context, we can check if the value is `null`, and throw an error.
 
 ```tsx
-const UserName = () => {
-  const authState = React.useContext(AuthContext);
-  if (authState === null) {
+const CurrentThemeDisplay = () => {
+  const theme = React.useContext(ThemeContext); // this will be "light"
+  if (theme === null) {
     throw new Error(
-      "Authentication state not found. Try wrapping a parent component with <AuthContext.Provider>."
+      "Theme state not found. Try wrapping a parent component with <ThemeContext.Provider>."
     );
   }
-  return authState.state === "logged-out" ? "Anonymous" : authState.user.name;
+  return <div>{theme}</div>;
 };
 ```
 
-Now if we try to render `<UserName />` without a `AuthContext.Provider`, an error will be thrown. The error message also includes what went wrong, explains how to fix the error: wrap a parent component with `AuthContext.Provider`.
+Now, we ensure that anywhere we use the theme context, that a theme provider must be rendered before the application works. In this way, we surface potential usage issues with our context much sooner than if we didn't throw an error.
+
+We also retain the type safety of TypeScript, because throwing an error when `theme === null` gives the compiler enough information to narrow the type of `ThemeState | null` to just `ThemeState`, which makes it safe to render `theme`.
 
 <div class="note">
-We also implicitly used another feature here of TypeScript here called <a href="https://www.typescriptlang.org/docs/handbook/2/narrowing.html">narrowing</a>. In combination with a <a href="https://en.wikipedia.org/wiki/Tagged_union"><abbr title="Also known as tagged unions">discriminated union</abbr></a>. Since we checked value of <code>state</code>, TypeScript was able to deduce that <code>authState.user</code> would always be defined in the other branch. If we had not properly checked this, TypeScript would not compile the code.
+The error message also includes what went wrong, explains how to fix the error: wrap a parent component with `ThemeContext.Provider`.
+
+Providing descriptive error messages that indicate clearly went wrong, and some possible ways to fix the issue is immensely valuable. <strong>You and future developers will thank you many times over.</strong>
+
 </div>
 
-## How to write a TypeScript custom hook for a React Context
+### How to write a TypeScript custom hook for a React Context
 
 Now that we've explored how to add a type to the context, and enforce that a provider is used, it has become a bit cumbersome to actually use the context. We can fix that by creating a custom hook that calls `useContext` for us.
 
 ```tsx
-const useUser = (): User | undefined => {
-  const authState = React.useContext(AuthContext);
-  if (authState === null) {
+const useTheme = (): ThemeState => {
+  const themeState = React.useContext(ThemeContext);
+  if (themeState === null) {
     throw new Error(
-      "Authentication state not found. Try wrapping a parent component with <AuthContext.Provider>."
+      "Theme state not found. Try wrapping a parent component with <ThemeContext.Provider>."
     );
   }
-  return authState.state === "logged-in" ? authState.user : undefined;
+  return themeState;
 };
 ```
 
-Now, we have a reusable hook called `useUser` that lets us access the currently authenticated user from anywhere. It guarantees that we check there is an authentication provider, and also validates that we are logged in (using narrowing, which was discussed in the note above).
+Now, we have a reusable hook called `useTheme` that lets us access the current theme from anywhere. It guarantees that we consistently check if there is a theme provider, and it also removes the dependency on the `ThemeContext` variable, which makes the code a bit shorter and easier to change if we want to switch how the theme state is accessed. <strong>Context is now an implementation detail of getting the theme.</strong>
 
-Now, the `UserName` component from before is much simpler:
+So, our `CurrentThemeDisplay` component from before is much simpler:
 
 ```tsx
-const UserName = () => {
-  const user = useUser();
-  return user ? "Anonymous" : user.name;
+function CurrentThemeDisplay() {
+  const { theme } = useTheme();
+  return <div>{theme}</div>;
+}
+```
+
+### How to update state in a context
+
+So far, we've only covered read-only contexts that don't allow consumers to update the state of the context. But it is also possible to provide functions in the context that actually allow the state of the context to change. Using the theme example, let's add a function to change the current theme.
+
+First, we need to add an additional type for the theme state, plus a callback to change the state. Why do we need to declare it separately? Because we are going to define the state and the callback separately before combining them into the context value.
+
+```tsx
+type ThemeState = "light" | "dark";
+type ThemeStateWithCallbacks = {
+  // The current theme state
+  theme: ThemeState;
+  // Callback for any consumer to change the current theme state
+  setTheme: (newTheme: ThemeState) => void;
+};
+const ThemeContext = React.createContext<ThemeStateWithCallbacks | null>(null);
+```
+
+Then, to actually store the state and create a callback to change it, we will use `React.useState` which conveniently does exactly that for us. To use a hook though, we need to create a component for the provider.
+
+```tsx
+const ThemeProvider = ({ children }: React.PropsWithChildren<unknown>) => {
+  const [theme, setTheme] = useState<ThemeState>("light");
+  return (
+    <ThemeContext.Provider value={{ theme, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 ```
+
+We use the separate theme state type with `useState` to define both the current state and create a callback to change it. Then, our theme context simply expects an object that has both a `theme` property and `setTheme` property.
+
+Now, because we are using `useState`, if any consumer changes the current theme, `ThemeProvider` will rerender and broadcast the change to all context consumers of the theme state.
+
+<div class="note">
+For this simple case, <code>useState</code> is sufficient to meet our needs. However, in larger applications, I would strongly
+recommend taking a look at <code><a href="https://reactjs.org/docs/hooks-reference.html#usereducer">useReducer</a></code> to make
+complex state changes simpler and easier to test.
+</div>
 
 ## Conclusion
 
