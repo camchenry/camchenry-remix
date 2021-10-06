@@ -1,5 +1,5 @@
 ---
-title: "How to power up the React Context API with TypeScript"
+title: "How to Power Up the React Context API with TypeScript"
 summary: "Context is a simple, but powerful feature that can be used in any React project. Using Context we can solve issues with prop drilling, and then by adding TypeScript, we can dramatically improve safety when using a context."
 publishedAt: "2021-10-06"
 tags:
