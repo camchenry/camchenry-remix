@@ -1,0 +1,12 @@
+.note {
+  border-left: 2px solid var(--primary-color);
+  padding-left: 1rem;
+  font-size: 14px;
+}
+.note::before {
+  content: "NOTE";
+  display: block;
+  letter-spacing: 0.1em;
+  color: var(--primary-color);
+  font-weight: bold;
+}

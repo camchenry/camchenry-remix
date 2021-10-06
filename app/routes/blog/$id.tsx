@@ -13,9 +13,13 @@ import PostDate from "../../components/PostDate";
 import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts";
+import styles from "../../styles/routes/blog/post.css";
 
 export const links: LinksFunction = () => {
-  return [{ rel: "stylesheet", href: highlightStyles }];
+  return [
+    { rel: "stylesheet", href: highlightStyles },
+    { rel: "stylesheet", href: styles },
+  ];
 };
 
 export const headers: HeadersFunction = ({ loaderHeaders }) => {
