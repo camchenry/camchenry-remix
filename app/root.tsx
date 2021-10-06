@@ -181,34 +181,15 @@ export default function App() {
       </div>
       <footer className="container mx-auto p-3">
         <Container className="border-t border-gray-200">
-          <div className="flex flex-col md:flex-row mt-12 mb-8">
-            <div className="flex-1">
+          <div className="grid grid-cols-2 mt-12 mb-8">
+            <div className="col-span-full md:col-span-1">
               <div className="font-bold mb-4">Cameron McHenry</div>
               <div className="flex flex-grow mb-8">
                 <Twitter />
                 <GitHub />
               </div>
-              <div className="mb-4">
-                <div className="font-bold">Sitemap</div>
-                <ul>
-                  <li>
-                    <a href="/">Home</a>
-                  </li>
-                  <li>
-                    <a href="/blog">Blog</a>
-                  </li>
-                  <li>
-                    <a href="/tools">Tools</a>
-                  </li>
-                  <li>
-                    <a href="/sitemap.xml">Full sitemap</a>
-                  </li>
-                </ul>
-              </div>
             </div>
-            <div className="flex-1">
-              <ConvertKitForm />
-            </div>
+            <ConvertKitForm />
           </div>
           <small className="text-gray-500">
             © Cameron McHenry 2016-{new Date().getFullYear()}
