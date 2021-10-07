@@ -27,7 +27,7 @@ function Document({ children }: { children: React.ReactNode }) {
         <link rel="icon" href="/favicon.ico" />
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=fallback"
           rel="stylesheet"
         />
         <Meta />
@@ -46,7 +46,7 @@ function Document({ children }: { children: React.ReactNode }) {
 
 const ConvertKitForm = () => (
   <div>
-    <script src="https://f.convertkit.com/ckjs/ck.5.js"></script>
+    <script async defer src="https://f.convertkit.com/ckjs/ck.5.js"></script>
     <form
       action="https://app.convertkit.com/forms/2644413/subscriptions"
       className="seva-form formkit-form"
