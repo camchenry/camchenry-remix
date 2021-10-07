@@ -1,12 +1,11 @@
 import React from "react";
-import type { MetaFunction, LinksFunction, LoaderFunction } from "remix";
+import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
 import { useRouteData } from "remix";
 import tw from "tailwind-styled-components";
 import PageCard from "../components/PageCard";
-import { H1, H2, H3 } from "../components/styled";
+import { H1, H2 } from "../components/styled";
 import { defaultMeta } from "../meta";
 import { getPosts, PostData } from "../services/posts";
-
 import stylesUrl from "../styles/routes/index.css";
 
 export const meta: MetaFunction = () => {
