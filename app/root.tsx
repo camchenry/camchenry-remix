@@ -5,6 +5,7 @@ import { Outlet } from "react-router-dom";
 import styles from "./styles/app.css";
 import { defaultMeta } from "./meta";
 import { Button, Container, Input, Label } from "./components/styled";
+import { useCatch } from "@remix-run/react";
 
 export const meta: MetaFunction = () => {
   return defaultMeta;
@@ -211,4 +212,37 @@ export function ErrorBoundary({ error }: { error: Error }) {
       </p>
     </Document>
   );
+}
+
+export function CatchBoundary() {
+  const caught = useCatch();
+
+  switch (caught.status) {
+    // add whichever other status codes you want to handle
+    // https://developer.mozilla.org/en-US/docs/Web/HTTP/Status#client_error_responses
+    case 401:
+      return (
+        <Document>
+          <h1>
+            {caught.status} {caught.statusText}
+          </h1>
+        </Document>
+      );
+    case 404:
+      return (
+        <div className="text-center my-6 md:my-32">
+          <h1 className="text-4xl mb-4">
+            <span className="font-bold">404</span> Not Found
+          </h1>
+          <p>
+            The link that you requested is either invalid or no longer exists.
+          </p>
+        </div>
+      );
+
+    default:
+      throw new Error(
+        `Unexpected caught response with status: ${caught.status}`
+      );
+  }
 }

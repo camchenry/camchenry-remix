@@ -1,5 +1,5 @@
 import React from "react";
-import { LoaderFunction, useRouteData } from "remix";
+import { LoaderFunction, useLoaderData } from "remix";
 import PageCard from "../../components/PageCard";
 import { Container, H1 } from "../../components/styled";
 import { getPosts, PostData } from "../../services/posts";
@@ -10,7 +10,8 @@ export const loader: LoaderFunction = async () => {
 };
 
 export default function BlogPostIndex() {
-  const posts = useRouteData<PostData[]>();
+  const posts = useLoaderData<PostData[]>();
+  console.log(posts);
   return (
     <Container>
       <H1 className="mb-4">Posts</H1>
