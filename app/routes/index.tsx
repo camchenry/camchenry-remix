@@ -35,7 +35,6 @@ export const loader: LoaderFunction = async ({
   request,
 }): Promise<LoaderData> => {
   const posts = await getPosts();
-  console.log(posts);
   const messageId = new URL(request.url).searchParams.get("messageId");
   const message = getMessage(messageId);
   return { posts, message };
@@ -61,9 +60,7 @@ const Header = tw.header`
 `;
 
 export default function Index() {
-  const { posts, message, ...rest } = useLoaderData<LoaderData>();
-  console.log(rest);
-  console.log("test");
+  const { posts, message } = useLoaderData<LoaderData>();
   return (
     <div className="mb-10">
       {message !== undefined && (

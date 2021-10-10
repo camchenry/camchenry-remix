@@ -11,7 +11,6 @@ export const loader: LoaderFunction = async () => {
 
 export default function BlogPostIndex() {
   const posts = useLoaderData<PostData[]>();
-  console.log(posts);
   return (
     <Container>
       <H1 className="mb-4">Posts</H1>
