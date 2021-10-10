@@ -1,6 +1,10 @@
 import React from "react";
-import type { LinksFunction, LoaderFunction, MetaFunction } from "remix";
-import { useRouteData } from "remix";
+import {
+  LinksFunction,
+  LoaderFunction,
+  MetaFunction,
+  useLoaderData,
+} from "remix";
 import tw from "tailwind-styled-components";
 import PageCard from "../components/PageCard";
 import { H1, H2 } from "../components/styled";
@@ -31,6 +35,7 @@ export const loader: LoaderFunction = async ({
   request,
 }): Promise<LoaderData> => {
   const posts = await getPosts();
+  console.log(posts);
   const messageId = new URL(request.url).searchParams.get("messageId");
   const message = getMessage(messageId);
   return { posts, message };
@@ -56,7 +61,9 @@ const Header = tw.header`
 `;
 
 export default function Index() {
-  const { posts, message } = useRouteData<LoaderData>();
+  const { posts, message, ...rest } = useLoaderData<LoaderData>();
+  console.log(rest);
+  console.log("test");
   return (
     <div className="mb-10">
       {message !== undefined && (

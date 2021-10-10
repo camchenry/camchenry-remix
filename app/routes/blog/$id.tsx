@@ -1,12 +1,12 @@
 import React from "react";
 import {
+  HeadersFunction,
   json,
   LinksFunction,
   LoaderFunction,
-  HeadersFunction,
   MetaFunction,
   redirect,
-  useRouteData,
+  useLoaderData,
 } from "remix";
 import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
 import PostDate from "../../components/PostDate";
@@ -38,7 +38,7 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const postId: string = params.id;
+  const postId = params.id;
   const postData = await getPost(postId);
   if (!postData) {
     return redirect("/404");
@@ -51,7 +51,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 export default function BlogPost() {
-  const data = useRouteData<PostData>();
+  const data = useLoaderData<PostData>();
 
   return (
     <div>
