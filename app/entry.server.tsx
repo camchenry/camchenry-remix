@@ -9,6 +9,7 @@ import {
 } from "canvas";
 import { getPost, getPosts } from "./services/posts";
 import globby from "globby";
+import { generateSitemap } from "services/sitemap";
 
 const getLines = (
   ctx: CanvasRenderingContext2D,
@@ -182,7 +183,6 @@ export default async function handleRequest(
   }
 
   if (url.pathname.startsWith("/sitemap.xml")) {
-    const DOMAIN = "https://camchenry.com";
     const getDate = new Date().toISOString();
 
     const staticPages = (
@@ -222,29 +222,9 @@ export default async function handleRequest(
       };
     });
 
-    // remove duplicates (such as /projects.tsx and /projects/index.tsx)
-    const filteredPages = Array.from(new Set(formattedPages));
-
-    const pagesSitemap = `${filteredPages
-      .map(({ url, lastmod }) => {
-        const routePath = url === "index" ? "" : url;
-        return `\n  <url>
-    <loc>${DOMAIN}/${routePath}</loc>
-    <lastmod>${lastmod}</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.7</priority>
-  </url>`;
-      })
-      .join("")}`;
-
-    const generatedSitemap = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-  xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd"
->${pagesSitemap}
-</urlset>
-  `;
+    const generatedSitemap = generateSitemap(formattedPages, {
+      hostname: "https://camchenry.com",
+    });
 
     return new Response(generatedSitemap, {
       headers: {
