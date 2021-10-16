@@ -9,7 +9,8 @@ import {
 } from "canvas";
 import { getPost, getPosts } from "./services/posts";
 import globby from "globby";
-import { generateSitemap } from "services/sitemap";
+import { generateSitemap } from "./services/sitemap";
+import { generateRss } from "./services/rss";
 
 const getLines = (
   ctx: CanvasRenderingContext2D,
@@ -227,6 +228,29 @@ export default async function handleRequest(
     });
 
     return new Response(generatedSitemap, {
+      headers: {
+        "Content-Type": "application/xml",
+        "Cache-Control": "public, max-age=2419200",
+      },
+    });
+  }
+
+  if (url.pathname.startsWith("/rss.xml")) {
+    const posts = await getPosts();
+    const feed = generateRss({
+      title: "Cameron McHenry Blog",
+      description: "Cameron McHenry's Blog",
+      link: "https://camchenry.com/blog",
+      entries: posts.map((post) => ({
+        description: post.metadata.summary,
+        pubDate: post.metadata.publishedAt,
+        title: post.metadata.title,
+        guid: post.id,
+        link: `https://camchenry.com/blog/${post.id}`,
+        author: "Cameron McHenry",
+      })),
+    });
+    return new Response(feed, {
       headers: {
         "Content-Type": "application/xml",
         "Cache-Control": "public, max-age=2419200",
