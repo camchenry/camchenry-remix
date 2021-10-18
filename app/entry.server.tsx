@@ -243,11 +243,10 @@ export default async function handleRequest(
       link: "https://camchenry.com/blog",
       entries: posts.map((post) => ({
         description: post.metadata.summary,
-        pubDate: post.metadata.publishedAt,
+        pubDate: new Date(post.metadata.publishedAt).toUTCString(),
         title: post.metadata.title,
-        guid: post.id,
         link: `https://camchenry.com/blog/${post.id}`,
-        author: "Cameron McHenry",
+        guid: `https://camchenry.com/blog/${post.id}`,
       })),
     });
     return new Response(feed, {

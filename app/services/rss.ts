@@ -21,13 +21,14 @@ export function generateRss({
   entries: RssEntry[];
 }): string {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>${title}</title>
     <description>${description}</description>
     <link>${link}</link>
     <language>en-us</language>
     <ttl>60</ttl>
+    <atom:link href="https://camchenry.com/rss.xml" rel="self" type="application/rss+xml" />
     ${entries
       .map(
         (entry) => `
@@ -36,10 +37,8 @@ export function generateRss({
         <description><![CDATA[${entry.description}]]></description>
         <pubDate>${entry.pubDate}</pubDate>
         <link>${entry.link}</link>
-        ${entry.author ? `<author>${entry.author}</author>` : ""}
-        ${entry.guid ? `<guid>${entry.guid}</guid>` : ""}
-      </item>
-    `
+        ${entry.guid ? `<guid isPermaLink="false">${entry.guid}</guid>` : ""}
+      </item>`
       )
       .join("")}
   </channel>
