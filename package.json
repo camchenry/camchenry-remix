@@ -17,10 +17,10 @@
     "vercel-build": "yum install --skip-broken libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
   },
   "dependencies": {
-    "@remix-run/node": "^0.19.2",
-    "@remix-run/react": "^0.19.2",
-    "@remix-run/serve": "^0.19.2",
-    "@remix-run/vercel": "^0.19.2",
+    "@remix-run/node": "^0.19.3",
+    "@remix-run/react": "^0.19.3",
+    "@remix-run/serve": "^0.19.3",
+    "@remix-run/vercel": "^0.19.3",
     "@tailwindcss/typography": "^0.4.0",
     "@vercel/node": "^1.10.0",
     "autoprefixer": "^10.2.5",
@@ -52,7 +52,7 @@
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
-    "@remix-run/dev": "^0.19.2",
+    "@remix-run/dev": "^0.19.3",
     "@types/jest": "^27.0.1",
     "@types/react": "^17.0.6",
     "@types/react-dom": "^17.0.5",
