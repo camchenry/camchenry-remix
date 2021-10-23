@@ -7,11 +7,11 @@
     "target": "es2019",
     "strict": true,
     "strictNullChecks": true,
-    "skipLibCheck": true,
     "paths": {
       "~/*": ["./app/*"]
     },
-    "baseUrl": "./"
+
+    "noEmit": true
   },
   "include": ["remix.env.d.ts", "**/*.ts", "**/*.tsx"]
 }
