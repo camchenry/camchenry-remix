@@ -1,4 +1,3 @@
-import { useCatch } from "@remix-run/react";
 import { Outlet } from "react-router-dom";
 import {
   Links,
@@ -8,6 +7,7 @@ import {
   Meta,
   MetaFunction,
   Scripts,
+  useCatch,
 } from "remix";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";
@@ -166,24 +166,28 @@ const GitHub = () => (
   </a>
 );
 
+const Navigation = () => (
+  <nav className="container mx-auto p-3">
+    <ul className="flex justify-center">
+      <li className="mr-4">
+        <a href="/">
+          <span className="font-bold">Cameron McHenry</span>
+        </a>
+      </li>
+      <li className="mr-4">
+        <a href="/blog">Blog</a>
+      </li>
+      <li>
+        <a href="/tools">Tools</a>
+      </li>
+    </ul>
+  </nav>
+);
+
 export default function App() {
   return (
     <Document>
-      <nav className="container mx-auto p-3">
-        <ul className="flex justify-center">
-          <li className="mr-4">
-            <a href="/">
-              <span className="font-bold">Cameron McHenry</span>
-            </a>
-          </li>
-          <li className="mr-4">
-            <a href="/blog">Blog</a>
-          </li>
-          <li>
-            <a href="/tools">Tools</a>
-          </li>
-        </ul>
-      </nav>
+      <Navigation />
       <div className="container mx-auto p-3">
         <Outlet />
       </div>
@@ -237,14 +241,17 @@ export function CatchBoundary() {
       );
     case 404:
       return (
-        <div className="text-center my-6 md:my-32">
-          <h1 className="text-4xl mb-4">
-            <span className="font-bold">404</span> Not Found
-          </h1>
-          <p>
-            The link that you requested is either invalid or no longer exists.
-          </p>
-        </div>
+        <Document>
+          <Navigation />
+          <div className="text-center my-6 md:my-32">
+            <h1 className="text-4xl mb-4">
+              <span className="font-bold">404</span> Not Found
+            </h1>
+            <p>
+              The link that you requested is either invalid or no longer exists.
+            </p>
+          </div>
+        </Document>
       );
 
     default:
