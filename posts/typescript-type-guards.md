@@ -298,33 +298,126 @@ function assertString(value: unknown): asserts value is string {
 
 const x = "123";
 assertString(x);
+// x now has type 'string', so it is safe to use string methods
 x.toLowerCase();
 ```
 
 <div class="note">
-Previously, we discussed how all type guards are based around a boolean check. That is still true in this case, but the actual usage is different from other type guards.
+Previously, we discussed how all type guards are based around a boolean check. That is still true in this case, but the actual usage is slightly different from other type guards.
 
 With other type guards, we typically used something like `if` or `switch` to create different branches of execution. With an assertion function, the two branches are: continue as normal, or stop the script (throw an error).
 
 </div>
 
+Other than the difference of how an assertion type guard can throw an exception, assertion type guards are similar to other type guards. However, something that we must be careful about is accidentally creating a type guard which asserts the **wrong** condition.
+
+This is one way that we can end up with a **false sense of safety**. Here is an example where the function asserts something, but the actual code asserts nothing.
+
+```typescript
+function assertString(value: unknown): asserts value is string {
+  // This check does not match the assertion signature
+  if (typeof value === "boolean") {
+    throw new TypeError();
+  }
+}
+
+const x: unknown = 123;
+assertString(x);
+// We get a run-time exception here (!!!), which TypeScript should
+// be able to prevent under normal circumstances:
+x.toLowerCase();
+// "TypeError: x.toLowerCase is not a function"
+```
+
 ### User-defined (custom) type guard
 
-- built-in example: `Array.isArray` (<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray>)
-- `Array.filter` (<https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter>)
+Most type guards have limitations to what they can check, such as only primitive types for `typeof`, or only classes for `instanceof`. But with user-defined type guards, there are no limitations on what we can check.
 
-## How to create a custom type guard function
+**Custom type guards are the most powerful kind of type guard**, because we can verify any type, including ones that we defined ourselves, as well as built-in types from JavaScript or the DOM. The main downside of custom type guards is that they are not predefined, so we have to write them ourselves.
 
-- Examples:
+There are a few built-in custom type guards though, such as [`Array.isArray`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/isArray):
 
-  - `isValidElement`: <https://reactjs.org/docs/react-api.html#isvalidelement>
-  - Checking a number is positive
-  - Checking a string is a guid
+```typescript
+const data: unknown = ["a", "b", 123, false];
+if (Array.isArray(data)) {
+  // data now has type "array", so it is safe to use array methods
+  data.sort();
+}
+```
 
-- Pros:
-  - Can create any kind of type, including custom types
-  - Allows type-checking at run-time, ensuring that safety is ensured against data changing at run-time (for example: API returning different data)
-- Cons:
-  - Have to be manually written (cannot be done automatically currently)
-  - Minor performance overhead
-  - Can be implemented incorrectly, providing a false sense of security and safety
+In the next section, we will look at all of the different ways that we can define our own type guard functions.
+
+## Type guard functions
+
+A type guard function is a function that returns a value and has a _type predicate_.
+
+A type predicate is an additional declaration that is added to a functon (like a return type) which gives additional information to TypeScript and allows it to narrow the type of a variable. For example, in the definition of `Array.isArray`,
+
+```typescript
+function isArray(arg: any): arg is any[];
+```
+
+the type predicate is `arg is any[]`. In spoken word, the signature of this function might be: "`isArray` takes one argument of type `any` and checks if it is an array." In general, type predicates take the form: `variable is type`.
+
+For a function to be eligible as a type guard, it must:
+
+- Return a boolean value
+- Have a type predicate
+
+The type predicate replaces the return type, because a function with a type predicate must always return a boolean value.
+
+### Examples of type guard functions
+
+#### Check if a value is a string
+
+This example is essentially a reusable form of the built-in `typeof` type guard.
+
+```typescript
+function isString(value: unknown): value is string {
+  return typeof value === "string";
+}
+```
+
+#### Check if a value is defined (not null or undefined)
+
+```typescript
+function isNotNullOrUndefined<Value>(
+  value: Value | undefined | null
+): value is Value {
+  return value !== null && value !== undefined;
+}
+```
+
+#### Check if a number is positive
+
+#### Check if a string is a GUID
+
+#### Check if a value is a valid React element (`React.isValidElement`)
+
+The [`isValidElement`](https://reactjs.org/docs/react-api.html#isvalidelement) function included with React checks if a value is a valid React element, which can be rendered by React.
+
+```typescript
+function isValidElement<P>(
+  object: {} | null | undefined
+): object is ReactElement<P>;
+```
+
+The implementation of this function is not relevant, but it is a perfect example of a type guard function that verifies a completely custom type that cannot be verified with other type guards.
+
+### Pros and cons of custom type guard functions
+
+The advantages of custom type guard functions are:
+
+- **Flexibility**: can check any type, including custom types that we define
+- **Run-time type checking**: allows type-checking at run-time, ensuring that safety is ensured both when code is compiled, and also when it is running
+- **Reusable**: type guard functions allow us to combine multiple type guards into one and easily use them in multiple places
+
+The disadvantages of a custom type guard function are:
+
+- **Manual**: type guard functions have to be written manually (currently no automatic way to generate type guards)
+- **Performance**: using type guard functions has a slight overhead to call the function and run the checks (negligible in practice)
+- **Fragile**: custom type guards can be implemented incorrectly on accident, which may provide a false sense of security and safety
+
+## Conclusion
+
+### Summary
