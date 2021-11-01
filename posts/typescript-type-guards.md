@@ -1,71 +1,71 @@
 ---
-title: "TODO: Post about TypeScript Type Guards"
-summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+title: "How To Do Anything in TypeScript With Type Guards"
+summary: "Type guards are conditional checks that allow types to be narrowed from general types to more specific ones. With type guards, we do perform run-time type checking and ensure that code is safe."
+publishedAt: "2021-11-01"
 tags:
   - typescript
 ---
 
-- TypeScript is useful because it enables us to write code that is safe
-- When we know all of the types at compile-time, we can be sure that our code will not crash or cause errors.
-- But what if we don't know all of the types at compile-time? Or if a value can have different types?
-- To check types at run-time or differentiate between different types, we need to narrow the types using a type guard.
+TypeScript is valuable because it enables us to write safe code. Because when every type in the code is known at compile time, we can compile the code with TypeScript and perform type checking, which ensures that the code will not crash or cause errors.
+
+However, **it is not always possible to know every type at compile time**, such as when accepting arbitrary data from an external API. To check types at run-time or differentiate between different types, we to need narrow the types using a type guard.
 
 ## What is narrowing?
 
-- Narrowing is the process of using type guards to turn general types into more specific types.
-- Uses a mechanism called control-flow analysis.
-- We can use narrowing to turn an `unknown` or `any` type into a more specific type (for example, parsing data from an API).
-- We can use narrowing to turn a union of types into a single type (for example, `string | object | number` to `string`).
-- We can use narrowing to turn a built-in type (like `string` or `number`) into a custom type like `NonEmptyString` or `PositiveNumber`.
+In TypeScript, [narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) is the process of refining broad types into more narrow types. Narrowing is useful because it allows code to be liberal in the types that it accepts. Then, we can use type guards to narrow the type down to something more useful.
+
+These are some common examples of narrowing:
+
+- `unknown` or `any` to `string`
+- `string | object | number` to `string`
+- `number | null | undefined` to `number`
+- `string` to a custom type like `NonEmptyString`
 
 ## What is a type guard?
 
-- Used to verify types at run-time and ensure safety at compile-time
-- Essentially: run-time type checking
+A type guard is a kind of conditional check that narrows a type. Type guards allow for run-time type checking by using expressions to see if a value is of a certain type or not.
 
-<https://www.typescriptlang.org/docs/handbook/2/narrowing.html>
+So, what does a type guard look like? These are all examples of type guards:
 
-## Where can a type guard be used?
+- `typeof value === 'string'`
+- `'name' in data`
+- `value instanceof MouseEvent`
+- `!value`
 
-- `if/else`
-- ternary operator
-- `switch`
-- `while`
-- Aliased conditions (since TS 4.4, <https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#cfa-aliased-conditions>)
+A type guard is a special kind of expression that changes the type of a variable. We will look at more examples of type guards in practice later.
 
 ## The kinds of type guards (how to check a type)
 
-There are a number of type guards that are built into TypeScript that make it easy to narrow types just by writing typical JavaScript code. So, you may be using type guards without even realizing it!
+Most type guards revolve around regular JavaScript operators, which are given extra abilities in TypeScript that make it possible to narrow types by writing typical JavaScript code. So, it is possible that you've used a type guard before without even realizing it!
 
 Fundamentally, **every type guard relies on checking that some expression evaluates to true or false.**
 
-So, the first kind of type guard which we will look at is just an `if/else` clause. But we can utilize more complex type guards like `in`, `typeof`, and `instanceof` that tell us much more information. In addition to all of these built-in type guards which utilize normal JavaScript behavior, we can can go even further and create our own custom type guards that can check _any type_.
+As a result, the first kind of type guard which we will look at is a simple truthiness check. But we can utilize more complex type guards like `in`, `typeof`, and `instanceof` that tell us much more information.
 
-### Boolean type guard
+In addition to all of these built-in type guards, we can can go even further and create our own custom type guards that can check _any type_.
 
-In a way, checking the boolean value (truthiness or falsiness) of something is the core of all type guards. All type guards depend evaluating an expression to a boolean value.
+### Boolean type guard (truthiness)
 
-The difference between the "boolean type guard" and more complex type guards is that it allows us to infer more information with only a single check.
+As stated previously, checking the truthiness of a value is the essence of all type guards.
 
-A boolean type guard only checks the truthiness of a value, but gives us no additional information beyond that. Other more complex type guards (which we will see shortly) can validate dozens of properties and methods with only a single type guard.
+However, a boolean type guard only checks the truthiness of a value, but gives us no additional information beyond that. Other more complex type guards can check more complex types or verify more properties, but the boolean type guard is the most basic type guard.
 
 ```typescript
-function getAvailableRooms(rooms: number) {
+function getAvailableRooms(rooms: number | undefined) {
   if (rooms) {
     return `There are ${rooms} hotel rooms available to book.`;
   }
   return "Sorry, all rooms are currently booked.";
 }
 
-getAvailableRooms(0); // "Sorry, all rooms are currently booked."
+getAvailableRooms(undefined); // "Sorry, all rooms are currently booked."
 getAvailableRooms(5); // "There are 5 hotel rooms available to book."
 ```
 
 <div class="note">
 When using a boolean type guard, the value is implicitly casted to a boolean. This has a logical interpretation most of the time, but not always.
 
-For example, if use a boolean type guard to check a type of `number | undefined`, we might expect that it will only exclude the `undefined` case. However, it will also rule out the case where the value is 0, which might not be what you expect. For more information on this common bug, check out Kent C. Dodd's article, [Use ternaries rather than && in JSX](https://kentcdodds.com/blog/use-ternaries-rather-than-and-and-in-jsx).
+For example, if use a boolean type guard to check a type of `number | undefined`, we might expect that it will only exclude the `undefined` case. However, it will also rule out the case where the value is 0, which might not be what you expect in some cases. For more information on this common bug, check out Kent C. Dodd's article, "[Use ternaries rather than && in JSX](https://kentcdodds.com/blog/use-ternaries-rather-than-and-and-in-jsx)."
 
 </div>
 
@@ -166,7 +166,7 @@ For example, the DOM APIs define many classes and subclasses which can be quickl
 function handleEvent(event: Event) {
   if (event instanceof MouseEvent) {
     // `event` now has type `MouseEvent`, so we can access mouse-specific properties
-    console.log(`A mouse event occured at (${event.x}, ${event.y}`);
+    console.log(`A mouse event occurred at (${event.x}, ${event.y}`);
   }
   if (event instanceof KeyboardEvent) {
     // `event` now has type `KeyboardEvent`, so we can access key-specific properties
@@ -351,7 +351,7 @@ In the next section, we will look at all of the different ways that we can defin
 
 A type guard function is a function that returns a value and has a _type predicate_.
 
-A type predicate is an additional declaration that is added to a functon (like a return type) which gives additional information to TypeScript and allows it to narrow the type of a variable. For example, in the definition of `Array.isArray`,
+A type predicate is an additional declaration that is added to a function (like a return type) which gives additional information to TypeScript and allows it to narrow the type of a variable. For example, in the definition of `Array.isArray`,
 
 ```typescript
 function isArray(arg: any): arg is any[];
@@ -380,17 +380,138 @@ function isString(value: unknown): value is string {
 
 #### Check if a value is defined (not null or undefined)
 
+A common use case for type guards is to refine the type of something like `Type | null` or `Type | undefined` down to just `Type`, effectively eliminating the null or undefined case. We can do this by accepting a generic type which can be null or undefined, and adding a type predicate to remove `null | undefined` from the type.
+
 ```typescript
-function isNotNullOrUndefined<Value>(
-  value: Value | undefined | null
-): value is Value {
+function isDefined<Value>(value: Value | undefined | null): value is Value {
   return value !== null && value !== undefined;
 }
 ```
 
+Then, it can be used like this:
+
+```typescript
+const x: string | undefined = 123;
+if (isDefined(x)) {
+  // x is defined, so it is safe to use methods on x
+  x.toLowerCase();
+}
+```
+
+#### Remove all values `null` or `undefined` values from array
+
+Using the `isDefined` type guard we just defined, we can use it with the built-in `Array.filter` function, which has special support for type predicates. The `Array.filter` function is defined like:
+
+```typescript
+function filter<Filtered extends Item>(
+  predicate: (value: Item, index: number, array: Item[]) => value is Filtered
+): Filtered[];
+```
+
+(The definition here has been altered slightly for improved understanding and readability). Essentially, every usage of `Array.filter` is a type guard, except in most cases the type before and after calling `Array.filter` is the same type.
+
+But if the function passed to `Array.filter` _narrows_ the type (like a type guard), then the return type of `Array.filter` changes. So we can use our `isDefined` type guard to remove all `null` and `undefined` values from the array, as well as removing `null` and `undefined` types from the array items.
+
+```typescript
+// 'values' is an array of strings, but can have null or undefined values
+const values: (string | null | undefined)[] = [null, "a", "b", undefined];
+
+// We can safely assign 'filtered' to an array of strings (string[])
+// because `isDefined` changes the type of the variable 'values'
+const filtered: string[] = values.filter(isDefined);
+```
+
 #### Check if a number is positive
 
+A common use-case for creating our own types is so that we can ensure certain conditions are met. For example, we might want to ensure that an object has certain properties, a string is not empty, or a number is positive.
+
+First, we need to create a custom `PositiveNumber` type, and a type guard to check for it.
+
+```typescript
+type PositiveNumber = number & { __type: "PositiveNumber" };
+
+function isPositive(n: number): n is PositiveNumber {
+  return n >= 0;
+}
+```
+
+To create a new type of number, we use a technique called "type branding." Essentially, we add a phantom property to the number type to differentiate it from all other types of numbers. In this case, I chose to use `{ __type: 'PositiveNumber' }`, but we could picked any arbitrary key/value, as long as it is unique and not already defined.
+
+The important thing is that we cannot create `PositiveNumber` by declaring a variable:
+
+```typescript
+const x: PositiveNumber = 49;
+// ERROR: Type 'number' is not assignable to type 'PositiveNumber
+```
+
+This may seem inconvenient, but it is exactly why it allows us to write safe code, because we must always check conditions with the type guard and prevents us from writing code like this:
+
+```typescript
+const x: PositiveNumber = -100;
+```
+
+As an example of how we might use this type guard, we can write a square root function which accepts only positive numbers:
+
+```typescript
+function squareRoot(n: PositiveNumber): PositiveNumber {
+  return Math.sqrt(n) as PositiveNumber;
+}
+```
+
+Then, we can use the type guard to compute the square root:
+
+```typescript
+const x = 49;
+
+squareRoot(x);
+// ERROR: ^^^ 'number' is not assignable to parameter of type 'PositiveNumber'
+
+if (isPositive(x)) {
+  // OK: Now x has type 'PositiveNumber', so we can take the square root
+  squareRoot(x);
+}
+```
+
 #### Check if a string is a GUID
+
+Similar to the previous example, we can create a custom `Guid` type that is based on the `string` type and write a type guard to check for it.
+
+```typescript
+type Guid = string & { __type: "Guid" };
+
+const guidPattern =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-5][0-9a-f]{3}-[089ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+
+function isGuid(value: string): value is Guid {
+  return guidPattern.test(value);
+}
+```
+
+As an example of how to use this type and type guard in practice, we will create a list of users that can be searched by GUID.
+
+```typescript
+type User = {
+  id: Guid;
+  name: string;
+};
+const users: User[] = [
+  /* ... */
+];
+
+function getUserById(id: Guid) {
+  return users.find((user) => user.id === id);
+}
+
+const id = "abc123";
+
+getUserById(id);
+// ERROR:   ^^ Argument of type 'string' is not assignable to parameter of type 'Guid'
+
+if (isGuid(id)) {
+  // OK: id now has type `Guid`:
+  getUserById(id);
+}
+```
 
 #### Check if a value is a valid React element (`React.isValidElement`)
 
@@ -402,9 +523,11 @@ function isValidElement<P>(
 ): object is ReactElement<P>;
 ```
 
-The implementation of this function is not relevant, but it is a perfect example of a type guard function that verifies a completely custom type that cannot be verified with other type guards.
+The implementation of this function is not relevant here, but it is a perfect example of a common type guard function that verifies a custom type that cannot be verified with other type guards.
 
 ### Pros and cons of custom type guard functions
+
+Custom type guard functions are powerful and sometimes be the only option in order to write type-safe code. However, they can be a tricky to write and are susceptible to mistakes.
 
 The advantages of custom type guard functions are:
 
@@ -418,6 +541,75 @@ The disadvantages of a custom type guard function are:
 - **Performance**: using type guard functions has a slight overhead to call the function and run the checks (negligible in practice)
 - **Fragile**: custom type guards can be implemented incorrectly on accident, which may provide a false sense of security and safety
 
+## Where can a type guard be used?
+
+Now that we know all about the available type guards, we will briefly look at where we can use type guards. There are a limited number of places that type guards can be used. The most common place they are used is in a `if/else` block, like this:
+
+```typescript
+if (typeof value === "string") {
+  // value has type 'string' in this block
+} else {
+  // value does NOT have type 'string' in this block
+}
+```
+
+Since we can use type guards in an `if/else` block, then you might expect that we can also use them with the ternary operator, since it's a shorthand for an `if/else` block. And you would be correct!
+
+```typescript
+typeof value === 'string'
+  ? /* value has type 'string' in this block */
+  : /* value does NOT have type 'string' in this block */
+```
+
+In addition, since [TypeScript 4.4](https://devblogs.microsoft.com/typescript/announcing-typescript-4-4/#cfa-aliased-conditions), we can use type guards with aliased conditions.
+
+```typescript
+const isString = typeof value === "string";
+if (isString) {
+  // value has type 'string' in this block
+} else {
+  // value does NOT have type 'string' in this block
+}
+```
+
+Beyond just `if/else`, type guards can also be used in a `while` block:
+
+```typescript
+while (typeof value === "string") {
+  // value has type 'string' in this block
+}
+```
+
+Finally, type guards are also compatible with a `switch/case` block:
+
+```typescript
+switch (typeof value) {
+  case "string":
+    // value has type 'string' in this block
+    break;
+}
+```
+
 ## Conclusion
 
+Type guards are conditional checks that allow types to be refined from one type to another, allowing us to write code that is type-safe and easy to write at the same time. Since TypeScript is a superset of JavaScript, many common operators like `typeof` or `instanceof` act as type guards. But, we can also use custom type guards to verify _any_ condition and _any_ type, given enough effort.
+
 ### Summary
+
+In general, I would recommend using the type guard that feels the most natural, which will come from experience. Don't write a custom type guard function when a simple `typeof` check can suffice. However, it may be necessary to write a custom type guard.
+
+To summarize the strengths of each type guard, here is a summary table.
+
+| Type guard                 | Usage                                                           |
+| -------------------------- | --------------------------------------------------------------- |
+| Boolean / truthiness       | Rule out falsy values like `null`, `undefined`, `''`, `0`, etc. |
+| Equality                   | Narrow multiple possible types down to a single type            |
+| `typeof`                   | Narrow a type to a primitive type (like `string` or `number`)   |
+| `instanceof`               | Check if a value is an instance of a specific class             |
+| `in`                       | Check if a property can be accessed                             |
+| Assertion function         | Assert invariants that should always be true                    |
+| Custom type guard function | Check that a type meets some arbitrary conditions               |
+
+If this article was helpful, let me know on Twitter at [@cammchenry](https://twitter.com/cammchenry)! If you enjoy guides like this, consider signing up for my mailing list to be notified when new posts are published.
+
+Good luck, and happy coding!
