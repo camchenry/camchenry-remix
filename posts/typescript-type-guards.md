@@ -1,6 +1,6 @@
 ---
 title: "How To Do Anything in TypeScript With Type Guards"
-summary: "Type guards are conditional checks that allow types to be narrowed from general types to more specific ones. With type guards, we do perform run-time type checking and ensure that code is safe."
+summary: "Type guards are conditional checks that allow types to be narrowed from general types to more specific ones. With type guards, we do run-time type checking and ensure that code is safe."
 publishedAt: "2021-11-01"
 tags:
   - typescript
