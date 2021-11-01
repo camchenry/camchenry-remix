@@ -43,11 +43,17 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!postData) {
     return redirect("/404");
   }
-  return json(postData, {
-    headers: {
-      Link: `<https://camchenry.com/blog/${postData.id}>; rel="canonical"`,
+  return json(
+    {
+      ...postData,
+      canonicalUrl: `https://camchenry.com/blog/${postData.id}`,
     },
-  });
+    {
+      headers: {
+        Link: `<https://camchenry.com/blog/${postData.id}>; rel="canonical"`,
+      },
+    }
+  );
 };
 
 export default function BlogPost() {
