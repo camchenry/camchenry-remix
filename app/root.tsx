@@ -55,6 +55,11 @@ function Document({
         {/* disabled for now: <Scripts /> */}
         {process.env.NODE_ENV === "development" && <LiveReload />}
         <Scripts />
+        <script
+          data-goatcounter="https://camchenry.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+        ></script>
       </body>
     </html>
   );
