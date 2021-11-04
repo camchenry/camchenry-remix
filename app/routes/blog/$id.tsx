@@ -34,6 +34,7 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
     title: data?.metadata?.title ?? defaultMeta.title,
     description: data?.metadata?.summary ?? defaultMeta.description,
     image: `https://camchenry.com/social-image?id=${data.id}`,
+    canonicalUrl: `https://camchenry.com/blog/${data.id}`,
   });
 };
 

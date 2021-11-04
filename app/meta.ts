@@ -8,7 +8,8 @@ export type MetaFields =
   | "twitter:image"
   | "og:title"
   | "og:description"
-  | "og:image";
+  | "og:image"
+  | "og:url";
 
 export const defaultTitle = "Cameron McHenry";
 
@@ -30,17 +31,22 @@ type GenerateMeta = {
   title: string;
   description: string;
   image?: string;
+  canonicalUrl?: string;
 };
 
 export const generateMeta = ({
   title,
   description,
   image,
+  canonicalUrl,
 }: GenerateMeta): Partial<Record<MetaFields, string>> => ({
   ...defaultMeta,
   title,
   description,
   "og:title": title,
+  ...(canonicalUrl !== undefined && {
+    "og:url": canonicalUrl,
+  }),
   "og:description": description,
   "twitter:title": title,
   "twitter:description": description,
