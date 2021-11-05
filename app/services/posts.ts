@@ -8,6 +8,12 @@ import parse from "remark-parse";
 import unified from "unified";
 import gfm from "remark-gfm";
 import highlight from "remark-highlight.js";
+import LRUCache from "lru-cache";
+
+const postCache = new LRUCache<string, PostData>({
+  maxAge:
+    process.env.NODE_ENV === "production" ? 1000 * 60 * 60 * 24 * 7 : 2500,
+});
 
 export type PostMetadata = {
   title: string;
@@ -78,12 +84,7 @@ export async function getPosts(): Promise<PostData[]> {
   return filtered;
 }
 
-export async function getPost(
-  postId: string | undefined
-): Promise<PostData | null> {
-  if (!postId) {
-    return null;
-  }
+async function generatePostFromMarkdown(postId: string | undefined) {
   const postPath = path.join(__dirname, `../../posts/${postId}.md`);
   if (!fs.existsSync(postPath)) {
     return null;
@@ -111,4 +112,23 @@ export async function getPost(
     throw new Error("Failed to parse post");
   }
   return postData;
+}
+
+export async function getPost(
+  postId: string | undefined
+): Promise<PostData | null | undefined> {
+  if (!postId) {
+    return null;
+  }
+  let post: PostData | null | undefined;
+  if (postCache.has(postId)) {
+    post = postCache.get(postId);
+  } else {
+    post = await generatePostFromMarkdown(postId);
+    if (post) {
+      postCache.set(postId, post);
+    }
+  }
+
+  return post;
 }

@@ -44,6 +44,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   if (!postData) {
     return redirect("/404");
   }
+
   return json(
     {
       ...postData,
