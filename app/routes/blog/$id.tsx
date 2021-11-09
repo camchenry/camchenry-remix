@@ -71,6 +71,18 @@ export default function BlogPost() {
           By Cameron McHenry on{" "}
           <PostDate publishedAt={data.metadata.publishedAt} />
         </div>
+        {data.metadata.tags && (
+          <div className="md:text-center">
+            {data.metadata.tags.map((tag) => (
+              <a
+                className="mr-2 border-b border-green-300"
+                href={`/blog/tag/${tag}`}
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )}
       </div>
       <div className="mx-auto max-w-2xl mb-10">
         <Hr />

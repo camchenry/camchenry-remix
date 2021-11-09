@@ -19,6 +19,7 @@ export type PostMetadata = {
   title: string;
   summary: string;
   publishedAt: string;
+  tags?: string[];
 };
 
 export type PostData = {
@@ -52,7 +53,10 @@ export function isPostMetadata(metadata: unknown): metadata is PostMetadata {
     "publishedAt" in metadata &&
     typeof casted.title === "string" &&
     typeof casted.summary === "string" &&
-    typeof casted.publishedAt === "string"
+    typeof casted.publishedAt === "string" &&
+    "tags" in metadata &&
+    Array.isArray(casted.tags) &&
+    casted.tags.every((tag) => typeof tag === "string")
   );
 }
 
