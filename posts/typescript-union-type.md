@@ -14,6 +14,18 @@ A union type (or "union" or "disjunction") is a set of types that are mutually e
 
 The union type provides more information to the TypeScript compiler that allows it to **prove code is safe _for all possible situations_**, which is a powerful tool. We may not know whether the user will pass a `string`, `number`, or `object` to a function, but we can guarantee that every case is handled without needing to write any unit tests to check that.
 
+### When should you use a union type?
+
+Union types are a perfect fit for a situation where we know exactly what all of the possible states are, but we don't know when we compile the program which one will be used. For example, we could use union types to store:
+
+- days of the week,
+- color palettes,
+- columns of a database table
+- [DOM event names](https://developer.mozilla.org/en-US/docs/Web/Events),
+- [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) states
+
+As a counterexample, something like a person's name is not a good fit for a union type, because there are essentially an infinite (or very large) number of possible states.
+
 ### Examples of union types
 
 In the DOM, we can only store strings for values, or numbers as strings. So, the only acceptable types for a DOM value are essentially a string or a number. (This is exactly the definition of the `ReactText` type).
@@ -31,6 +43,8 @@ type Event = MouseEvent | KeyboardEvent; /* and so on */
 
 We can also use a union type to represent a subset of primitive types like `string` or `number`.
 
+For example, we could write some business logic functions that only accept days of the week:
+
 ```typescript
 type DayOfWeek =
   | "Monday"
@@ -40,27 +54,38 @@ type DayOfWeek =
   | "Friday"
   | "Saturday"
   | "Sunday";
+
+function isBusinessDay(day: DayOfWeek): boolean {
+  return day !== "Saturday" && day !== "Sunday";
+}
+
+isBusinessDay("Monday"); // => true
+isBusinessDay("Saturday"); // => false
+isBusinessDay("Whensday");
+//             ^^^^^^^^ ERROR: Argument of type '"Whensday"'
+// is not assignable to parameter of type 'DayOfWeek'
 ```
+
+If **every type in the union is the same**, then we can use functions and operators as expected on those types.
 
 ```typescript
 type NumberOfColumns = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
+
+function getColumnWidth(totalWidth: number, columns: NumberOfColumns) {
+  return `${(totalWidth / columns).toFixed(2)}px`;
+}
+
+getColumnWidth(1920, 6); // => "320.00px"
+getColumnWidth(1920, 16);
+//                   ^^ ERROR: Argument of type '16' is not
+// assignable to parameter of type 'NumberOfColumns'
 ```
 
-### When should you use a union type?
-
-Union types are a perfect fit for a situation where we know exactly what all of the possible states are, but we don't know when we compile the program which one will be used. For example, we could use union types to store:
-
-- days of the week,
-- color palettes,
-- columns of a database table
-- [DOM event names](https://developer.mozilla.org/en-US/docs/Web/Events),
-- [finite state machine](https://en.wikipedia.org/wiki/Finite-state_machine) states
-
-As a counterexample, something like a person's name is not a good fit for a union type, because there are essentially an infinite (or very large) number of possible states.
+If the types are different (which is most of the time), then we cannot simply call functions on them or use arithmetic operators. We need to differentiate between the types in the union.
 
 ## How to tell which type is currently in use
 
-Of course, it's great that we can model mutually exclusive states with union types, but how do we actually use them? How do we make sense of a union and figure out which specific case we have?
+Of course, it's great that we can model mutually exclusive states with union types, but how do we actually use them? What if every type is not the same? How do we make sense of a union and figure out which specific case we have?
 
 We can differentiate between types in a union with a type guard. A **type guard** is a conditional check that allows us to differentiate between types. And in this case, a type guard lets us figure out exactly which type we have within the union.
 
@@ -74,9 +99,9 @@ Enter discriminated unions.
 
 A **discriminated union** (also called "distinguished union" or "tagged union") is a special case of a union type that allows us to easily differentiate between the types within it.
 
-This is accomplished by adding a field to each type which a unique value, which can be used to differentiate between the types using an equality type guard.
+This is accomplished by adding a field to each type that has a unique value, which can be used to differentiate between the types using an equality type guard.
 
-For example, if we had a type which represented possible events that could occur, we could give each event a unique type. Then, we just need to check the event type to know exactly what case we are handling.
+For example, if we had a type which represented all possible events that could occur, we could give each event a unique name. Then, we just need to check the event name to know exactly what type/case we are handling.
 
 ```typescript
 type AppEvent =
@@ -102,9 +127,90 @@ function handleEvent(event: AppEvent) {
 }
 ```
 
+In this example, the advantage is that we can have completely disparate types in our union, and easily handle each case with just a single `if` check. This lends itself well to extension, because we can easily add new events and new cases to our application and lean on TypeScript to ensure that we don't forget to handle them.
+
+## How to get a single type from a union type
+
+Sometimes, we want to deal with just a single type from union type, or a subset of the types. Thankfully, TypeScript provides a built-in utility type called [`Extract`](https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union) to _extract_ a single type from a union type.
+
+Using the `DayOfWeek` type from before, we can extract individual days from the type:
+
+```typescript
+type DayOfWeek =
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
+
+type BusinessDay = Extract<
+  DayOfWeek,
+  "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"
+>;
+// => "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"
+type Weekend = Extract<DayOfWeek, "Saturday" | "Sunday">;
+// => "Saturday" | "Sunday"
+```
+
+This might seem redundant, but the advantage is that we are deriving types based on our `DayOfWeek` type. So, if the base type ever changes, we can be sure that all of our types are still valid.
+
+But, `Extract` is more powerful than just extracting a single type. It can extract all **assignable types** from a union type.
+
+```typescript
+// Type for a configuration value that can be defined in multiple ways:
+// either as a single value (string or number), array of values, or an object.
+type Value = string | number;
+type Config = Value | Array<Value> | Record<string, Value>;
+
+// Only config values that are assignable to objects will have this type
+type Objects = Extract<Config, object>;
+// => Value[] | Record<string, Value>
+```
+
+## How to get a subset of a union type
+
+We saw that `Extract` can be used to a subset of a union type, but only for a few specific types. When we want to extract most types, we can use the complement of `Extract` type, which is `Exclude`.
+
+In TypeScript, we can use the [`Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludetype-excludedunion) type to get all types from a union type, except for those that are assignable to another union.
+
+For example, let's redefine our types derived from `DayOfWeek` to use `Exclude` instead:
+
+```typescript
+type BusinessDay = Exclude<DayOfWeek, "Saturday" | "Sunday">;
+// => "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"
+type Weekend = Exclude<
+  DayOfWeek,
+  "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"
+>;
+// => "Saturday" | "Sunday"
+```
+
+These types are exactly the same as the ones we defined before, but we defined them using `Exclude` instead of `Extract`.
+
+### When to use `Extract` or `Exclude`
+
+For the most part, `Extract` and `Exclude` are interchangeable, they are just complements of each other. So the general rule for when to use them is:
+
+- Use `Extract` when you only need to extract **a few types** from a union type
+- Use `Exclude` when you need to extract **most types** from a union type
+
+Both of these types become even more powerful when we leverage each of their respective strengths. For example, we can redefine our day of the week types to use `Extract` and `Exclude` in combination:
+
+```typescript
+type BusinessDay = Exclude<DayOfWeek, "Saturday" | "Sunday">;
+// => "Monday" | "Tuesday" | "Wednesday" | "Thursday" | "Friday"
+type Weekend = Exclude<DayOfWeek, BusinessDay>;
+// => "Saturday" | "Sunday"
+```
+
+This version is both much shorter (so it is easier to read) and it also better conveys the meaning and intention behind the types.
+
 ## When should you _not_ use a union type?
 
 - When you can use a generic instead to avoid needing to use a type guard (i.e., it is knowable at compile time)
+- When you need to enumerate all of the possible values at run-time (use `enum` instead)
 
 ## What is the difference between an `enum` and a union type?
 
@@ -115,14 +221,6 @@ function handleEvent(event: AppEvent) {
 - Values vs types
   - An enum is a set of mutually exclusive **values** (either `string` or `number`)
   - A union type is a set of mutually exclusive **types** (which can be anything)
-
-## How to get a single type from a union type
-
-<https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union>
-
-## How to get a subset of a union type
-
-<https://www.typescriptlang.org/docs/handbook/utility-types.html#excludetype-excludedunion>
 
 ## Additional resources
 
