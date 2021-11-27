@@ -108,13 +108,8 @@ function getGreeting(timeOfDay?: "morning" | "afternoon") {
 
 Using a `switch` block like this might be preferable if you have a lot of possible values to check and which might share the same code.
 
-[//]: # "TODO: This would be a good place to talk about discriminated unions, or link to an article"
-
 <div class="note">
-Discriminated unions deserve their own article, but they are essentially a more powerful version of the equality type guard.
-
-A discriminated union is a type that has multiple possible types, with a field that allows to us to discriminate (or differentiate) between them. In other words, when we check the value of a single field (like `type`), it automatically includes a number of other properties.
-
+A <strong>discriminated union</strong> is a <a href="https://camchenry.com/blog/typescript-union-type">union type</a> with a field that allows to us to discriminate (or differentiate) between different types. Discriminated unions are essentially a more powerful version of the equality type guard, that can quickly tell us what case we are dealing with in a union type. In other words, when we check the value of a single field (like `type`), it automatically includes a number of other properties.
 </div>
 
 ### `typeof` type guard
