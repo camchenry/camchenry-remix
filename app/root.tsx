@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import {
   Links,
   LinksFunction,
@@ -9,6 +8,7 @@ import {
   Scripts,
   useCatch,
   useMatches,
+  Outlet,
 } from "remix";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";

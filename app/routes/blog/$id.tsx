@@ -76,6 +76,7 @@ export default function BlogPost() {
           <div className="md:text-center">
             {data.metadata.tags.map((tag) => (
               <a
+                key={tag}
                 className="mr-2 border-b border-green-300"
                 href={`/blog/tag/${tag}`}
               >
