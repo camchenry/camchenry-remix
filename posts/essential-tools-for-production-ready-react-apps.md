@@ -139,7 +139,7 @@ See the "Using ESLint" header under the "Linter" section above.
 
 ### Unit testing
 
-There's not much more that I can say about unit testing that others haven't already. In short, I would highly recommend having *some *kind of unit testing library to help you ensure that your code works exactly as you expect it to.
+There's not much more that I can say about unit testing that others haven't already. In short, I would highly recommend having *some*kind of unit testing library to help you ensure that your code works exactly as you expect it to.
 
 If you're already using create-react-app, then you're already using Jest as the test runner by default so you don't need to worry about this.
 
@@ -250,7 +250,7 @@ npm audit --registry <registry>
 
 If any issues are found, you can fix any issues by running:
 
-```
+```bash
 npm audit fix
 ```
 
