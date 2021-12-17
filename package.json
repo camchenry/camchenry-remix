@@ -6,7 +6,7 @@
   "scripts": {
     "postinstall": "remix setup",
     "build": "npm run build:css && remix build",
-    "dev": "remix",
+    "dev": "remix dev",
     "start": "remix-serve server/build",
     "test": "jest --watch",
     "test:ci": "jest --ci",
@@ -17,14 +17,14 @@
     "vercel-build": "yum install --skip-broken libuuid-devel libmount-devel zlib && cp /lib64/{libuuid,libmount,libblkid,libz}.so.1 node_modules/canvas/build/Release/"
   },
   "dependencies": {
-    "@remix-run/node": "^0.20.1",
-    "@remix-run/react": "^0.20.1",
-    "@remix-run/serve": "^0.20.1",
-    "@remix-run/vercel": "^0.20.1",
+    "@napi-rs/canvas": "^0.1.17",
+    "@remix-run/node": "^1.0.6",
+    "@remix-run/react": "^1.0.6",
+    "@remix-run/serve": "^1.0.6",
+    "@remix-run/vercel": "^1.0.6",
     "@tailwindcss/typography": "^0.4.0",
     "@vercel/node": "^1.10.0",
     "autoprefixer": "^10.2.5",
-    "canvas": "2.6.1",
     "date-fns": "^2.24.0",
     "date-fns-tz": "^1.1.4",
     "globby": "^11.0.4",
@@ -36,24 +36,28 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-hook-form": "^7.15.4",
-    "react-router-dom": "^6.0.0",
+    "rehype-document": "^6.0.1",
+    "rehype-highlight": "^5.0.1",
+    "rehype-raw": "^6.1.0",
+    "rehype-stringify": "^9.0.2",
     "remark": "^13.0.0",
-    "remark-frontmatter": "^3.0.0",
+    "remark-frontmatter": "^4.0.1",
     "remark-gfm": "^1.0.0",
     "remark-highlight.js": "^6.0.0",
     "remark-html": "^13.0.1",
-    "remark-parse": "^9.0.0",
+    "remark-parse": "^10.0.1",
     "remark-parse-frontmatter": "^1.0.3",
-    "remix": "^0.20.1",
+    "remark-rehype": "^10.1.0",
+    "remix": "^1.0.6",
     "tailwind-styled-components": "^2.0.2",
     "tailwindcss": "^2.1.2",
-    "unified": "^9.2.1"
+    "unified": "^10.1.1"
   },
   "devDependencies": {
     "@babel/core": "^7.15.5",
     "@babel/preset-env": "^7.15.6",
     "@babel/preset-typescript": "^7.15.0",
-    "@remix-run/dev": "^0.20.1",
+    "@remix-run/dev": "^1.0.6",
     "@types/jest": "^27.0.1",
     "@types/lru-cache": "^5.1.1",
     "@types/react": "^17.0.6",
@@ -66,7 +70,7 @@
     "typescript": "^4.4.3"
   },
   "engines": {
-    "node": "14"
+    "node": ">=14"
   },
   "sideEffects": false
 }

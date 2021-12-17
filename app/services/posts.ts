@@ -1,14 +1,7 @@
-import { redirect } from "remix";
+import LRUCache from "lru-cache";
 import fs from "../fs";
 import path from "../path";
-import html from "remark-html";
-import frontmatter from "remark-frontmatter";
-import parseFrontmatter from "remark-parse-frontmatter";
-import parse from "remark-parse";
-import unified from "unified";
-import gfm from "remark-gfm";
-import highlight from "remark-highlight.js";
-import LRUCache from "lru-cache";
+import { convertMarkdownToHtml } from "./markdown.server";
 
 const postCache = new LRUCache<string, PostData>({
   maxAge:
@@ -93,22 +86,18 @@ async function generatePostFromMarkdown(postId: string | undefined) {
   if (!fs.existsSync(postPath)) {
     return null;
   }
+  if (!postId) {
+    return null;
+  }
   const file = fs.readFileSync(postPath);
-  const processed = await unified()
-    .use(parse)
-    .use(frontmatter, ["yaml", "toml"])
-    .use(parseFrontmatter)
-    .use(gfm)
-    .use(html)
-    .use(highlight, ["bash"])
-    .process(file.toString());
-  const metadata = (processed.data as Record<string, unknown> | null)
-    ?.frontmatter;
+  const { html, frontmatter: metadata } = await convertMarkdownToHtml(
+    file.toString()
+  );
   if (!isPostMetadata(metadata)) {
     throw new Error("Failed to parse post metadata");
   }
   const postData: PostData = {
-    text: processed.contents.toString(),
+    text: html,
     id: postId,
     metadata,
   };

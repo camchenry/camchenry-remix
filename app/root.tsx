@@ -1,4 +1,3 @@
-import { Outlet } from "react-router-dom";
 import {
   Links,
   LinksFunction,
@@ -9,6 +8,7 @@ import {
   Scripts,
   useCatch,
   useMatches,
+  Outlet,
 } from "remix";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";
@@ -81,7 +81,7 @@ const ConvertKitForm = () => (
     >
       <div className="font-bold mb-2">Stay updated</div>
       <p className="mb-4">
-        Subscribe to the mailing list to receives updates about new blog posts
+        Subscribe to the mailing list to receive updates about new blog posts
         and more.
       </p>
       <div data-style="clean">
