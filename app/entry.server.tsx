@@ -3,20 +3,18 @@ import type { EntryContext } from "remix";
 import { RemixServer } from "remix";
 import {
   createCanvas,
-  loadImage,
-  CanvasRenderingContext2D,
-  registerFont,
-} from "canvas";
+  SKRSContext2D,
+  GlobalFonts,
+  Image,
+} from "@napi-rs/canvas";
 import { getPost, getPosts } from "./services/posts";
 import globby from "globby";
 import { generateSitemap } from "./services/sitemap";
 import { generateRss } from "./services/rss";
+import path from "./path";
+import fs from "./fs";
 
-const getLines = (
-  ctx: CanvasRenderingContext2D,
-  text: string,
-  maxWidth: number
-) => {
+const getLines = (ctx: SKRSContext2D, text: string, maxWidth: number) => {
   const words = text.split(" ");
   const lines = [];
   let currentLine = words[0];
@@ -123,7 +121,11 @@ const generateImage = async ({
 
   // Draw the author's profile picture
   if (profileImage) {
-    const img = await loadImage(profileImage);
+    // Load profile image from path
+    const data = fs.readFileSync(path.resolve(profileImage));
+    const img = new Image(100, 100);
+    img.src = data;
+    // const img = await loadImage(profileImage);
     const x = margin;
     const y = bottomOfTitleText - profileRadius / 2;
     ctx.drawImage(img, x, y, profileRadius, profileRadius);
@@ -160,14 +162,25 @@ export default async function handleRequest(
     if (!post) {
       return new Response("", { status: 404 });
     }
-    registerFont("assets/fonts/Inter-Regular.otf", {
-      family: "Inter",
-      weight: "400",
-    });
-    registerFont("assets/fonts/Inter-Bold.otf", {
-      family: "Inter",
-      weight: "700",
-    });
+
+    const inter = GlobalFonts.families.some((f) => f.family === "Inter");
+    if (!inter) {
+      GlobalFonts.registerFromPath(
+        path.join(
+          __dirname,
+          "..",
+          "..",
+          "assets",
+          "fonts",
+          "Inter-Regular.otf"
+        ),
+        "Inter"
+      );
+      GlobalFonts.registerFromPath(
+        path.join(__dirname, "..", "..", "assets", "fonts", "Inter-Bold.otf"),
+        "Inter Bold"
+      );
+    }
 
     const socialImage = await generateImage({
       title: post.metadata.title,
