@@ -10,6 +10,7 @@ import {
   useMatches,
   Outlet,
 } from "remix";
+import { DevTools } from "./components/DevTools";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";
 import styles from "./styles/app.css";
@@ -50,6 +51,7 @@ function Document({
         <Links />
       </head>
       <body>
+        <DevTools />
         {children}
 
         {/* disabled for now: <Scripts /> */}
