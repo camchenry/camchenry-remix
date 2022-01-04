@@ -16,12 +16,14 @@ export async function convertMarkdownToHtml(markdownString: string) {
   const { default: rehypeRaw } = await import("rehype-raw");
   const { default: rehypeHighlight } = await import("rehype-highlight");
   const { default: remarkGfm } = await import("remark-gfm");
+  const { default: remarkFootnotes } = await import("remark-footnotes");
   const { unified } = await import("unified");
   const processed = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ["yaml", "toml"])
     .use(remarkParseFrontmatter)
     .use(remarkGfm)
+    .use(remarkFootnotes)
     .use(remarkToRehype, { allowDangerousHtml: true })
     .use(rehypeHighlight, {
       languages: {
