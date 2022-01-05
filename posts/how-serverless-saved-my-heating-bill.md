@@ -48,7 +48,7 @@ So, I decided to use:
 Here is a diagram that shows the architecture of the application:
 
 <figure>
-  <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/43ccdeae-066d-4d9f-38ce-fc542f4c7c00/public" alt="Architecture diagram of the gas tracking application. The client interacts with the Remix appication, which runs within Fly.io, via GET and POST requests to view the dashboard and fetch new data. The Remix application also interacts with the external services Browserless and Supabase to fetch the new data and store it." height="201" width="650" />
+  <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/43ccdeae-066d-4d9f-38ce-fc542f4c7c00/public" alt="Architecture diagram of the gas tracking application. The client interacts with the Remix application, which runs within Fly.io, via GET and POST requests to view the dashboard and fetch new data. The Remix application also interacts with the external services Browserless and Supabase to fetch the new data and store it." height="201" width="650" />
   <figcaption>Architecture diagram of the gas tracking application, which shows how Remix coordinates rendering pages for our client, receiving fetch requests, scraping webpages, and updating the database.</figcaption>
 </figure>
 
@@ -84,7 +84,7 @@ Remix also comes with a Fly.io deployment template, which means you can deploy y
 
 ## The Result
 
-Putting all of these serverless services together, I was able to build my gas-tracking application over a weeekend (while on a bus!) and deploy it for my own personal use.
+Putting all of these serverless services together, I was able to build my gas-tracking application over a weekend (while on a bus!) and deploy it for my own personal use.
 
 <figure>
   <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/67187615-d70d-46d3-6c01-53d7da41c300/public" alt="A picture of the gas tracking dashboard, which shows various metrics like current gas level, gas consumption per day, and number of days remaining until the tank is empty. There is also a chart that shows historical gas tank data from the last month." height="432" width="650" />
