@@ -40,9 +40,9 @@ export const loader: LoaderFunction = async ({
   return { posts, message };
 };
 
-const Header = tw.header`
-  lg:text-center
-  p-6
+const Intro = tw.section`
+  p-4
+  md:p-8
   lg:p-16
   mb-8
   mx-auto
@@ -68,16 +68,52 @@ export default function Index() {
           {message}
         </div>
       )}
-      <Header>
-        <H1 className="mb-4 py-2  font-black lg:text-5xl bg-gradient-to-r from-green-400 to-green-600">
-          Cameron McHenry
+      <Intro id="intro">
+        <H1 className="mb-4 py-2 font-black lg:text-5xl bg-gradient-to-r from-green-400 to-green-600">
+          I'm Cameron McHenry
         </H1>
-        <p className="text-white-500 text-lg filter">
-          is passionate about building web applications and tools
-          <br />
-          that make the world better.
-        </p>
-      </Header>
+        <div className="my-4">
+          <p className="md:text-lg">
+            I am a software engineer that is passionate about building great web
+            applications. Currently, I work at{" "}
+            <a href="https://github.com/camchenry">GitHub</a>.
+          </p>
+          <p className="md:text-lg">
+            I often write about <a href="/blog/tag/typescript">TypeScript</a>{" "}
+            and <a href="/blog/tag/react">React</a> in my blog, and occasionally
+            write some useful <a href="/tools">tools</a>.
+          </p>
+        </div>
+        <div className="md:text-lg">
+          <H2 className="my-4">Featured work</H2>
+          <ul className="my-4">
+            <li>
+              🔥 A story about{" "}
+              <a href="/blog/how-serverless-saved-my-heating-bill">
+                how serverless saved money on my heating bill
+              </a>
+            </li>
+            <li>
+              🤖 An answer on{" "}
+              <a href="/blog/github-copilot">
+                Why I'm Not Worried About GitHub Copilot Taking My Software Job
+              </a>
+            </li>
+            <li>
+              🛠 Learn everything there is to know about TypeScript type guards
+              in{" "}
+              <a href="/blog/typescript-type-guards">
+                How To Do Anything in TypeScript With Type Guards
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div id="intro-contact-links" className="md:text-lg my-4">
+          <a href="https://twitter.com/cammchenry">Twitter</a>
+          <a href="https://github.com/camchenry">GitHub</a>
+          <a href="https://camchenry.ck.page/mailing-list">Newsletter</a>
+        </div>
+      </Intro>
       <div className="max-w-prose mx-auto">
         <H2 className="mb-4">Posts</H2>
         <ul className="flex flex-col space-y-4">
