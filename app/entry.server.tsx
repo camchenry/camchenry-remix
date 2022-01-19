@@ -267,7 +267,7 @@ export default async function handleRequest(
   if (responseStatusCode === 404) {
     // Before returning a true 404 response page, try to check if there is a matching redirect
 
-    const redirects = getPossibleRedirects("./_redirects");
+    const redirects = getPossibleRedirects(path.resolve("./_redirects"));
     const redirectResponse = handleRedirect(request, redirects);
     if (redirectResponse) {
       return redirectResponse;
