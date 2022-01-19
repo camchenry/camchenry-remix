@@ -11,7 +11,7 @@
       "src": "server/index.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["posts/**", "assets/**"]
+        "includeFiles": ["posts/**", "assets/**", "_redirects"]
       }
     }
   ],
