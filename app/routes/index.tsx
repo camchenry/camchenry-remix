@@ -90,7 +90,7 @@ export default function Index() {
             <li>
               🔥 A story about{" "}
               <a href="/blog/how-serverless-saved-my-heating-bill">
-                how serverless saved money on my heating bill
+                How Serverless Saved Money on My Heating Bill
               </a>
             </li>
             <li>

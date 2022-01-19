@@ -5,10 +5,10 @@ import {
   LoaderFunction,
   Meta,
   MetaFunction,
+  Outlet,
   Scripts,
   useCatch,
   useMatches,
-  Outlet,
 } from "remix";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";
