@@ -10,3 +10,10 @@
   color: var(--primary-color);
   font-weight: bold;
 }
+
+.prose blockquote p:first-of-type::before {
+  content: none;
+}
+.prose blockquote p:last-of-type::before {
+  content: none;
+}
