@@ -4,6 +4,7 @@ summary: "Picking a function to use for parsing numbers can be a confusing quest
 publishedAt: "2021-06-23"
 tags:
   - javascript
+type: "guide"
 ---
 
 Parsing numeric inputs is a task that comes up frequently when creating web applications. Typically, it comes up when

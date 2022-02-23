@@ -4,6 +4,7 @@ summary: "Deleting dead code is a worthwhile effort that reduces the amount of t
 publishedAt: "2021-08-30"
 tags:
   - typescript
+type: "guide"
 ---
 
 ## What is dead code?

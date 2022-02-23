@@ -6,6 +6,7 @@ tags:
   - remix
   - node
   - seo
+type: "guide"
 ---
 
 <figure>

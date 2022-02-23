@@ -4,6 +4,7 @@ summary: "Type guards are conditional checks that allow types to be narrowed fro
 publishedAt: "2021-11-01"
 tags:
   - typescript
+type: "guide"
 ---
 
 TypeScript is valuable because it enables us to write safe code. Because when every type in the code is known at compile time, we can compile the code with TypeScript and perform type checking, which ensures that the code will not crash or cause errors.
