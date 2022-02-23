@@ -5,6 +5,7 @@ publishedAt: "2021-10-06"
 tags:
   - typescript
   - react
+type: "guide"
 ---
 
 ## What is the React Context API?
