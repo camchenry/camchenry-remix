@@ -62,13 +62,35 @@ export const loader: LoaderFunction = async ({ params }) => {
 export default function BlogPost() {
   const data = useLoaderData<PostData>();
 
+  const todos = {
+    // Always check the title and summary for TODO
+    // (since it should be fixed, even if it is published)
+    title: data.metadata.title.toLowerCase().includes("todo"),
+    summary: data.metadata.summary.toLowerCase().includes("todo"),
+    // The date is OK if:
+    // - It is published and in the past (or today)
+    // - It is not published and in the future
+    // Otherwise, it should be considered in error.
+    date: data.metadata.published
+      ? new Date(data.metadata.publishedAt) > new Date()
+      : new Date(data.metadata.publishedAt) <= new Date(),
+  };
+
+  console.log(todos);
+
   return (
     <div>
       <div className="md:my-12 mx-auto max-w-3xl lg:max-w-4xl">
-        <H1 className="mb-2 font-bold md:mb-4 md:text-4xl md:text-center">
+        <H1
+          className="mb-2 font-bold md:mb-4 md:text-4xl md:text-center"
+          style={todos.title ? { background: "red" } : undefined}
+        >
           {data.metadata.title}
         </H1>
-        <div className="mb-4 md:text-center">
+        <div
+          className="mb-4 md:text-center"
+          style={todos.date ? { background: "red" } : undefined}
+        >
           By Cameron McHenry on{" "}
           <PostDate publishedAt={data.metadata.publishedAt} />
         </div>
@@ -88,7 +110,10 @@ export default function BlogPost() {
       </div>
       <div className="mx-auto max-w-2xl mb-10">
         <Hr />
-        <p className="prose mx-auto">
+        <p
+          className="prose mx-auto"
+          style={todos.summary ? { background: "red" } : undefined}
+        >
           <span className="font-bold">Summary</span> ❧ {data.metadata.summary}
         </p>
         <Hr />

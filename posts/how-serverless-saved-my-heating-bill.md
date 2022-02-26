@@ -5,6 +5,7 @@ publishedAt: "2022-01-04"
 tags:
   - serverless
   - remix
+published: true
 ---
 
 <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/13af599c-6ef7-48f1-2b86-5c9ff7178800/public" alt="A picture of burning money." width="650" height="433">

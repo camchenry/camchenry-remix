@@ -5,6 +5,7 @@ publishedAt: "2021-11-27"
 tags:
   - typescript
 type: "guide"
+published: true
 ---
 
 Programming in TypeScript is all about creating models that help us to write safe code. Among those models, union types are one of the most useful, because they allow us to model mutually exclusive states like: low, medium, or high, one or none, on or off, and so on. In this article, I'll teach you what a union type is, when to use it, and tips on how to use it effectively.

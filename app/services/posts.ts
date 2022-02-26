@@ -14,6 +14,7 @@ export type PostMetadata = {
   publishedAt: string;
   tags?: string[];
   type?: "guide" | "post";
+  published?: boolean;
 };
 
 export type PostData = {
