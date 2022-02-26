@@ -1,3 +1,4 @@
+import { addDays, format } from "date-fns";
 import React from "react";
 import {
   HeadersFunction,
@@ -62,6 +63,8 @@ export const loader: LoaderFunction = async ({ params }) => {
 export default function BlogPost() {
   const data = useLoaderData<PostData>();
 
+  const today = format(new Date(), "yyyy-MM-dd");
+  const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
   const todos = {
     // Always check the title and summary for TODO
     // (since it should be fixed, even if it is published)
@@ -69,11 +72,12 @@ export default function BlogPost() {
     summary: data.metadata.summary.toLowerCase().includes("todo"),
     // The date is OK if:
     // - It is published and in the past (or today)
-    // - It is not published and in the future
+    // - It is not published and anything but today or tomorrow
     // Otherwise, it should be considered in error.
     date: data.metadata.published
       ? new Date(data.metadata.publishedAt) > new Date()
-      : new Date(data.metadata.publishedAt) <= new Date(),
+      : data.metadata.publishedAt !== today &&
+        data.metadata.publishedAt !== tomorrow,
   };
 
   console.log(todos);
