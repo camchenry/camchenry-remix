@@ -227,7 +227,7 @@ These are just a few common reasons to not use a union type, but there are other
 
 ## Conclusion
 
-Union types are a fantastic feature of TypeScript. They are an ergonomic way to model a finite number of mutually exclusive cases, and allow new cases to be added without breaking any existing code. However, union types do not exist at compile-time, so any programs that need access to the enumerated values should probably use an `enum` instead.
+Union types are a fantastic feature of TypeScript. They are an ergonomic way to model a finite number of mutually exclusive cases, and allow new cases to be added without breaking any existing code. However, union types do not exist at compile-time, so any programs that need access to the enumerated values should probably use an object instead.
 
 If you're interested in learning more about union types and the theory behind them, check out these additional resources:
 
