@@ -1,6 +1,6 @@
 import ReactDOMServer from "react-dom/server";
-import { EntryContext, redirect as remixRedirect } from "remix";
-import { RemixServer } from "remix";
+import { EntryContext, redirect as remixRedirect } from "@remix-run/node";
+import { RemixServer } from "@remix-run/react";
 import {
   createCanvas,
   SKRSContext2D,
@@ -172,7 +172,6 @@ const handleRedirect = (
       }
       const url = new URL(req.url);
 
-      console.log(redirect.from, url.pathname);
       const match = url.pathname.match(redirect.from);
       if (!match) continue;
 

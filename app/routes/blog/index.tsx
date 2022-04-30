@@ -1,5 +1,6 @@
 import React from "react";
-import { Link, LoaderFunction, useLoaderData } from "remix";
+import { LoaderFunction } from "@remix-run/node";
+import { Link, useLoaderData } from "@remix-run/react";
 import PageCard from "../../components/PageCard";
 import { Container, H1, H2 } from "../../components/styled";
 import { getPosts, PostData } from "../../services/posts";

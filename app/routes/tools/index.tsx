@@ -1,6 +1,6 @@
 import PageCard from "../../components/PageCard";
 import React from "react";
-import type { LoaderFunction } from "remix";
+import type { LoaderFunction } from "@remix-run/node";
 import { Container, H1, H3 } from "../../components/styled";
 
 export const loader: LoaderFunction = async () => {
