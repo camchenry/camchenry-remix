@@ -1,4 +1,5 @@
-import { LinksFunction, Outlet } from "remix";
+import { LinksFunction } from "@remix-run/node";
+import { Outlet } from "@remix-run/react";
 import blogStyles from "../styles/routes/blog/blog.css";
 
 export const links: LinksFunction = () => {

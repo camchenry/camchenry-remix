@@ -19,7 +19,7 @@ import {
   getTimeProfit,
 } from "./time-profit";
 import styles from "../../../../styles/routes/tools/worth-it-to-automate.css";
-import { LinksFunction } from "remix";
+import { LinksFunction } from "@remix-run/node";
 
 type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
 

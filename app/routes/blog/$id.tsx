@@ -1,5 +1,6 @@
 import { addDays, format } from "date-fns";
 import React from "react";
+
 import {
   HeadersFunction,
   json,
@@ -7,8 +8,9 @@ import {
   LoaderFunction,
   MetaFunction,
   redirect,
-  useLoaderData,
-} from "remix";
+} from "@remix-run/node";
+
+import { useLoaderData } from "@remix-run/react";
 import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
 import PostDate from "../../components/PostDate";
 import { H1, Hr } from "../../components/styled";

@@ -1,15 +1,13 @@
+import { LinksFunction, LoaderFunction, MetaFunction } from "@remix-run/node";
 import {
   Links,
-  LinksFunction,
   LiveReload,
-  LoaderFunction,
   Meta,
-  MetaFunction,
   Outlet,
   Scripts,
   useCatch,
   useMatches,
-} from "remix";
+} from "@remix-run/react";
 import { Button, Container, Input, Label } from "./components/styled";
 import { defaultMeta } from "./meta";
 import styles from "./styles/app.css";
