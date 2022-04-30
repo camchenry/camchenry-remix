@@ -12,8 +12,10 @@ export type PostMetadata = {
   title: string;
   summary: string;
   publishedAt: string;
+  updatedAt?: string;
   tags?: string[];
   type?: "guide" | "post";
+  published?: boolean;
 };
 
 export type PostData = {

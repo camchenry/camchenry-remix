@@ -5,6 +5,7 @@ publishedAt: "2021-08-30"
 tags:
   - typescript
 type: "guide"
+published: true
 ---
 
 ## What is dead code?

@@ -5,6 +5,7 @@ publishedAt: "2021-09-11"
 tags:
   - ai
   - programming
+published: true
 ---
 
 I've been using GitHub Copilot as a coding assistance tool to write TypeScript code everyday for the past two months. After two months, I think I have a pretty good idea of what it's like to use GitHub Copilot for everyday engineering. So, what's my conclusion on AI taking my job as a software engineer? I'm not concerned that AI will take my job as a software engineer. In fact, I think it's a great tool that will help developers write all kinds of software.

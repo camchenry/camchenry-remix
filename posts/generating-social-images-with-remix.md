@@ -7,6 +7,7 @@ tags:
   - node
   - seo
 type: "guide"
+published: true
 ---
 
 <figure>
