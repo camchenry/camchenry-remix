@@ -2,6 +2,7 @@
 title: "Everything You Need To Know About TypeScript Union Types"
 summary: "Union types are a powerful feature of TypeScript to ergonomically model a finite number of mutually exclusive cases and ensure that every case is handled safely."
 publishedAt: "2021-11-27"
+updatedAt: "2022-04-30"
 tags:
   - typescript
 type: "guide"
@@ -219,43 +220,10 @@ This version is both much shorter (so it is easier to read) and it also better c
 Although union types are an excellent modeling tool, there are legitimate reasons to _not_ use them:
 
 - **When the types are known at compile-time**, we can use [generics](https://www.typescriptlang.org/docs/handbook/2/generics.html) instead to provide further type safety and flexibility. If the types are known ahead of time, then there is no need to use a union type.
-- **When we need to enumerate all possibilities at run-time** (use an [`enum`](https://www.typescriptlang.org/docs/handbook/enums.html) instead for this). For example, if we wanted to iterate over all of the days of the week and construct an array, we would need to use an `enum`, because union types are a TypeScript-only feature, so it is compiled away when compiling to JavaScript.
+- When we need to enumerate all possibilities at run-time
+- When we want named values
 
-## What is the difference between an `enum` and a union type?
-
-At first, an `enum` and a union appear to be almost the same, so what's the difference? The two main differences between an `enum` and unions are:
-
-- A union type exists only at compile-time, an `enum` exists at compile-time and run-time.
-- A union type is an enumeration of any kind of type, an `enum` is an enumeration of only strings or numbers.
-
-Of these differences, the one that has the most important practical implications is that unions only exist in TypeScript's type system, while an `enum` actually exists as an object in JavaScript. Unions are a convenient way to model many types, but they do not actually affect the program's execution in any way. So, when we compile TypeScript to JavaScript, the union type will disappear from the code.
-
-```typescript
-type Color = "Red" | "Green" | "Blue";
-
-// Note: `Color` does not exist at run-time, so we
-// cannot do something like this:
-console.log(Object.values(Color));
-//                        ^^^^^ ERROR: 'Color' only refers
-// to a type, but is being used as a value here
-```
-
-On the other hand, an `enum` is essentially an alias for a JavaScript object. It is both a type and a value at the same time, similar to how a class can act as both a type and an actual value in JavaScript.
-
-```typescript
-enum Color {
-  Red,
-  Green,
-  Blue,
-}
-
-// Note: `Color` _does_ exist as an actual value at run-time,
-// so we can use it just like any object:
-console.log(Object.values(Color));
-// => ["Red", "Green", "Blue"]
-```
-
-So, if it is necessary to be able to iterate over all the possible values and use the values in our program, then an `enum` might be a better choice instead.
+These are just a few common reasons to not use a union type, but there are others as well. If you are interested in knowing the comprehensive difference union types and other language features, check out my article on [the differences between union types, enums, and objects](./typescript-union-vs-enum-vs-object).
 
 ## Conclusion
 

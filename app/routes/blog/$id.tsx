@@ -80,8 +80,6 @@ export default function BlogPost() {
         data.metadata.publishedAt !== tomorrow,
   };
 
-  console.log(todos);
-
   return (
     <div>
       <div className="md:my-12 mx-auto max-w-3xl lg:max-w-4xl">
@@ -92,11 +90,17 @@ export default function BlogPost() {
           {data.metadata.title}
         </H1>
         <div
-          className="mb-4 md:text-center"
+          className="md:text-center"
           style={todos.date ? { background: "red" } : undefined}
         >
           By Cameron McHenry on{" "}
           <PostDate publishedAt={data.metadata.publishedAt} />
+          {data.metadata.updatedAt && (
+            <span>
+              {" "}
+              (Updated on <PostDate publishedAt={data.metadata.updatedAt} />)
+            </span>
+          )}
         </div>
         {data.metadata.tags && (
           <div className="md:text-center">
