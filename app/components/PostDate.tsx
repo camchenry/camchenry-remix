@@ -1,3 +1,4 @@
+import { addHours } from "date-fns";
 import { format, zonedTimeToUtc } from "date-fns-tz";
 
 /**
@@ -11,8 +12,9 @@ export type PostDateProps = {
 };
 
 export default function PostDate({ publishedAt }: PostDateProps) {
-  const postDate = new Date(
-    zonedTimeToUtc(publishedAt, defaultTimeZone).valueOf()
+  const postDate = addHours(
+    new Date(zonedTimeToUtc(publishedAt, defaultTimeZone).valueOf()),
+    12
   );
 
   return (
