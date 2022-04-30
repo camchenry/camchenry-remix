@@ -5,7 +5,7 @@ publishedAt: "2022-04-30"
 tags:
   - typescript
 type: "guide"
-published: false
+published: true
 ---
 
 When you first encounter unions and enums in TypeScript, you might wonder what the difference is between them. At first glance, they are very similar, but in fact they are quite different. The situation becomes even more complicated when we consider "constant objects" which are essentially another way to implement an enumeration.
