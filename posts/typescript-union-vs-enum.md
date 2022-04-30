@@ -1,14 +1,16 @@
 ---
-title: "The Difference Between TypeScript Unions and Enums"
-summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+title: "The Difference Between TypeScript Unions, Enums, and Objects"
+summary: "In this guide, we'll examine when you might want to use a union, enum, or object and the relative strengths and weaknesses of each feature, and see why unions and objects should be the backbone of most TypeScript projects."
+publishedAt: "2022-04-30"
 tags:
   - typescript
 type: "guide"
 published: false
 ---
 
-Unions and enums seem very similar, and in fact they accomplish the same ideas. In this article we'll look at how they are the same, how they are different, and when you might use each of them. They are not opposed to each other, they can be used together.
+When you first encounter unions and enums in TypeScript, you might wonder what the difference is between them. At first glance, they are very similar, but in fact they are quite different. The situation becomes even more complicated when we consider "constant objects" which are essentially another way to implement an enumeration.
+
+In this article we'll look at their similarities and differences, and when you might want to use each of them.
 
 ## What are TypeScript unions?
 
@@ -23,6 +25,10 @@ This means that our code will be safer automatically because **TypeScript does a
 Enums, short for enumerations, are a more traditional programming language feature in imperative languages like C/C++ and Java. Their purpose is similar to union types, except they act on a much more basic principle.
 
 Enums give values (strings and numbers) a human-readable name that can be referenced easily in code via the name for the enumeration.
+
+<div class="note">
+Enums were added to TypeScript in anticipation of them becoming a standard JavaScript feature, however that currently seems unlikely based on the 4 year old <a href="https://github.com/rbuckton/proposal-enum">TC39 enum proposal</a> still being stuck at Stage 0.
+</div>
 
 ### TypeScript enum example
 
@@ -50,24 +56,55 @@ function isWeekend(day: DayOfWeek) {
 
 Using enums in this case makes our code easier to read and prevents simple typos.
 
-Now that we understand unions and enums, let's consider why we would want to choose one over the other.
+#### Constant enums
 
-## Comparison between unions and enums
+It is also possible to define an `enum` as a [`const enum`](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums) similar to the constant objects which we will talk about in this article. However, using `const enums` comes with some [pitfalls/caveats](https://www.typescriptlang.org/docs/handbook/enums.html#const-enum-pitfalls) which make them slightly more difficult to use in some cases. They don't offer a significant advantage over constant objects, so we won't discuss them in more detail here, but check out the [TypeScript documentation on `const enums`](https://www.typescriptlang.org/docs/handbook/enums.html#const-enums) for more info.
 
-To help you decide whether to use a union or an enum, I've created a table that summarizes the key similarities and differences:
+## What are TypeScript constant objects?
 
-| Feature                   | Unions                 | Enums                  |
-| ------------------------- | ---------------------- | ---------------------- |
-| Strictly typed            | ✅ Yes                 | ✅ Yes                 |
-| Available at compile-time | ✅ Yes                 | ✅ Yes                 |
-| Available at run-time     | ❌ No                  | ✅ Yes                 |
-| Named values              | 🟡 Partial<sup>1</sup> | ✅ Yes                 |
-| Unique values             | ✅ Yes                 | ❌ No                  |
-| Sub-typing                | ✅ Yes                 | 🟡 Partial<sup>2</sup> |
-| Mixed types               | ✅ Yes                 | 🟡 Partial<sup>3</sup> |
-| Computed values           | 🟡 Partial<sup>4</sup> | ❌ No                  |
+A constant object is no different from any other object in JavaScript, but when defined as `const` in TypeScript, it becomes a much stricter type. To create a constant object, we simply define an object and then add `as const` to make it a constant object.
 
-1. Unions can emulate named values when the values are strings, by making the value the same as the name. For example:
+Making it constant makes it act similar to enum, and it can be used in almost the same way. Let's look at the previous `enum` example, but now using an object with `as const`:
+
+```typescript
+const DayOfWeek = {
+  Monday: 0,
+  Tuesday: 1,
+  Wednesday: 2,
+  Thursday: 3,
+  Friday: 4,
+  Saturday: 5,
+  Sunday: 6,
+} as const;
+```
+
+Using `as const` makes all of the properties `readonly`, so the values are not allowed to be changed in the type system. So, all of the keys and values are guaranteed to never change as long as we abide by the type system, just like an `enum`.
+
+Now that we are a little bit familiar with unions, enums, and constant objects, let's compare them with each other and see how they stack up.
+
+## Comparison between unions, enums, and constant objects
+
+To help you decide whether to use a union, enum, or object, I've created a table that summarizes the key similarities and differences:
+
+| Feature                   | Unions                 | Enums                  | Constant objects       |
+| ------------------------- | ---------------------- | ---------------------- | ---------------------- |
+| Strictly typed            | ✅ Yes                 | ✅ Yes                 | 🟡 Partial<sup>1</sup> |
+| Available at compile-time | ✅ Yes                 | ✅ Yes                 | ✅ Yes                 |
+| Available at run-time     | ❌ No                  | ✅ Yes                 | ✅ Yes                 |
+| Named values              | 🟡 Partial<sup>2</sup> | ✅ Yes                 | ✅ Yes                 |
+| Unique values             | ✅ Yes                 | ❌ No                  | ❌ No                  |
+| Sub-typing                | ✅ Yes                 | 🟡 Partial<sup>3</sup> | 🟡 Partial<sup>3</sup> |
+| Mixed types               | ✅ Yes                 | 🟡 Partial<sup>4</sup> | ✅ Yes                 |
+| Computed values           | 🟡 Partial<sup>5</sup> | ❌ No                  | ✅ Yes                 |
+| Reverse mappings          | ❌ No                  | ✅ Yes                 | ❌ No                  |
+
+1. Constant objects cannot be used directly as types, but it is simple to create a type of the key values:
+
+   ```typescript
+   type Key = keyof typeof ConstantObject;
+   ```
+
+2. Unions can emulate named values when the values are strings, by making the value the same as the name. For example:
 
    ```typescript
    enum Dimension {
@@ -80,30 +117,99 @@ To help you decide whether to use a union or an enum, I've created a table that 
    type Dimension = "x" | "y" | "z";
    ```
 
-2. Only keys of an enum can be easily derived, the values are not possible to subtype.
+3. Only keys can be easily derived, the values are not possible to subtype.
 
-3. Enums do not support mixed types within each state other than strings and numbers, such as objects, booleans, etc. (For example: you cannot use an enum to refer to an object value, even if it is constant.)
+4. Enums do not support mixed types within each state other than strings and numbers, such as objects, booleans, etc. (For example: you cannot use an enum to refer to an object value, even if it is constant.)
 
-4. Unions allow strings to be interpolated into them, but the interpolation will be interpreted as a [template literal type](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html). If the interpolated value is a union, multiple possibilities will be generated. If the interpolated value is a string, only one possibility will be generated.
+5. Unions allow strings to be interpolated into them, but the interpolation will be interpreted as a [template literal type](https://www.typescriptlang.org/docs/handbook/2/template-literal-types.html). If the interpolated value is a union, multiple possibilities will be generated. If the interpolated value is a string, only one possibility will be generated.
 
-## What's similar between unions and enums
+## Unions, enums, and constant objects all support type safety
 
-There are a few commonalities between unions and enums in TypeScript:
+Regardless of which language feature you choose, the one thing they share in common is static type safety. We can create additional types that derive from a union, enum, or object. This helps us lean into leveraging the full power of the TypeScript compiler and make our code safer and reduce the amount of work a developer needs to do.
 
-- **Strictly typed**: Both can be used to only allow specific values and prevent typos
-- **Statically typed**: Both can be used at compile time to create other types.
-
-### Both: strictly typed
+## Unions and enums are both strictly typed
 
 The advantage of using a union or an enum over a more generic type like `string` is that the number of possible values is much lower and is enforced by the compiler. Rather than allowing _all_ strings or _all_ numbers, we can reduce it to just a _few_ strings or a _few_ numbers.
 
 The TypeScript compiler ensures that we cannot make any spelling mistakes in values because all of the possibilities are known. Using `string` or `number` does not provide the same guarantees. So, unions and enums help make the code safer by automatically preventing simple typing mistakes.
 
-### Both: statically typed
+## What's similar between enums and constant objects
 
-As an additional benefit of using enums and unions, we can create additional types that derive from a union or enum. This helps us lean into leveraging the full power of the TypeScript compiler and make our code safer and reduce the amount of work a developer needs to do.
+Enums are constant objects are very similar, and so they are many properties in common:
 
-One caveat is that enum values aren't able to be extracted into a type, so unions and generally easier to work with in this regard.
+- ⭐️ **Run-time usable**: Enums and objects can be used while the program is running (for example, to build a selection menu UI)
+- **Named values**: Both can give given names or aliases to specific values.
+- **No uniqueness**: Both do _not_ enforce uniqueness of values. There may be duplicate values.
+- **Partial sub-typing**: Both only support sub-typing on the keys, not the values.
+
+### Both: named values
+
+Another unique advantage of enums and objects is that keys and values can be named independently. This is great for improving the readability of code, essentially creating two sets: human-readable names, and machine-readable values.
+
+This is good if you don't control the values, but want to give them understandable names. For example, using an enum or object to identify pin numbers for microchips:
+
+```typescript
+enum Pin {
+  Power = 0,
+  LED0 = 4,
+  LED1 = 5,
+  Button1 = 8,
+  Button2 = 3,
+  Ground = 1,
+}
+```
+
+```typescript
+const Pin = {
+  Power: 0,
+  LED0: 4,
+  LED1: 5,
+  Button1: 8,
+  Button2: 3,
+  Ground: 1,
+} as const;
+```
+
+This is one of the advantages of using an enum or object instead of a union type, because union types cannot be referred to by name, only by their value.
+
+### Both: run-time usability
+
+The biggest advantage of using an enum is that they exist even after code is compiled, while the program is running. This is because enums are ultimately generated as normal JavaScript objects.
+
+This can be helpful when it is necessary to have the benefits of type safety and compile time, while also remembering the set of values while the program is running.
+
+Union types cannot be used as values, and cannot be used in executable code:
+
+```typescript
+type Color = "Red" | "Green" | "Blue";
+
+// Note: `Color` does not exist at run-time, so we
+// cannot do something like this:
+console.log(Object.values(Color));
+//                        ^^^^^ ERROR: 'Color' only refers
+// to a type, but is being used as a value here
+```
+
+On the other hand, an `enum` is essentially an alias for a JavaScript object. It is both a type and a value at the same time, similar to how a class can act as both a type and an actual value in JavaScript.
+
+```typescript
+enum Color {
+  Red,
+  Green,
+  Blue,
+}
+// Or:
+const Color = {
+  Red: "Red",
+  Green: "Green",
+  Blue: "Blue",
+} as const;
+
+// Note: `Color` _does_ exist as an actual value at run-time,
+// so we can use it just like any object:
+console.log(Object.values(Color));
+// => ["Red", "Green", "Blue"]
+```
 
 ## Advantages of union types
 
@@ -131,7 +237,7 @@ type SomeUnionOfTypes =
   | true; // boolean
 ```
 
-Using many different kinds of types brings some challenges, such as how to differentiate between them. To learn more on how to differentiate betwen types in a union, check out my complete guide on [TypeScript type guards](./typescript-type-guards).
+Using many different kinds of types brings some challenges, such as how to differentiate between them. To learn more on how to differentiate between types in a union, check out my complete guide on [TypeScript type guards](./typescript-type-guards).
 
 ### Union advantage: sub-typing
 
@@ -179,51 +285,9 @@ Using the dynamic input eliminates the previous type safety that was given by kn
 
 Enums do not support computed values or computed keys, so this is a uniquely union type advantage.
 
-## Advantages of enums
+## Unique advantage of enums: reverse mapping
 
-Compared to union types, enums have a few distinct advantages:
-
-- ⭐️ **Run-time usable**: Enums can be used at run-time and at compile-time, so the values/types can be used during execution (for example, to build a selection menu UI)
-- **Named values**: Enum values can be named independently of the value
-
-### Enum advantage: run-time usability
-
-The biggest advantage of using an enum is that they exist even after code is compiled, while the program is running. This is because enums are ultimately generated as normal JavaScript objects.
-
-This can be helpful when it is necessary to have the benefits of type safety and compile time, while also remembering the set of values while the program is running.
-
-Union types cannot be used as values, and cannot be used in executable code:
-
-```typescript
-type Color = "Red" | "Green" | "Blue";
-
-// Note: `Color` does not exist at run-time, so we
-// cannot do something like this:
-console.log(Object.values(Color));
-//                        ^^^^^ ERROR: 'Color' only refers
-// to a type, but is being used as a value here
-```
-
-On the other hand, an `enum` is essentially an alias for a JavaScript object. It is both a type and a value at the same time, similar to how a class can act as both a type and an actual value in JavaScript.
-
-```typescript
-enum Color {
-  Red,
-  Green,
-  Blue,
-}
-
-// Note: `Color` _does_ exist as an actual value at run-time,
-// so we can use it just like any object:
-console.log(Object.values(Color));
-// => ["Red", "Green", "Blue"]
-```
-
-### Enum advantage: named values
-
-Another unique advantage of enums is that keys and values can be named independently. This is great for improving the readability of code, essentially creating two sets: human-readable names, and machine-readable values.
-
-This is good if you don't control the values, but want to give them understandable names. For example, using an enum to identify pin numbers for microchips:
+The main advantage that enums have over unions and constant objects is that the values are automatically mapped to their names, as well as the reverse: names can be mapped to values. This can be useful when it is necessary to often go between the names and values often. For example, let's use the `Pin` enum from before:
 
 ```typescript
 enum Pin {
@@ -236,26 +300,96 @@ enum Pin {
 }
 ```
 
-This is one of the advantages of using enums instead of a union type, because union types cannot be referred to by name, only by their value.
+We can easily answer two questions with the `enum`:
 
-## When should you use a union in TypeScript
+- What is the purpose of pin `0`?
+
+  ```typescript
+  const purpose: string = Pin[0]; // => "Power"
+  ```
+
+- What pin number corresponds to `Ground`?
+
+  ```typescript
+  const ground: number = Pin.Ground; // => 1
+  ```
+
+However, two things diminish the usefulness of this:
+
+1. This feature can be replicated with objects when it is needed.
+2. If we don't need the reverse mapping, this results in useless code being generated. This can bloat the JavaScript bundle size significantly depending on how many enums are used in a project.
+
+## Unique advantage of constant objects: computed values
+
+One unique advantage of constant objects that can be helpful in some circumstances is that it is possible to used computed values as keys or values. For example, suppose we have an object which resolves theme values for whether we should show a light or dark-mode color scheme. In addition to the base keys and values, we can also create other dynamically computed values:
+
+```typescript
+const defaultColorScheme: string = "light";
+const lightAlias: string = "day";
+const darkAlias: string = "night";
+
+const ColorScheme = {
+  default: defaultColorScheme,
+  light: "light",
+  dark: "dark",
+  [lightAlias]: "light",
+  [darkAlias]: "dark",
+} as const;
+```
+
+We still retain the type safety of saying `ColorScheme.light` or `ColorScheme.dark` but can also use it in dynamic circumstances to find `ColorScheme.default` or `ColorScheme[usedSpecifiedTheme]`.
+
+This is the type that TypeScript ultimately resolves for this object:
+
+```typescript
+const ColorScheme: {
+  readonly [x: string]: string;
+  readonly default: string;
+  readonly light: "light";
+  readonly dark: "dark";
+};
+```
+
+It's not perfect, but at least it is possible to use computed values if necessary.
+
+---
+
+## What type should I use?
+
+We've looked at a lot of examples and caveats of unions, enums, and objects. So, let's wrap things up by looking at a subjective opinion of what type I recommend you should use depending on the circumstances.
+
+If you just want a quick summary:
+
+- **Use union types as a default**
+- **Use constant objects for run-time purposes**
+- **Avoid using `enum` if possible**
+
+### When should you use a union in TypeScript
 
 As a general guide, union types might be a good choice to use if many of the following apply:
 
 - You have a known set of possible values
 - The values are self-descriptive
-- ...
+- All of the values must be unique
+- The values are only needed at compile-time (i.e., not used in the output)
 
-## When should you use an enum in TypeScript
+### When should you use a constant object in TypeScript
 
-Enums might be a good tool to use when many of the following are true:
+Constant objects could be a good choice if several of the following apply to the situation:
 
 - You have a known set of possible values
-- The values are not within your control
-- ...
+- The values don't correspond to their name
+- The values are used in the output (for example, a selection menu or printed to the screen)
+- The keys or values can be dynamic
+
+### When should you use an enum in TypeScript: probably never
+
+Besides automatically doing reverse mapping (which can actually be a disadvantage), there are not enough benefits to justify using an enum over a constant object. Using a constant object over an enum will result in a smaller bundle size, and more flexibility with being able to use dynamic values and interoperate with standard JavaScript syntax.
+
+Enums were added to TypeScript in anticipation of them becoming a standard JavaScript feature, however it seems extremely unlikely that will happen anytime soon, or ever (see: [TC39 proposal](https://github.com/rbuckton/proposal-enum)). As such, they have not seen many language improvements in the last few years.
 
 ## Conclusion
 
-Hopefully this guide helped make the differences (and similarities!) between enums and unions in TypeScript more clear. They can be used together, or independently, to implement mutual exclusivity in TypeScript programs.
+Hopefully this guide helped clear up the confusion between enums and unions, and made the advantages and disadvantages between enums, unions, and constant objects clear. However, enums are somewhat lackluster when compared to the other two, and probably should not be used in most cases. On the other hand, unions and constant objects work together very well and can be used together, or independently, in a broad set of situations to implement mutual exclusivity in TypeScript programs.
 
 Good luck and happy coding!
