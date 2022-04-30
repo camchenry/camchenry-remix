@@ -127,9 +127,7 @@ To help you decide whether to use a union, enum, or object, I've created a table
 
 Regardless of which language feature you choose, the one thing they share in common is static type safety. We can create additional types that derive from a union, enum, or object. This helps us lean into leveraging the full power of the TypeScript compiler and make our code safer and reduce the amount of work a developer needs to do.
 
-## Unions and enums are both strictly typed
-
-The advantage of using a union or an enum over a more generic type like `string` is that the number of possible values is much lower and is enforced by the compiler. Rather than allowing _all_ strings or _all_ numbers, we can reduce it to just a _few_ strings or a _few_ numbers.
+Another advantage of using these features over a more generic type like `string` is that the number of possible values is much lower and is enforced by the compiler. Rather than allowing _all_ strings or _all_ numbers, we can reduce it to just a _few_ strings or a _few_ numbers.
 
 The TypeScript compiler ensures that we cannot make any spelling mistakes in values because all of the possibilities are known. Using `string` or `number` does not provide the same guarantees. So, unions and enums help make the code safer by automatically preventing simple typing mistakes.
 
