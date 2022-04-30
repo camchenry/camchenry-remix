@@ -172,7 +172,6 @@ const handleRedirect = (
       }
       const url = new URL(req.url);
 
-      console.log(redirect.from, url.pathname);
       const match = url.pathname.match(redirect.from);
       if (!match) continue;
 
