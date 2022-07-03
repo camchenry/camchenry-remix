@@ -15,7 +15,7 @@ import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl
 import PostDate from "../../components/PostDate";
 import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
-import { getPost, PostData } from "../../services/posts";
+import { getPost, PostData } from "../../services/posts.server";
 import styles from "../../styles/routes/blog/post.css";
 
 export const links: LinksFunction = () => {
@@ -44,7 +44,9 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const postId = params.id;
+  console.time("getPost");
   const postData = await getPost(postId);
+  console.timeEnd("getPost");
   if (!postData) {
     return redirect("/404");
   }

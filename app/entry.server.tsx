@@ -7,7 +7,7 @@ import {
   GlobalFonts,
   Image,
 } from "@napi-rs/canvas";
-import { getPost, getPosts } from "./services/posts";
+import { getPost, getPosts } from "./services/posts.server";
 import globby from "globby";
 import { generateSitemap } from "./services/sitemap";
 import { generateRss } from "./services/rss";

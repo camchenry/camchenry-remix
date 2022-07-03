@@ -116,12 +116,15 @@ export async function getPost(
   if (!postId) {
     return null;
   }
+
   let post: PostData | null | undefined;
   if (postCache.has(postId)) {
+    console.log(`CACHE HIT: ${postId}`);
     post = postCache.get(postId);
   } else {
     post = await generatePostFromMarkdown(postId);
     if (post) {
+      console.log(`CACHE MISS: ${postId}`);
       postCache.set(postId, post);
     }
   }

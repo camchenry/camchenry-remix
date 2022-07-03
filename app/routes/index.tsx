@@ -5,7 +5,7 @@ import tw from "tailwind-styled-components";
 import PageCard from "../components/PageCard";
 import { H1, H2 } from "../components/styled";
 import { defaultMeta } from "../meta";
-import { getPosts, PostData } from "../services/posts";
+import { getPosts, PostData } from "../services/posts.server";
 import stylesUrl from "../styles/routes/index.css";
 
 export const meta: MetaFunction = () => {

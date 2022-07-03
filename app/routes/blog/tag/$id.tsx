@@ -2,7 +2,7 @@ import { LoaderFunction } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import PageCard from "../../../components/PageCard";
 import { Container, H1 } from "../../../components/styled";
-import { getPosts, PostData } from "../../../services/posts";
+import { getPosts, PostData } from "../../../services/posts.server";
 
 type LoaderData = {
   id: string;
