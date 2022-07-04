@@ -15,7 +15,7 @@ import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl
 import PostDate from "../../components/PostDate";
 import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
-import { getPost, PostData } from "../../services/posts";
+import { getPost, PostData } from "../../services/posts.server";
 import styles from "../../styles/routes/blog/post.css";
 
 export const links: LinksFunction = () => {
@@ -44,7 +44,9 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const postId = params.id;
+  console.time("getPost");
   const postData = await getPost(postId);
+  console.timeEnd("getPost");
   if (!postData) {
     return redirect("/404");
   }
@@ -95,8 +97,7 @@ export default function BlogPost() {
           className="md:text-center"
           style={todos.date ? { background: "red" } : undefined}
         >
-          By Cameron McHenry on{" "}
-          <PostDate publishedAt={data.metadata.publishedAt} />
+          By Cam McHenry on <PostDate publishedAt={data.metadata.publishedAt} />
           {data.metadata.updatedAt && (
             <span>
               {" "}
@@ -121,14 +122,14 @@ export default function BlogPost() {
       <div className="mx-auto max-w-2xl mb-10">
         <Hr />
         <p
-          className="prose mx-auto"
+          className="prose dark:prose-invert mx-auto"
           style={todos.summary ? { background: "red" } : undefined}
         >
           <span className="font-bold">Summary</span> ❧ {data.metadata.summary}
         </p>
         <Hr />
         <main
-          className="prose mx-auto"
+          className="prose dark:prose-invert mx-auto"
           dangerouslySetInnerHTML={{ __html: data.text }}
         />
       </div>

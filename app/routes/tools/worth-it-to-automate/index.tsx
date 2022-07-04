@@ -92,7 +92,7 @@ const WorthItDisplay = ({
 };
 
 const StepHeader = ({ children }: { children: React.ReactNode }) => (
-  <H2 className="py-6 border-t step-header">{children}</H2>
+  <H2 className="py-6 step-header">{children}</H2>
 );
 
 export default function WorthItToAutomate() {
@@ -182,7 +182,7 @@ export default function WorthItToAutomate() {
                   </Select>
                 </div>
               </div>
-              <p className="text-gray-500">
+              <p className="text-gray-500 dark:text-gray-300">
                 This is the number of times that the task will be done, and on
                 what schedule it will occur. For example, something done each
                 business day (Monday through Friday) would have 5 occurrences
@@ -226,7 +226,7 @@ export default function WorthItToAutomate() {
                     </Select>
                   </div>
                 </div>
-                <p className="text-gray-500">
+                <p className="text-gray-500 dark:text-gray-300">
                   This is the period over which to calculate the total number of
                   tasks. For example, a value of "1 year" would find how much
                   time can be saved from automation in a year.
@@ -234,7 +234,7 @@ export default function WorthItToAutomate() {
               </div>
             </Details>
             {taskRepetitions !== undefined && (
-              <p className="mb-4 text-gray-500">
+              <p className="mb-4 text-gray-500 dark:text-gray-300">
                 With the current frequency and time period, this task will occur{" "}
                 <strong>{taskRepetitions}</strong> times over{" "}
                 {timePeriod ?? "an ⚠️ unknown amount of time"}.
@@ -274,7 +274,7 @@ export default function WorthItToAutomate() {
                 </Select>
               </div>
             </div>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-300">
               This is how much time would be saved by automating the task.
             </p>
           </section>
@@ -313,7 +313,7 @@ export default function WorthItToAutomate() {
                 </Select>
               </div>
             </div>
-            <p className="text-gray-500">
+            <p className="text-gray-500 dark:text-gray-300">
               This is amount of time that it will take to automate the task.
             </p>
           </section>
@@ -344,7 +344,7 @@ export default function WorthItToAutomate() {
         <Hr className="pb-12" />
         <section className="mb-8">
           <H2 className="mb-4">About</H2>
-          <div className="prose">
+          <div className="prose dark:prose-invert">
             <p>
               This tool calculates whether a task is worth automating or not. It
               was inspired by the XKCD comic "
@@ -365,7 +365,7 @@ export default function WorthItToAutomate() {
         </section>
         <section>
           <H2 className="mb-4">Frequently Asked Questions</H2>
-          <Details className="prose">
+          <Details className="prose dark:prose-invert">
             <Summary>How is this calculated?</Summary>
             <p>
               The recommendation is calculated using a simple formula: <br />

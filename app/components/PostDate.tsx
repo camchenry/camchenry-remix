@@ -3,7 +3,7 @@ import { format, zonedTimeToUtc } from "date-fns-tz";
 
 /**
  * This is the time zone that is used for interpreting dates in the project, since
- * I (Cameron McHenry) live on the East Coast.
+ * I (Cam McHenry) live on the East Coast.
  */
 export const defaultTimeZone = "America/New_York";
 

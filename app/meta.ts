@@ -12,10 +12,10 @@ export type MetaFields =
   | "og:url"
   | "og:type";
 
-export const defaultTitle = "Cameron McHenry";
+export const defaultTitle = "Cam McHenry";
 
 export const defaultDescription =
-  "Cameron McHenry is passionate about building web applications and tools that make the world better.";
+  "Cam McHenry is passionate about building web applications and tools that make the world better.";
 
 export const defaultMeta: Partial<Record<MetaFields, string>> = {
   title: defaultTitle,

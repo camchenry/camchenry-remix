@@ -7,7 +7,7 @@ import {
   GlobalFonts,
   Image,
 } from "@napi-rs/canvas";
-import { getPost, getPosts } from "./services/posts";
+import { getPost, getPosts } from "./services/posts.server";
 import globby from "globby";
 import { generateSitemap } from "./services/sitemap";
 import { generateRss } from "./services/rss";
@@ -79,7 +79,7 @@ const generateImage = async ({
   margin = 60,
   profileImage,
   profileRadius = 120,
-  author = "Cameron McHenry",
+  author = "Cam McHenry",
   font,
 }: GenerateSocialImage) => {
   const canvas = createCanvas(width, height);
@@ -305,7 +305,7 @@ export default async function handleRequest(
 
     const socialImage = await generateImage({
       title: post.metadata.title,
-      author: "Cameron McHenry",
+      author: "Cam McHenry",
       font: "Inter",
       profileImage: "assets/images/camchenry.png",
     });
@@ -372,8 +372,8 @@ export default async function handleRequest(
   if (url.pathname.startsWith("/rss.xml")) {
     const posts = await getPosts();
     const feed = generateRss({
-      title: "Cameron McHenry Blog",
-      description: "Cameron McHenry's Blog",
+      title: "Cam McHenry Blog",
+      description: "Cam McHenry's Blog",
       link: "https://camchenry.com/blog",
       entries: posts.map((post) => ({
         description: post.metadata.summary,

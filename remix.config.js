@@ -1,5 +1,5 @@
 /**
- * @type {import('@remix-run/dev/config').AppConfig}
+ * @type {import('@remix-run/dev/dist/config').AppConfig}
  */
 module.exports = {
   appDirectory: "app",

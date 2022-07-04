@@ -47,7 +47,7 @@ function Document({
         <Meta />
         <Links />
       </head>
-      <body>
+      <body className="dark:bg-gray-900 dark:text-white">
         {children}
 
         {/* disabled for now: <Scripts /> */}
@@ -182,7 +182,7 @@ const Navigation = () => (
     <ul className="flex justify-center">
       <li className="mr-4">
         <a href="/">
-          <span className="font-bold">Cameron McHenry</span>
+          <span className="font-bold">Cam McHenry</span>
         </a>
       </li>
       <li className="mr-4">
@@ -222,10 +222,10 @@ export default function App() {
         <Outlet />
       </div>
       <footer className="container mx-auto p-3">
-        <Container className="border-t border-gray-200">
+        <Container className="border-t border-gray-200 dark:border-gray-800">
           <div className="grid grid-cols-2 mt-12 mb-8">
             <div className="col-span-full md:col-span-1">
-              <div className="font-bold mb-4">Cameron McHenry</div>
+              <div className="font-bold mb-4">Cam McHenry</div>
               <div className="flex flex-grow mb-8">
                 <Twitter />
                 <GitHub />
@@ -233,8 +233,8 @@ export default function App() {
             </div>
             <ConvertKitForm />
           </div>
-          <small className="text-gray-500">
-            © Cameron McHenry 2016-{new Date().getFullYear()}
+          <small className="text-gray-500 dark:text-gray-400">
+            © Cam McHenry 2016-{new Date().getFullYear()}
           </small>
         </Container>
       </footer>

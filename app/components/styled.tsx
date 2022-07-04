@@ -25,6 +25,8 @@ export const Label = tw.label`
 export const Input = tw.input`
   border-2
   border-gray-300
+  dark:border-gray-600
+  dark:bg-gray-900
   border-solid
   rounded
   py-2
@@ -35,6 +37,8 @@ export const Input = tw.input`
 export const Select = tw.select`
   border-2
   border-gray-300
+  dark:border-gray-600
+  dark:bg-gray-900
   border-solid
   rounded
   py-2
@@ -61,6 +65,8 @@ export const Button = tw.button`
 export const Details = tw.details`
   border-2
   border-gray-300
+  dark:border-gray-600
+  dark:bg-gray-900
   border-solid
   rounded
   py-2
