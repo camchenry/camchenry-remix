@@ -51,8 +51,9 @@ const Intro = tw.section`
   max-w-3xl
   rounded
   rounded-lg
-  shadow-md
-  lg:shadow-2xl
+  border
+  border-green-500
+  dark:border-green-700
 `;
 
 export default function Index() {
@@ -65,8 +66,8 @@ export default function Index() {
         </div>
       )}
       <Intro id="intro">
-        <H1 className="mb-4 py-2 font-black lg:text-5xl bg-gradient-to-r from-green-400 to-green-600">
-          I'm Cameron McHenry
+        <H1 className="mb-4 py-2 font-black lg:text-5xl text-green-500">
+          👋 I'm Cam McHenry
         </H1>
         <div className="my-4">
           <p className="md:text-lg">

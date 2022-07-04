@@ -16,7 +16,7 @@ export default function PageCard({ url, title, summary, date }: PageCardProps) {
         <a href={url}>{title}</a>
       </H3>
 
-      <p className="text-gray-600">
+      <p className="text-gray-600 dark:text-gray-400">
         {date !== undefined ? (
           <>
             <PostDate publishedAt={date} /> &mdash; {summary}

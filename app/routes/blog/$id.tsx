@@ -97,8 +97,7 @@ export default function BlogPost() {
           className="md:text-center"
           style={todos.date ? { background: "red" } : undefined}
         >
-          By Cameron McHenry on{" "}
-          <PostDate publishedAt={data.metadata.publishedAt} />
+          By Cam McHenry on <PostDate publishedAt={data.metadata.publishedAt} />
           {data.metadata.updatedAt && (
             <span>
               {" "}

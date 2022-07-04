@@ -11,7 +11,7 @@ published: true
 ---
 
 <figure>
-  <img src="/social-image?id=generating-social-images-with-remix" alt="Blog post: Generating Social Images with Remix by Cameron McHenry"/>
+  <img src="/social-image?id=generating-social-images-with-remix" alt="Blog post: Generating Social Images with Remix by Cam McHenry"/>
   <figcaption>The generated social image for this blog post (meta, right?)</figcaption>
 </figure>
 
@@ -229,7 +229,7 @@ const generateImage = async ({
   margin = 60,
   profileImage,
   profileRadius = 120,
-  author = "Cameron McHenry",
+  author = "Cam McHenry",
   font,
 }: GenerateSocialImage) => {
   // ...
@@ -268,7 +268,7 @@ const generateImage = async ({
   margin = 60,
   profileImage,
   profileRadius = 120,
-  author = "Cameron McHenry",
+  author = "Cam McHenry",
   font,
 }: GenerateSocialImage) => {
   // ...
@@ -365,7 +365,7 @@ const url = new URL(request.url);
 if (url.pathname.startsWith("/social-image")) {
   const socialImage = await generateImage({
     title: "Generating Social Images with Remix",
-    author: "Cameron McHenry",
+    author: "Cam McHenry",
     profileImage: "assets/images/camchenry.png",
   });
   return new Response(socialImage, {
@@ -418,7 +418,7 @@ registerFont("assets/fonts/Inter-Bold.otf", {
 
 const socialImage = await generateImage({
   title: "Generating Social Images with Remix",
-  author: "Cameron McHenry",
+  author: "Cam McHenry",
   font: "Inter",
   profileImage: "assets/images/camchenry.png",
 });
