@@ -122,9 +122,9 @@ export async function getPost(
     console.log(`CACHE HIT: ${postId}`);
     post = postCache.get(postId);
   } else {
+    console.log(`CACHE MISS: ${postId}`);
     post = await generatePostFromMarkdown(postId);
     if (post) {
-      console.log(`CACHE MISS: ${postId}`);
       postCache.set(postId, post);
     }
   }
