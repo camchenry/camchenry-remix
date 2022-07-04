@@ -122,14 +122,14 @@ export default function BlogPost() {
       <div className="mx-auto max-w-2xl mb-10">
         <Hr />
         <p
-          className="prose mx-auto"
+          className="prose dark:prose-invert mx-auto"
           style={todos.summary ? { background: "red" } : undefined}
         >
           <span className="font-bold">Summary</span> ❧ {data.metadata.summary}
         </p>
         <Hr />
         <main
-          className="prose mx-auto"
+          className="prose dark:prose-invert mx-auto"
           dangerouslySetInnerHTML={{ __html: data.text }}
         />
       </div>
