@@ -222,7 +222,7 @@ export default function App() {
         <Outlet />
       </div>
       <footer className="container mx-auto p-3">
-        <Container className="border-t border-gray-200">
+        <Container className="border-t border-gray-200 dark:border-gray-800">
           <div className="grid grid-cols-2 mt-12 mb-8">
             <div className="col-span-full md:col-span-1">
               <div className="font-bold mb-4">Cam McHenry</div>
