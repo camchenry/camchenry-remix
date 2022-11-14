@@ -4,6 +4,7 @@
   "description": "",
   "license": "",
   "scripts": {
+    "new:post": "node scripts/new-post.js",
     "build": "npm run build:css && remix build",
     "dev": "remix dev",
     "start": "remix-serve server/build",
