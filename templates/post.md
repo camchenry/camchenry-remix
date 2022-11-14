@@ -1,7 +1,7 @@
 ---
 title: "{{title}}"
 summary: "TODO: Summary"
-publishedAt: "9999-01-01"
+publishedAt: "{{date}}"
 tags: TAGS
 type: TYPE # 'guide' or 'post' or 'til'
 published: false

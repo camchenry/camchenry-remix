@@ -36,7 +36,7 @@ const questions = [
     type: "select",
     name: "type",
     message: "What is the type of the post?",
-    choices: ["post", "guide"],
+    choices: ["post", "guide", "til"],
   },
 ];
 
@@ -50,7 +50,12 @@ prompt(questions)
       .replace(/ /g, "-");
     const date = new Date().toISOString().split("T")[0];
     const tags = answers["tags"];
-    const tagsList = "\n" + tags.split(",").map((tag) => `  - ${tag.trim()}`);
+    const tagsList =
+      "\n" +
+      tags
+        .split(",")
+        .map((tag) => `  - ${tag.trim()}`)
+        .join("\n");
     const post = postTemplate
       .replace(/\{\{title\}\}/g, title)
       .replace(/\{\{date\}\}/g, date)
