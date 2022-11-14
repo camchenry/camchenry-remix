@@ -1,11 +1,10 @@
 ---
-title: "TODO: Draft Post"
+title: "{{title}}"
 summary: "TODO: Summary"
-publishedAt: "9999-01-01"
-tags:
-  - TODO
-type: "post" # 'guide' or 'post'
+publishedAt: "{{date}}"
+tags: TAGS
+type: TYPE # 'guide' or 'post' or 'til'
 published: false
 ---
 
-## New Post
+{{title}}
