@@ -9,6 +9,7 @@ type LoaderData = {
   posts: PostData[];
   guides: PostData[];
   articles: PostData[];
+  tils: PostData[];
   tags: string[];
 };
 
@@ -18,14 +19,15 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   const articles = posts.filter(
     (post) => post.metadata.type === "post" || !post.metadata.type
   );
+  const tils = posts.filter((post) => post.metadata.type === "til");
   const tags = Array.from(
     new Set(posts.flatMap((post) => post.metadata.tags ?? []))
   );
-  return { posts, guides, articles, tags };
+  return { posts, guides, articles, tags, tils };
 };
 
 export default function BlogPostIndex() {
-  const { posts, guides, articles, tags } = useLoaderData<LoaderData>();
+  const { posts, guides, articles, tags, tils } = useLoaderData<LoaderData>();
   const numberOfRecentPosts = 3;
   const recentPosts = posts.slice(0, numberOfRecentPosts);
   return (
@@ -73,6 +75,25 @@ export default function BlogPostIndex() {
         </p>
         <ul className="post-grid">
           {guides.map((post) => (
+            <li key={post.id}>
+              <PageCard
+                url={`/blog/${post.id}`}
+                title={post.metadata.title}
+                summary={post.metadata.summary}
+                date={post.metadata.publishedAt}
+              />
+            </li>
+          ))}
+        </ul>
+      </section>
+      <section className="post-section">
+        <H2>Today I Learned (TIL)</H2>
+        <p className="max-w-prose text-lg py-4">
+          Today I learned posts are short posts about something I learned that
+          recently.
+        </p>
+        <ul className="post-grid">
+          {tils.map((post) => (
             <li key={post.id}>
               <PageCard
                 url={`/blog/${post.id}`}
