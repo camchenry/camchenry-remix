@@ -87,6 +87,9 @@ export default function BlogPost() {
   return (
     <div>
       <div className="md:my-12 mx-auto max-w-3xl lg:max-w-4xl">
+        {data.metadata.type === "til" && (
+          <div className="til text-sm md:text-center mb-2">Today I learned</div>
+        )}
         <H1
           className="mb-2 font-bold md:mb-4 md:text-4xl md:text-center"
           style={todos.title ? { background: "red" } : undefined}

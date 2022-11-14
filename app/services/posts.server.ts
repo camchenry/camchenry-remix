@@ -14,7 +14,7 @@ export type PostMetadata = {
   publishedAt: string;
   updatedAt?: string;
   tags?: string[];
-  type?: "guide" | "post";
+  type?: "guide" | "post" | "til";
   published?: boolean;
 };
 
