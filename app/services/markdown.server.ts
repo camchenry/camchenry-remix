@@ -34,13 +34,6 @@ export async function convertMarkdownToHtml(
       markdownString.slice(0, endOfFrontmatter + 3)
     : markdownString;
 
-  console.log({
-    startOfFrontmatter,
-    endOfFrontmatter,
-    markdownString,
-    stringToProcess,
-  });
-
   const processed = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ["yaml", "toml"])
