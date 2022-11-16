@@ -44,9 +44,7 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const postId = params.id;
-  console.time("getPost");
   const postData = await getPost(postId, { onlyRenderMetadata: false });
-  console.timeEnd("getPost");
   if (!postData) {
     return redirect("/404");
   }
