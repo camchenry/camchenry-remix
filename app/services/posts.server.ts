@@ -3,7 +3,10 @@ import fs from "../fs";
 import path from "../path";
 import { convertMarkdownToHtml } from "./markdown.server";
 
-const postCache = new LRUCache<string, PostData>({
+const postCache = new LRUCache<
+  { id: string; onlyRenderMetadata: boolean },
+  PostData
+>({
   maxAge:
     process.env.NODE_ENV === "production" ? 1000 * 60 * 60 * 24 * 7 : 2500,
 });
@@ -118,21 +121,21 @@ async function generatePostFromMarkdown(
 
 export async function getPost(
   postId: string | undefined,
-  { onlyRenderMetadata }: { onlyRenderMetadata?: boolean } = {}
+  { onlyRenderMetadata = true }: { onlyRenderMetadata?: boolean } = {}
 ): Promise<PostData | null | undefined> {
   if (!postId) {
     return null;
   }
 
   let post: PostData | null | undefined;
-  if (postCache.has(postId)) {
+  if (postCache.has({ id: postId, onlyRenderMetadata })) {
     console.log(`CACHE HIT: ${postId}`);
-    post = postCache.get(postId);
+    post = postCache.get({ id: postId, onlyRenderMetadata });
   } else {
     console.log(`CACHE MISS: ${postId}`);
     post = await generatePostFromMarkdown(postId, { onlyRenderMetadata });
     if (post) {
-      postCache.set(postId, post);
+      postCache.set({ id: postId, onlyRenderMetadata }, post);
     }
   }
 
