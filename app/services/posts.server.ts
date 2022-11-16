@@ -65,14 +65,16 @@ export function notNullOrUndefined<TValue>(
   return true;
 }
 
-export async function getPosts(): Promise<PostData[]> {
+export async function getPosts({
+  onlyRenderMetadata,
+}: { onlyRenderMetadata?: boolean } = {}): Promise<PostData[]> {
   const postsPath = path.join(__dirname, `../../posts`);
   const entries = fs.readdirSync(postsPath);
   const posts = await Promise.all(
     entries
       .filter((entry) => entry.endsWith(".md"))
       .map((entry) => entry.replace(".md", ""))
-      .map((postName) => getPost(postName))
+      .map((postName) => getPost(postName, { onlyRenderMetadata }))
       .filter(notNullOrUndefined)
   );
   const filtered = posts
@@ -84,7 +86,10 @@ export async function getPosts(): Promise<PostData[]> {
   return filtered;
 }
 
-async function generatePostFromMarkdown(postId: string | undefined) {
+async function generatePostFromMarkdown(
+  postId: string | undefined,
+  { onlyRenderMetadata }: { onlyRenderMetadata?: boolean } = {}
+) {
   const postPath = path.join(__dirname, `../../posts/${postId}.md`);
   if (!fs.existsSync(postPath)) {
     return null;
@@ -94,7 +99,8 @@ async function generatePostFromMarkdown(postId: string | undefined) {
   }
   const file = fs.readFileSync(postPath);
   const { html, frontmatter: metadata } = await convertMarkdownToHtml(
-    file.toString()
+    file.toString(),
+    { onlyRenderMetadata }
   );
   if (!isPostMetadata(metadata)) {
     throw new Error("Failed to parse post metadata");
@@ -111,7 +117,8 @@ async function generatePostFromMarkdown(postId: string | undefined) {
 }
 
 export async function getPost(
-  postId: string | undefined
+  postId: string | undefined,
+  { onlyRenderMetadata }: { onlyRenderMetadata?: boolean } = {}
 ): Promise<PostData | null | undefined> {
   if (!postId) {
     return null;
@@ -123,7 +130,7 @@ export async function getPost(
     post = postCache.get(postId);
   } else {
     console.log(`CACHE MISS: ${postId}`);
-    post = await generatePostFromMarkdown(postId);
+    post = await generatePostFromMarkdown(postId, { onlyRenderMetadata });
     if (post) {
       postCache.set(postId, post);
     }

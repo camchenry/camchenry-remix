@@ -279,7 +279,7 @@ export default async function handleRequest(
     if (!id) {
       return new Response("", { status: 404 });
     }
-    const post = await getPost(id);
+    const post = await getPost(id, { onlyRenderMetadata: true });
     if (!post) {
       return new Response("", { status: 404 });
     }

@@ -9,7 +9,9 @@ type LoaderData = {
   posts: PostData[];
 };
 
-export const loader: LoaderFunction = async ({ params }): LoaderData => {
+export const loader: LoaderFunction = async ({
+  params,
+}): Promise<LoaderData> => {
   const id: string | undefined = params.id;
   if (!id) {
     throw new Response("", { status: 404 });

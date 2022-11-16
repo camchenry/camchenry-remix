@@ -5,7 +5,10 @@ import langJavaScript from "highlight.js/lib/languages/javascript";
 import langMarkdown from "highlight.js/lib/languages/markdown";
 import langBash from "highlight.js/lib/languages/bash";
 
-export async function convertMarkdownToHtml(markdownString: string) {
+export async function convertMarkdownToHtml(
+  markdownString: string,
+  { onlyRenderMetadata = true }: { onlyRenderMetadata?: boolean } = {}
+) {
   const { default: remarkToRehype } = await import("remark-rehype");
   const { default: remarkParse } = await import("remark-parse");
   const { default: rehypeStringify } = await import("rehype-stringify");
@@ -18,6 +21,19 @@ export async function convertMarkdownToHtml(markdownString: string) {
   const { default: remarkGfm } = await import("remark-gfm");
   const { default: remarkFootnotes } = await import("remark-footnotes");
   const { unified } = await import("unified");
+
+  // If `onlyRenderMetadata` is true, remove all non-frontmatter content
+  // from the markdown string, and only return the frontmatter rendered.
+  const startOfFrontmatter = markdownString.indexOf("---");
+  const endOfFrontmatter = markdownString.indexOf(
+    "---",
+    startOfFrontmatter + 1
+  );
+  const stringToProcess = onlyRenderMetadata
+    ? // Remove all content after the second "---" (the end of the frontmatter)
+      markdownString.slice(0, endOfFrontmatter + 3)
+    : markdownString;
+
   const processed = await unified()
     .use(remarkParse)
     .use(remarkFrontmatter, ["yaml", "toml"])
@@ -45,7 +61,7 @@ export async function convertMarkdownToHtml(markdownString: string) {
     })
     .use(rehypeRaw)
     .use(rehypeStringify)
-    .process(markdownString);
+    .process(stringToProcess);
 
   return {
     html: processed.value.toString(),
