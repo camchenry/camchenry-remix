@@ -10,7 +10,6 @@ import {
 import { getPost, getPosts } from "./services/posts.server";
 import globby from "globby";
 import { generateSitemap } from "./services/sitemap";
-import { generateRss } from "./services/rss";
 import path from "./path";
 import fs from "./fs";
 
@@ -362,28 +361,6 @@ export default async function handleRequest(
     });
 
     return new Response(generatedSitemap, {
-      headers: {
-        "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=2419200",
-      },
-    });
-  }
-
-  if (url.pathname.startsWith("/rss.xml")) {
-    const posts = await getPosts();
-    const feed = generateRss({
-      title: "Cam McHenry Blog",
-      description: "Cam McHenry's Blog",
-      link: "https://camchenry.com/blog",
-      entries: posts.map((post) => ({
-        description: post.metadata.summary,
-        pubDate: new Date(post.metadata.publishedAt).toUTCString(),
-        title: post.metadata.title,
-        link: `https://camchenry.com/blog/${post.id}`,
-        guid: `https://camchenry.com/blog/${post.id}`,
-      })),
-    });
-    return new Response(feed, {
       headers: {
         "Content-Type": "application/xml",
         "Cache-Control": "public, max-age=2419200",
