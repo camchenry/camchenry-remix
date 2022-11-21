@@ -21,13 +21,13 @@ TypeScript lets you define [reusable types via the `type` keyword](https://www.t
 The `Awaited` type takes a type that is a `Promise` and returns the type that the `Promise` resolves to, mimicking the behavior of the `await` keyword. The `Awaited` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1530-L1539):
 
 ```typescript
-type Awaited<T> = T extends null | undefined
-  ? T
-  : T extends object & { then(onfulfilled: infer F): any }
-  ? F extends (value: infer V, ...args: any) => any
-    ? Awaited<V>
+type Awaited<Type> = Type extends null | undefined
+  ? Type
+  : Type extends object & { then(onfulfilled: infer OnFulfilled): any }
+  ? OnFulfilled extends (value: infer Value, ...args: any) => any
+    ? Awaited<Value>
     : never
-  : T;
+  : Type;
 ```
 
 For example, if you have a `Promise` that resolves to a `string`, you can use `Awaited` to get the type of the resolved value:
@@ -61,7 +61,48 @@ const nonAsync: NonAsync = await "test"; // => "test" (string)
 
 ### `Partial<Type>`
 
-TODO
+The `Partial` type takes an object type and makes all of its properties optional. The `Partial` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1546-L1551):
+
+```typescript
+type Partial<Object> = {
+  [Property in keyof Object]?: Object[Property];
+};
+```
+
+Example:
+
+```typescript
+type User = {
+  name: string;
+  email: string;
+  phone: string;
+};
+
+const updateUserDetails = (user: User, newDetails: Partial<User>) => ({
+  ...user,
+  ...newDetails,
+});
+
+const user = { name: "Ada", email: "ada@lovelace.com", phone: "3214567890" };
+const updatedUser = updateUserDetails(user, { email: "ada@example.com" });
+// => { name: "Ada", email: "ada@example.com", phone: "3214567890" }
+```
+
+```typescript
+type Preferences = {
+  theme: "light" | "dark";
+  language: string;
+  allowMotion: boolean;
+};
+
+const userPreferences: Partial<Preferences> = {
+  theme: "dark",
+  language: "en",
+};
+```
+
+- [TypeScript documentation on `Partial`](https://www.typescriptlang.org/docs/handbook/utility-types.html#partialtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgFURGAnGAXjKppoRg2RgC4YIZB3wBzANz8BjXKgA24ydIjzFNegAtMYiVNkLqMAL7nFUTJJgJ6AE2DJGbTgBFGyPKpAeGAIEdg5xTw4AGhgIRgB3Hz81EHEABWAONGBVAB5IgD4SbgLg0hgAOirQzhiqirjE339AyyIqW3tkRzCg8qERcQByAEFXIZjlf2HgVwABVXQAN0ZVYChGCrtsCZgDI2GAZgAmAEYAFgBWADYAdgAOAE4ABiGrTogHJ1d3Z0ig75uDxhJItEJhGLlKZqGbzRgAD2E9FUm22bzaHUomJodCYMDSHEYcE4jGgjECvAoFhx+mUxgARKpUDJ9Mh6TAAD4wemuDgAa3p5gEMDW2gQwBkxk0Zl0MByi3iAFl0GhMOIAEbodAo4AQIVWGwWOyfbo1DgEokksmpfGZbJ5C3EwnW0qU2XIWmDbm8gVRWWimTiyXiemk+l+izWKiWTEqQjtShAA)
 
 ### `Required<Type>`
 
