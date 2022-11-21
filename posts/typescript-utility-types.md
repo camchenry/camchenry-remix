@@ -1,0 +1,138 @@
+---
+title: "A Complete Guide to TypeScript Utility Types"
+summary: "TODO: Summary"
+publishedAt: "2022-11-21"
+tags:
+  - typescript
+type: guide # 'guide' or 'post' or 'til'
+published: false
+---
+
+## What are utility types?
+
+Utility types are helpers provided automatically by TypeScript to make common typing tasks easier. Since they are standard across _all_ TypeScript codebases, they are sort of like the "standard library of TypeScript."
+
+TypeScript lets you define [reusable types via the `type` keyword](https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html#reusable-types-type-aliases). There is nothing special about utility types, all of the types are reusable types that happen to be automatically included with every TypeScript installation. All of the definitions for each utility type are freely available on GitHub.
+
+## Utility Types
+
+### `Awaited<Type>`
+
+The `Awaited` type takes a type that is a `Promise` and returns the type that the `Promise` resolves to, mimicking the behavior of the `await` keyword. The `Awaited` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1530-L1539):
+
+```typescript
+type Awaited<T> = T extends null | undefined
+  ? T
+  : T extends object & { then(onfulfilled: infer F): any }
+  ? F extends (value: infer V, ...args: any) => any
+    ? Awaited<V>
+    : never
+  : T;
+```
+
+For example, if you have a `Promise` that resolves to a `string`, you can use `Awaited` to get the type of the resolved value:
+
+```typescript
+type Value = Awaited<Promise<string>>; // Value: string
+```
+
+The `Awaited` type will also recursively unwrap nested `Promise`s. If a type is not a Promise, it will be left as-is.
+
+```typescript
+type Nested = Awaited<Promise<Promise<string>>>; // X: string
+type NonAsync = Awaited<string>; // NonAsync: string
+```
+
+For clarity, compare the behavior of `Awaited` with the parallel behavior of `await` in JavaScript:
+
+```typescript
+type Value = Awaited<Promise<string>>; // => string
+const value: Value = await Promise.resolve("string"); // => "string" (string)
+
+type Nested = Awaited<Promise<Promise<number>>>; // => number
+const nested: Nested = await Promise.resolve(Promise.resolve(123)); // => 123 (number)
+
+type NonAsync = Awaited<string>; // => string
+const nonAsync: NonAsync = await "test"; // => "test" (string)
+```
+
+- [TypeScript documentation on `Awaited`](https://www.typescriptlang.org/docs/handbook/utility-types.html#awaitedtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgDVgAbBZgXhgEEA7nmSMAJgB4ACgCd02VCEbiQyafgDmAPk0wA9LpjcdKtRHVUaUTCpgA3DlwBcrBzxjAhqZDBlyFjADppRhB0dltGAgByEw0oogsYKwhQ9kD2dHUCe05GBMpEuiYYADkQkVFDfk8KqVl5RTq-RogEbAAjRmltHX1DHVaOrsTkmwhysWcylTEqj2Efev8gkLCIgl8GwODU9YBGACYAZiJ8y2sw9MyCcZnRfMKGZhLMPnBoKsFhMWVVDV6DEYYLEzCNrN4IK93lAplDILBeFERCoomCUpcAhkspCIG94fkAL5UKi4fDEKhAA)
+
+### `Partial<Type>`
+
+TODO
+
+### `Required<Type>`
+
+TODO
+
+### `Readonly<Type>`
+
+TODO
+
+### `Record<Keys, Type>`
+
+TODO
+
+### `Pick<Type, Keys>`
+
+TODO
+
+### `Omit<Type, Keys>`
+
+TODO
+
+### `Exclude<UnionType, ExcludedMembers>`
+
+TODO
+
+### `Extract<Type, Union>`
+
+TODO
+
+### `NonNullable<Type>`
+
+TODO
+
+### `Parameters<Type>`
+
+TODO
+
+### `ConstructorParameters<Type>`
+
+TODO
+
+### `ReturnType<Type>`
+
+TODO
+
+### `InstanceType<Type>`
+
+TODO
+
+### `ThisParameterType<Type>`
+
+TODO
+
+### `OmitThisParameter<Type>`
+
+TODO
+
+### `ThisType<Type>`
+
+TODO
+
+### `Uppercase<StringType>`
+
+TODO
+
+### `Lowercase<StringType>`
+
+TODO
+
+### `Capitalize<StringType>`
+
+TODO
+
+### `Uncapitalize<StringType>`
