@@ -19,3 +19,17 @@
   letter-spacing: 0.1em;
   color: var(--primary-color);
 }
+
+main.prose :is(h1, h2, h3, h4, h5, h6) {
+  display: flex;
+  flex: 1;
+  flex-direction: row;
+  gap: 0.5rem;
+}
+main.prose :is(h1, h2, h3, h4, h5, h6) a {
+  order: 2;
+  text-decoration: none;
+}
+.icon-link::before {
+  content: "🔗";
+}

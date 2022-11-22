@@ -20,6 +20,10 @@ export async function convertMarkdownToHtml(
   const { default: rehypeHighlight } = await import("rehype-highlight");
   const { default: remarkGfm } = await import("remark-gfm");
   const { default: remarkFootnotes } = await import("remark-footnotes");
+  const { default: rehypeAutoLinkHeadings } = await import(
+    "rehype-autolink-headings"
+  );
+  const { default: rehypeSlug } = await import("rehype-slug");
   const { unified } = await import("unified");
 
   // If `onlyRenderMetadata` is true, remove all non-frontmatter content
@@ -41,6 +45,8 @@ export async function convertMarkdownToHtml(
     .use(remarkGfm)
     .use(remarkFootnotes)
     .use(remarkToRehype, { allowDangerousHtml: true })
+    .use(rehypeSlug)
+    .use(rehypeAutoLinkHeadings)
     .use(rehypeHighlight, {
       languages: {
         typescript: langTypescript,
