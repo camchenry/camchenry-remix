@@ -161,7 +161,45 @@ const options: Required<Options> = {
 
 ### `Readonly<Type>`
 
-TODO
+The `Readonly` utility type accepts an object type and marks all of its properties as `readonly`, so they cannot be changed. The `Readonly` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1563-L1565):
+
+```typescript
+type Readonly<Object> = {
+  readonly [Property in keyof Object]: Object[Property];
+};
+```
+
+For example, you can use this to create a parameter type for a function so that the function may not change any properties in the object:
+
+```typescript
+interface Options {
+  optionA?: boolean;
+  optionB?: boolean;
+}
+
+const userOptions: Options = {
+  optionA: true,
+};
+
+function runApp(options: Readonly<Options>) {
+  // Try to change options after starting to run the app
+  options.optionA = false;
+  //      ~~~~~~~ Error: Cannot assign to 'optionA' because it is a read-only property.
+}
+```
+
+In addition to objects, the `Readonly` type also has [special handling in the TypeScript compiler](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-4.html#improvements-for-readonlyarray-and-readonly-tuples) to work with arrays and makes them a `ReadonlyArray` type instead. This ensures that elements in the array cannot be added, removed, or updated by removing associated methods like `push`, `pop`, `shift`, `sort`, and so on:
+
+```typescript
+// Readonly<Array<T>> === readonly T[]
+function processEntries(entries: Readonly<Array<object>>) {
+  entries.slice(1); // slicing is ok, produces a new array
+  entries.push({ id: 1 }); // cannot push, will mutate the array
+}
+```
+
+- [TypeScript documentation on `Readonly`](https://www.typescriptlang.org/docs/handbook/utility-types.html#readonlytype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZ9kBTAJzmCnpgHkAHNTEMqjRroeGCAEEA-AC4YAI3ToANvWAQA3IKEjeEAEIz5ilWs3UYAXypaofZDAQgm3XSFkux-ALwDzw0ZjissiMCPQANFoWZlqIKGIwoRJcXAQ6nrIASqoAJphKYAA8HnwAfCQUfjAA9NUwACqMYDDI6DBQABZqAObs6XwwwHAMjDAgyMCMaBDdLW1JLR3swCla-q4AdP0SMD4sSk5mNFaUWrUw2cB5EAWF4oyMwEX1paW7Xj6MufnN9QDaAF1YkgoLoYFxGOg2CAQABRCAhVD0EAEegIxhItwXb43Ir3R5FdByABW9FBrwqaxgaMRyI2ICUqDYBAAjCRzgymfhZqh+OgANbhcGQnIIaGDGAQegAd0GDyeVJpGLpXEcHQIpFoOVkLMs7LqUDUEHQ9lVIA6QulqCUShwCAmDEWy3lYCiVBO1kouHwxCoQA)
 
 ### `Record<Keys, Type>`
 
