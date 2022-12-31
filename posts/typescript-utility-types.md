@@ -203,7 +203,77 @@ function processEntries(entries: Readonly<Array<object>>) {
 
 ### `Record<Keys, Type>`
 
-TODO
+The `Record` utility type accepts two types, `Keys` and `Type`, and creates an object type where all keys have the type of `Keys` and each value has the type of `Type`. The `Record` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1577-L1579):
+
+```typescript
+type Record<Keys extends keyof any, Type> = {
+  [Key in Keys]: Type;
+};
+```
+
+For example, the type `Record<keyof any, unknown>` can represent a generic object where the keys are some type that can used as a key, and the values are unknown (could be a string, object, number, or anything else). The type `keyof any` represents any type that can be used as an object key, so in other words it is effectively shorthand for `string | number | symbol`.
+
+```typescript
+type GenericObject = Record<keyof any, unknown>;
+
+const a: GenericObject = {
+  test: "something",
+  123: "another value",
+};
+```
+
+More commonly, you would use `Record` to create an object type where the keys are known, and the values are all the same type:
+
+```typescript
+type Options = Record<string, boolean>;
+const options: Options = {
+  optionA: true,
+  optionB: false,
+};
+```
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+  email: string;
+};
+
+type UsersById = Record<User["id"], User>;
+const users: UsersById = {
+  1: {
+    id: 1,
+    name: "test user",
+    email: "user@example.com",
+  },
+};
+```
+
+It is also useful for using with [union types](./typescript-union-type.md) to create an object type where every type in the union must have an associated value:
+
+```typescript
+type HttpStatusCode = 200 | 404 | 500;
+const httpStatusCodes: Record<HttpStatusCode, string> = {
+  200: "OK",
+  404: "Not Found",
+  500: "Internal Server Error",
+};
+```
+
+If a new entry is ever added to the union, it _must_ be added to the object, or else an error will occur:
+
+```typescript
+type HttpStatusCode = 200 | 201;
+const httpStatusCodes: Record<H> = {
+  //  ~~~~~~~~~~~~~~~ ERROR: Property '201' is missing
+  //  in type '{ 200: string; }' but required in
+  //  type 'Record<HttpStatusCode, string>'.(2741)
+  200: "OK",
+};
+```
+
+- [TypeScript documentation on `Record`](https://www.typescriptlang.org/docs/handbook/utility-types.html#recordkeys-type)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgHFGJGAnVKAeQCMAVoyjIYAXhgAlEek4ATADwBrRmHRwYwCGAA0MJMojoA7hAB8AbipUaUTCDHAAXK3ZceA4aIllbNWkZHVwByEHRsRmQAC3wAcxDdfxoARgAmAGZQ7XQYrhgAN2AAGwRGRP8AXxtqWgZmAFUQfMkKWppUeVcIBGx+Lmt2mAhgSNdHbgg4wYCYRlxUYvHkSemqmbqmGCauEAAhMABJeV8ZewVFHc4AbQAiTtuAXX0rq397CEcDZs4QVyv9kcTq1kjAUq42rMOl0wUkhjQRmMYCFkEExAgfhV4XMFktkRiuAABRgAD1G9GKjAAdPZsCFQdVaoy7A50T8AIK+Am-a4pR41Gh0La8ehoBynWQXCbxfT8dDoSnaczvVkwdCijCfVwisWfXyQgLq3Xs1wrMpw2ZGzV7VxwErNC0wRn+IXMAASyGQ9AAyshgMgMQBhdDyZiSNIABgjMAAPjBIykNh8vtFPT6-QGQMHQ39pJKlB6vb7-UGQ4x9NKpuZ9aDIxHXLdeABpW6OyqDZ2UKgLQhEKhAA)
 
 ### `Pick<Type, Keys>`
 
