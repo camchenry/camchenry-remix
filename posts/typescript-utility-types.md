@@ -325,14 +325,44 @@ TODO
 
 ### `Uppercase<StringType>`
 
-TODO
+The `Uppercase` utility type accepts a [string literal type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types) and returns a new string type where all characters are uppercase. The `Uppercase` utility type is an intrinsic compiler function, so unfortunately its definition is not available.
+
+```typescript
+type Upper = Uppercase<"typeScript">; // => "TYPESCRIPT"
+```
+
+- [TypeScript documentation on `Uppercase`](https://www.typescriptlang.org/docs/handbook/utility-types.html#uppercasestringtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgA0YBeGAcjqYGUoAJ1T1kXKjV7MAqvSaCOMWfKihGAHhYA+CbQbMAMugDujBZyOnBqkBu26pMAMLB6qZMAA2il24+fUAC87HWo9JiVoV3cvRWkovy8gkKoAXyoMylx8YiogA)
 
 ### `Lowercase<StringType>`
 
-TODO
+The `Lowercase` utility type accepts a [string literal type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types) and returns a new string type where all characters are lowercase. Unfortunately, the definition of the `Lowercase` utility type is not available to us, as it is an intrinsic compiler function.
+
+```typescript
+type Lower = Lowercase<"TypeScript">; // => "typescript"
+```
+
+- [TypeScript documentation on `Lowercase`](https://www.typescriptlang.org/docs/handbook/utility-types.html#lowercasestringtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgA0YBeGAcjqYGUoAJ1T1kXKjV7MAqvSaCOMWfKihGAHhYA+CbQbMAMugDujBZyOnBqkBu26pMAMLB6qZMAA2il24+fUAC87HWo9JiVoV3cvRWkovy8gkKoAXyoMylx8YiogA)
 
 ### `Capitalize<StringType>`
 
-TODO
+The `Capitalize` utility type accepts a [string literal type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types) and returns a new string type where the first character is uppercase and the remaining characters are lowercase. Unfortunately, we cannot easily view the definition of the `Capitalize` utility type, since it is an intrinsic compiler function.
+
+```typescript
+type Capitalized = Capitalize<"typeScript">; // => "TypeScript"
+```
+
+- [TypeScript documentation on `Capitalize`](https://www.typescriptlang.org/docs/handbook/utility-types.html#capitalizestringtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgA0YBeGAcjqYGUoAJ1T1kXKjV7MAqvSaCOMWfKihGAHhYA+CbQbMAMugDujBZyOnBqkBu26pMAMLB6qZMAA2il24+fUAC87HWo9JiVoV3cvRWkovy8gkKoAXyoMylx8YiogA)
 
 ### `Uncapitalize<StringType>`
+
+The `Uncapitalize` utility type accepts a [string literal type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#literal-types) and returns a new string type where the first character is lowercase and the remaining characters are unchanged. It essentially does the opposite of the [`Capitalize`](#capitalizestringtype). `Uncapitalize` is an intrinsic utility type, so unfortunately its definition is not readily available.
+
+```typescript
+type Uncapitalized = Uncapitalize<"TypeScript">; // => "typeScript"
+```
+
+- [TypeScript documentation on `Uncapitalize`](https://www.typescriptlang.org/docs/handbook/utility-types.html#uncapitalizestringtype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgA0YBeGAcjqYGUoAJ1T1kXKjV7MAqvSaCOMWfKihGAHhYA+CbQbMAMugDujBZyOnBqkBu26pMAMLB6qZMAA2il24+fUAC87HWo9JiVoV3cvRWkovy8gkKoAXyoMylx8YiogA)
