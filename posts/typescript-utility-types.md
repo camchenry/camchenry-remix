@@ -277,7 +277,57 @@ const httpStatusCodes: Record<H> = {
 
 ### `Pick<Type, Keys>`
 
-TODO
+The `Pick` utility type creates a subset of an object by _including_ specific properties. It accepts an object type and a union of keys, and returns a new object type with only the keys specified from the object type. The `Pick` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1571C2-L1572C3):
+
+```typescript
+type Pick<Type, Keys extends keyof Type> = {
+  [Key in Keys]: Type[Key];
+};
+```
+
+It can be thought of as repeated application of the [indexing operator](https://www.typescriptlang.org/docs/handbook/2/indexed-access-types.html) to the object type:
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+  rating: number;
+  reviews: string[];
+};
+type WithoutPersonalInfo = Pick<User, "id" | "rating" | "reviews">;
+// equivalent to:
+type WithoutPersonalInfo2 = {
+  id: User["id"];
+  rating: User["rating"];
+  reviewers: User["reviews"];
+};
+```
+
+```typescript
+// Minimum data needed to represent a project
+type MinimalProject = Pick<Project, "id" | "name">;
+const fullProject: Project = {
+  id: 123,
+  name: "Test Project",
+  description: "This is a test project",
+  dateCreated: new Date("2022-01-01"),
+  dateUpdated: new Date("2022-01-06"),
+  hasIssues: true,
+  hasWiki: false,
+  users: [],
+};
+// Any type created via Pick will be satisfiable by the source type
+const fullProject2: MinimalProject = fullProject; // ok
+const minimalProject = {
+  id: 321,
+  name: "Project lite",
+};
+```
+
+- [TypeScript documentation on `Pick`](https://www.typescriptlang.org/docs/handbook/utility-types.html#picktype-keys)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgFURGAnGAXjKppqoAJgC4YEBNgBGnANz8BEYNkZiQyDvgDm86gMa5UAGzUbtugTHqgQAd3QdRMdZog6FNDsDRuxE6XIeMByMAG6ojLYgpq5aANoAuhYwAL7JdEwwAOqoyAAW6AjIAAqcIJjARgCSEHDoPDDFqFAA1gA8bJwANDAARMK9MAA+fV4+WoMjvSHhkSC9AHzJAPTLMIwAjgiooZWMEMi06CIKGcw5+YUlZRXVtegATA2kMMJinRxx-UK9CT1j2ne7E+0282l+-zCEVsZSBnC+M2h8wSqV0pwYzGKHHQACtGFBDrwKHpBE5-DIOMkaEoVDFzEEhIwQFBNPQ0Jg6W4qTAhN5GABhEJ8pwAET53N5yEYLHoksYovFQTyoCqIBACCZYik6HQRkYwAg3OVIByLVQWp1eoN3IQwOirGBiWSKSoClWMAAsvhUNhJDzvMBxIx5fKjsFGPQQuwDjBA5HcfjkOjMl6ID7KliEwSGk1Wm1M3iCT1vpM+jTGItdC7KK7KIZCEQqEA)
 
 ### `Omit<Type, Keys>`
 
