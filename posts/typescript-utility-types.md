@@ -277,7 +277,7 @@ const httpStatusCodes: Record<H> = {
 
 ### `Pick<Type, Keys>`
 
-The `Pick` utility type creates a subset of an object by _including_ specific properties. It accepts an object type and a union of keys, and returns a new object type with only the keys specified from the object type. The `Pick` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1571C2-L1572C3):
+The `Pick` utility type creates a subset of an object by _including_ specific properties. It accepts an object type and a union of keys, and returns a new object type with only the keys specified from the object type. `Pick` is the opoosite of the [`Omit`](#omittype-keys) utility type. The `Pick` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1571C2-L1572C3):
 
 ```typescript
 type Pick<Type, Keys extends keyof Type> = {
@@ -331,7 +331,50 @@ const minimalProject = {
 
 ### `Omit<Type, Keys>`
 
-TODO
+The `Omit` utility type creates a subset of an object by _excluding_ specific properties. It accepts an object type and a union of keys, and returns a new object type with all the properties of the original object, except the keys specified. `Omit` is the opposite of the [`Pick`](#picktype-keys) utility type. The `Omit` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1594):
+
+```typescript
+type Omit<Type, Keys extends keyof any> = Pick<Type, Exclude<keyof Type, Keys>>;
+```
+
+Note that this definition utilizes [`Exclude`](#excludeuniontype-excludedmembers) and [`Pick`](#picktype-keys) to essentially perform an inverse selection of properties, where we pick all properties, but exclude the ones that are part of the passed in `Keys` union.
+
+`Omit` is helpful when you want to create a new type from an existing one, and keep most of the properties the same except for a few. For example, if you have a `User` type that contains a `password` property, you may want to create a `UserWithoutPassword` type that is the same as `User`, but with the password omitted.
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+  email: string;
+  password: string;
+};
+type UserWithoutPassword = Omit<User, "password">;
+const user: UserWithoutPassword = {
+  id: 123,
+  name: "Test User",
+  email: "user@example.com",
+};
+```
+
+Or, it could be used to remove props from a React component that are handled automatically by a component:
+
+```tsx
+type ButtonAttributes = {
+  onClick: () => void;
+  type: "button" | "submit" | "reset";
+  children: React.ReactNode;
+  disabled?: boolean;
+  className?: string;
+};
+function Button(props: Omit<ButtonAttributes, "type">) {
+  // The `type` attribute is preconfigured, so we omit it from the
+  // accepted props and hardcode it to "button" in the component
+  return <button {...props} type="button" />;
+}
+```
+
+- [TypeScript documentation on `Omit`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?target=9&pretty=false#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgcilQ3wFgAoClAZwE8A7NOTAV0ZmAnrhBWHoAUASjgBvCnDgxaYJHACq1JFDgBeMRMlxgAEwBcceixAAjZQG5Nk+ihBID1GFH4BzS+S1wkvYABsHTq7unmA01ADu0Ppwjs70bpoAvsFSMnKKygDqwDAAFhAsMAAKYZFQOmpwAPIgOQA8GVAANHAARKHUEVGtAHwpaFyOcCxKUAaN2XkFxaVRleIeWroGAIwATADMTVaGtvZtACpIQ42t24uS3nz+bSPKAAJIAB62YL5IAHQDIGdJ7pqaaSyOAAIUKMC4AEEYIETIVjvMdlwAMK+YBoADWBmEah6cAAbhBdClJED9q04TCuK04AAfNrUFgmWowGn01pEJSsklwHTAagoEzvHQAfgMJggEHeKHoPLQvjCADk9mKYoF4ilkppWOxONwwVTBGAcGBqAYavUDRD6NDYfDqC1WmTeiIFp4APTuuAHXJyAAGZL9cBQMOclLk-LgxqQA3omGALhYRB0LWoEDg4TkuBy2iwODweSQO09wbQaCQYBgSAqxogpuD9AquRQ5QGOgj8AhbUp1pp-Ckvrg30g9CQ9BgOyIMCT3DqPa4Yg+S9rpsSqVkqgp4OpcHdfSSFESFGP5B8giEFCAA)
 
 ### `Exclude<UnionType, ExcludedMembers>`
 
