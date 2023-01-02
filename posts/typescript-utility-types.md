@@ -561,7 +561,46 @@ const array = [0, 1, null, 3, false, -1, ""]
 
 ### `ReturnType<Type>`
 
-TODO
+The `ReturnType` utility type takes a function type and takes on the type of whatever that function returns. The [definition of `ReturnType`](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1614) is almost exactly the same as [`Parameters`](#parameterstype), but it infers the return type instead of the parameter types:
+
+```typescript
+type ReturnType<Type extends (...args: any) => any> = Type extends (
+  ...args: any
+) => infer Return
+  ? Return
+  : any;
+```
+
+It allows us to get the return type of any function we pass in:
+
+```typescript
+function sayHello(name: string) {
+  return `Hello ${name}!`;
+}
+type Greeting = ReturnType<typeof sayHello>; // => string
+```
+
+```typescript
+function add(a: number, b: number) {
+  return a + b;
+}
+type Sum = ReturnType<typeof add>; // => number
+```
+
+One of the most useful aspects is that we can re-use the return types of built-in functions:
+
+```typescript
+type Value = string | number
+type Entries = ReturnType<typeof Object.entries<Value>>
+// => [string, Value][]
+const entries: Entries = [
+  ['key', 'value'],
+  ['key2', 123]
+]
+```
+
+- [TypeScript documentation on `ReturnType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgZ4ko1MYRgwAJAUwBtP0CJhs7AFxNkAJ3wBzEhWo0YY9sgRisAAw7d0MACSl+ggL4BCNVRqHzMZGAAO7GAHFFSqTAC8MAEpKVEACp27AA8NvbocEwsmjwAfDAA9Ake8SDiUlRWiCgYWMAAJvkEwCIQCNgARuxiADQwFaXlVWIyVjSKyqowwDAA1PUA3FaWcmEOAMrlHt6+qoH2oUER3YWxA4nJ7vFlldWZo0EwAGrAnAgOnmkSEJIwAD4wO81WYzAAohDp7CDTPp0BQUW4UiAHkKgArdj0AB07E+Em+wROZ3YsXiSRSMAA2lcpHVkecALpYwlWKCYNIwOFfEAiD406ZYtrYgDkAGt2GAWXUWQA3U7nFmEmrMrHszkAJm5MAAjBKAMykuRKkb7XD4YhUIA)
 
 ## Class / object-oriented types
 
