@@ -5,7 +5,7 @@ publishedAt: "2023-01-02"
 tags:
   - typescript
 type: guide # 'guide' or 'post' or 'til'
-published: false
+published: true
 ---
 
 ## What are utility types?
