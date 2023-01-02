@@ -401,14 +401,70 @@ type DefinedX = Defined<X>; // => string
 ```
 
 ```typescript
-type Values = Exclude<string | number | () => void | (...args) => boolean, Function> // => string | number
+type Values = Exclude<
+  string | number | (() => void) | ((...args: unknown[]) => boolean),
+  Function
+>;
+// => string | number
 ```
 
-For more examples, check out my [blog post on union types](./typescript-union-type).
+For more examples, check out my [blog post on union types](./typescript-union-type#how-to-get-a-subset-of-a-union-type).
+
+- [TypeScript documentation on `Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludeuniontype-excludedmembers)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?target=9&pretty=false#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgDkFsAjRgJxBgF4YARhgAfGACYxMAMzSALNICs0gGzSA7NIAc0gJzShABgDcVGnSYwAogDdGENpx59B1gB5QANggAmjAB4nLl4AGmFpOXEVcS1xPQA+M2paBmYAeV9fYJcBG08ffyD2EJBwuwcc3iSqc1SrAA08kGRufABzaQgELy9pJH84fEZfOstmABFGIYgRgIA1YB9GBLyPbz9AxeXw7t7+iEHh3wSxtJgpmZGmwUvjgIbVgHongVWWtoh22pTxmG2EIxXPkNkUPh0uiUeNICMQ3jBbOhUL4SOJYQA6THAbjtEAALhgSAA1hB0AB3CAAbQAuiR+KsOOh0F5GMAIERwgAxJBQNCYU6UAC+PyouHwxCoQA)
 
 ### `Extract<Type, Union>`
 
-TODO
+The `Extract` utility type accepts a union type and a union of types to extract from the passed in union type. The returned type is the union of types which are assignable to the union of types passed in. `Extract` is sort of like [`Pick`](#picktype-keys) but for union types instead of object types. `Extract` is the opposite of the [`Exclude`](#excludeuniontype-excludedmembers) utility type. The `Extract` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1589):
+
+```typescript
+type Extract<Type, Union> = Type extends Union ? Type : never;
+```
+
+`Extract` can be used to remove all but a few types from a union type:
+
+```typescript
+type Days =
+  | "Monday"
+  | "Tuesday"
+  | "Wednesday"
+  | "Thursday"
+  | "Friday"
+  | "Saturday"
+  | "Sunday";
+type Weekend = Extract<Days, "Saturday" | "Sunday">; // => 'Saturday' | 'Sunday'
+```
+
+Like `Exclude`, `Extract` can be used to filter entire categories of types, since it removes any types from the union which are _assignable_ to the union of types to extract:
+
+```typescript
+type Types =
+  | string
+  | number
+  | boolean
+  | (() => void)
+  | ((...args: unknown[]) => boolean)
+  | Map<unknown, unknown>
+  | Set<unknown>;
+type Objects = Extract<Types, object>;
+// => Map<unknown, unknown> | Set<unknown> | (() => void) | ((...args: unknown[]) => boolean)
+type Functions = Extract<Types, Function>;
+// => () => void | ((...args: unknown[]) => boolean)
+type Values = Extract<Types, string | number | boolean>;
+// => string | number | boolean
+```
+
+```typescript
+type NumberValue = Extract<
+  string | number | Date | Array<number>,
+  { valueOf: () => number }
+>;
+```
+
+For more examples, check out my [blog post on union types](./typescript-union-type#how-to-get-a-single-type-from-a-union-type).
+
+- [TypeScript documentation on `Extract`](https://www.typescriptlang.org/docs/handbook/utility-types.html#extractuniontype-extractedunion)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?target=9&pretty=false#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgBFgwQYBeKmmgHxgAiALKYAJuyG8+goQBUEjEJLDTqs4QHVG4iMtXq+MOfIAWCAE4qpMgcIBil1IbsnhAZWDIrrjfaEPJEMAbhk6JhgdRgBrRghxbhgAUQAPZEtgKGQAHjYOABpPb18pd0DgqQA+EJgAejruKpgAci8fS1UW9zbKsBaqcIZmeWHOLhgQDPwAc3cIBGwAI0ZLdyX0dAAbRmAsQQJiJpgAN3QXEgOCADpb4EsZkAAuGCQYiHQAdwgAbQBdEhcZobba7CCXGAiYD0HJvD7fIpwr4QZqCDyMXJI741IaRADySwAVoxsuMUulMtkcqMmCAiugiSTkDV6o0gZDobCIO9kYjufCUe50Zj+cjUTBDoDmmcLu5DrdrvdHi8sb8AccQTs9kRccwHEhshgIGS0hksrkacoivqUEaWQ1jkd2TLElcFUrnq9Rd9-lKYJqwTqNBFmAA1YBbJQminm6ljIpTZwQOaCBbLVbrTZalG1B3sxOzeaLFZrQQBvaDYPDGAAOWLq3DkeYE1NlNyBeTRfTpdY3mYggAgpZMmAcmmS1UiqRThGlHi4C8nc1xxmAL5VKirytUXD4YhUIA)
 
 ### `NonNullable<Type>`
 
