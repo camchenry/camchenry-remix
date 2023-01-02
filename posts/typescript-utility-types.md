@@ -640,7 +640,27 @@ type VectorParameters = ConstructorParameters<Vector>;
 
 ### `InstanceType<Type>`
 
-TODO
+The `InstanceType` utility type takes a class type and returns the type that will be instantiated by the constructor. This is similar to the `ReturnType` utility type, but only returning the type of the constructor function. In essence, it strips away `typeof` in an expression like `typeof Instance` and simply returns `Instance`. For example:
+
+```typescript
+type DateType = InstanceType<typeof Date>;
+// => Date
+type SetType = InstanceType<typeof Set>;
+// => Set
+type ArrayType = InstanceType<typeof Array>;
+// => unknown[]
+```
+
+This also works for any type that has a `new` constructor:
+
+```typescript
+type Vector = { new (x: number, y: number): { x: number; y: number } };
+type VectorType = InstanceType<Vector>;
+// => { x: number; y: number }
+```
+
+- [TypeScript documentation on `InstanceType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#instancetypetype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgBFhlGAVB5gXhgCSEEMmDQuPADx0m6OK3aMAfFRoB6NTF5KFHVbR4wAyo2TcmWwcNHjzjaTznHTK6jA1adJ5PpnMAggBOgcBgdpZCImJQEkwOsvJBIWCu6praMEgA1hDoAO4QANoAulS+hgBqjFDI6IGWpDAQjHkwBAAeAFxNCNgARoyBADQwYN0QvQOBRN2NXT39gwDco+OTgzAAvltL5RZVNXXh-JE2MXaSB7WBSrtuHhlza4uBK2MLU1tUm2WUVLj4YhUIA)
 
 ### `ThisParameterType<Type>`
 
