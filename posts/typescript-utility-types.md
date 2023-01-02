@@ -249,7 +249,7 @@ const users: UsersById = {
 };
 ```
 
-It is also useful for using with [union types](./typescript-union-type.md) to create an object type where every type in the union must have an associated value:
+It is also useful for using with [union types](./typescript-union-type) to create an object type where every type in the union must have an associated value:
 
 ```typescript
 type HttpStatusCode = 200 | 404 | 500;
@@ -378,7 +378,33 @@ function Button(props: Omit<ButtonAttributes, "type">) {
 
 ### `Exclude<UnionType, ExcludedMembers>`
 
-TODO
+The `Exclude` utility type accepts a union type and a union of types to remove from the passed in union type. The returned type is the union type without the specified types. `Exclude` is sort of like [`Array.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) or [`Omit`](#omittype-keys), but for union types. `Exclude` is the opposite of the [`Extract`](#extracttype-union) utility type. The `Exclude` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1584):
+
+```typescript
+type Exclude<Type, ExcludedUnion> = Type extends ExcludedUnion ? never : Type;
+```
+
+`Exclude` can be used to a few types from a union type:
+
+```typescript
+type Numbers = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+type EvenNumbers = Exclude<Numbers, 1 | 3 | 5 | 7 | 9>; // => 2 | 4 | 6 | 8 | 10
+type OddNumbers = Exclude<Numbers, EvenNumbers>; // => 1 | 3 | 5 | 7 | 9
+```
+
+Importantly, `Exclude` removes any types from the union which are _assignable_ to the union of excluded types, so it can be used to filter categories of types:
+
+```typescript
+type X = string | null | undefined;
+type Defined<Value> = Exclude<Value, null | undefined>;
+type DefinedX = Defined<X>; // => string
+```
+
+```typescript
+type Values = Exclude<string | number | () => void | (...args) => boolean, Function> // => string | number
+```
+
+For more examples, check out my [blog post on union types](./typescript-union-type).
 
 ### `Extract<Type, Union>`
 

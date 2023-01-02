@@ -138,7 +138,7 @@ In this example, the advantage is that we can have completely disparate types in
 
 ## How to get a single type from a union type
 
-Sometimes, we want to deal with just a single type from union type, or a subset of the types. Thankfully, TypeScript provides a built-in utility type called [`Extract`](https://www.typescriptlang.org/docs/handbook/utility-types.html#extracttype-union) to _extract_ a single type from a union type.
+Sometimes, we want to deal with just a single type from union type, or a subset of the types. Thankfully, TypeScript provides a built-in utility type called [`Extract`](./typescript-utility-types#extracttype-union) to _extract_ a single type from a union type.
 
 Using the `DayOfWeek` type from before, we can extract individual days from the type:
 
@@ -180,7 +180,7 @@ type Objects = Extract<Config, object>;
 
 We saw that `Extract` can be used to a subset of a union type, but only for a few specific types. When we want to extract most types, we can use the complement of `Extract` type, which is `Exclude`.
 
-In TypeScript, we can use the [`Exclude`](https://www.typescriptlang.org/docs/handbook/utility-types.html#excludetype-excludedunion) type to get all types from a union type, except for those that are assignable to another union.
+In TypeScript, we can use the [`Exclude`](./typescript-utility-types#excludeuniontype-excludedmembers) type to get all types from a union type, except for those that are assignable to another union.
 
 For example, let's redefine our types derived from `DayOfWeek` to use `Exclude` instead:
 
