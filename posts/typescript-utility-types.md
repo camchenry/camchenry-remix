@@ -1,6 +1,6 @@
 ---
 title: "A Complete Guide to TypeScript Utility Types"
-summary: "Utility types are pre-defined types that are included in TypeScript by default to help with common typing tasks. In this article, we will see how utility types can be used to manipulate unions, objects, strings, and other types."
+summary: "Utility types are included with TypeScript to help with common typing tasks. In this article, we will see how utility types can be used to manipulate unions, objects, strings, and other types."
 publishedAt: "2023-01-02"
 tags:
   - typescript
