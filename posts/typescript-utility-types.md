@@ -702,7 +702,39 @@ type NoThis = ThisParameterType<(x: number) => number>;
 
 ### `OmitThisParameter<Type>`
 
-TODO
+The `OmitThisParameter` utility type takes a function type and returns a new function type with the `this` parameter removed. If the passed in function does not have a `this` parameter, it is returned unchanged. It is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L334):
+
+```typescript
+type OmitThisParameter<Type> = unknown extends ThisParameterType<Type>
+  ? Type
+  : Type extends (...args: infer Arguments) => infer ReturnType
+  ? (...args: Arguments) => ReturnType
+  : Type;
+```
+
+It allows you to remove the `this` parameter from a function type, so that it can be used like a callback or an already bound function:
+
+```typescript
+// Function that acts as if it were a class method
+function vectorLength(this: { x: number; y: number }) {
+  return Math.sqrt(this.x ** 2 + this.y ** 2);
+}
+
+type BoundLength = OmitThisParameter<typeof vectorLength>;
+// => () => number
+const length: BoundLength = vectorLength.bind({ x: 3, y: 4 });
+console.log(length()); // => 5
+```
+
+And for most functions that do not have a `this` parameter, it returns the same type:
+
+```typescript
+type NoThis = OmitThisParameter<(x: number) => number>;
+// => (x: number) => number
+```
+
+- [TypeScript documentation on `OmitThisParameter`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omitthisparametertype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYYB6WmAMSSjUxmQAthkZhWQfQajgxUvAO4BTAE5S+MKABtQg7FK7oAJlRqIUGLADcprdDIAyUiAHMuBLqhAAuMgA9XEBNgBGsgDQwYJ7efjIAviQU1DQwcsgIMlgAsjycAHQgAI4yyA6cTuluAFTFAEwwANQcBSDpYKVlRLow4VQtyGAADvIAQuhIWla2XDAAvDAA8tjiACq1AArAMsDqyLIAPJ096KImZpbWdpwAfC304ycwxJcwXr6yLVCYILxKR1yu-YPDx+Mw+2Q5l+XHSPnwWgIpBgHhgAGZAsEYAAWVrNGLPCAgdDvdJKdA2AjvEacYgkC5jK4AVnaMW28gAcuh5k5-tM5otlqsNJsCLD7mESJS7qFZCcANznBjCvkhB4yIVXAWPShtSi03D4YhUIA)
 
 ### `ThisType<Type>`
 
