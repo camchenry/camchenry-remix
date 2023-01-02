@@ -468,7 +468,35 @@ For more examples, check out my [blog post on union types](./typescript-union-ty
 
 ### `NonNullable<Type>`
 
-TODO
+The `NonNullable` utility type accepts a union type and returns a new type that is guaranteed not to contain `null` or `undefined`. The `NonNullable` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1599):
+
+```typescript
+type NonNullable<Type> = Type & {};
+```
+
+This is a shorthand definition that utilizes how the empty object type and intersection operator interact with each other. A more intuitive definition using [`Exclude`](#excludeuniontype-excludedmembers) would be:
+
+```typescript
+type NonNullable<Type> = Exclude<Type, null | undefined>;
+```
+
+It can be used to ensure that a type is definitely defined:
+
+```typescript
+type Value = NonNullable<string | number | undefined | null>; // => string | number
+```
+
+```typescript
+type User = {
+  id: number;
+  name: string;
+  phone?: string;
+};
+type PhoneNumber = NonNullable<User["phone"]>; // => string
+```
+
+- [TypeScript documentation on `NonNullable`](https://www.typescriptlang.org/docs/handbook/utility-types.html#nonnullabletype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgDVgAbBZgXhgDlMfBO3bAARu0YAeEMgBO+AOYwAPjAgJsYxnNUwkAE0Zx8jA3o0iAfAG4YAensxuVmLIURlajVp1UqNHRMMACqIDrOZAE0MKgGAFzqmtpyNtE0EMDYjInuSmnUMfQAFpiMAPy58vnRAL4FgQzMAAqlEIxCvrq8AhBCIuKSUmE6ANoARCVl4wC6tg5OLm7VnlS1-pRUuPjEVEA)
 
 ### `Parameters<Type>`
 
