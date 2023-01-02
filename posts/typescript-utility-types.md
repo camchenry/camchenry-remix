@@ -1,7 +1,7 @@
 ---
 title: "A Complete Guide to TypeScript Utility Types"
-summary: "TODO: Summary"
-publishedAt: "2022-11-21"
+summary: "Utility types are pre-defined types that are included in TypeScript by default to help with common typing tasks. In this article, we will see how utility types can be used to manipulate unions, objects, strings, and other types."
+publishedAt: "2023-01-02"
 tags:
   - typescript
 type: guide # 'guide' or 'post' or 'til'
@@ -12,7 +12,9 @@ published: false
 
 Utility types are helpers provided automatically by TypeScript to make common typing tasks easier. Since they are standard across _all_ TypeScript codebases, they are sort of like the "standard library of TypeScript."
 
-TypeScript lets you define [reusable types via the `type` keyword](https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html#reusable-types-type-aliases). There is nothing special about utility types, all of the types are reusable types that happen to be automatically included with every TypeScript installation. All of the definitions for each utility type are freely available on GitHub.
+TypeScript lets you define [reusable types via the `type` keyword](https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html#reusable-types-type-aliases). There is nothing special about most utility types, almost all of the types are reusable types that happen to be automatically included with every TypeScript installation. All of the definitions for each utility type are freely available on GitHub.
+
+There are a few exceptions to the above, where the types cannot be reproduced since they are built into the TypeScript compiler, such as [`ThisType`](#thistypetype).
 
 ## Value transformation types
 
