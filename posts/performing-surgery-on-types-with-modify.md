@@ -24,7 +24,7 @@ Let's break down what this type does. First, it accepts two arguments: `Type` an
 that will have modifications done to it. `Replace` is what modifications will be made to `Type`.
 
 The `Omit<Type, keyof Replace>` removes all properties from the `Type` which are going to be modified. `Omit` is a
-[built-in utility type](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys) to TypeScript.
+[built-in utility type](./typescript-utility-types#omittype-keys) to TypeScript.
 Then, the `& Replace` re-adds the modified types the resulting type from `Omit`, which results in an object that
 has exactly the same type, but with only specific types replaced.
 
