@@ -506,7 +506,58 @@ type PhoneNumber = NonNullable<User["phone"]>; // => string
 
 ### `Parameters<Type>`
 
-TODO
+The `Parameters` utility type accepts a function and returns the parameter types of that function as an array (tuple). The `Parameters` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1604)
+
+```typescript
+type Parameters<Type extends (...args: any) => any> = Type extends (
+  ...args: infer Args
+) => any
+  ? Args
+  : never;
+```
+
+The `Parameters` allows us to extract the parameter types out of a function and use it like any other type.
+
+```typescript
+function add(a: number, b: number) {
+  return a + b;
+}
+
+type AddParameters = Parameters<typeof add>; // => [a: number, b: number]
+```
+
+Note that we need to use `typeof add` here to refer to the `add` function **type**, rather than the `add` function itself.
+
+This is type is especially useful for creating functions that utilize standard library functions, because we can avoid the need to rewrite the type:
+
+```typescript
+function getUtcDate(...args: Parameters<typeof Date["UTC"]>) {
+  // args has the following type:
+  // => [year: number,
+  //     monthIndex: number,
+  //     date?: number | undefined,
+  //     hours?: number | undefined,
+  //     minutes?: number | undefined,
+  //     seconds?: number | undefined,
+  //     ms?: number | undefined]
+  return Date.UTC(...args);
+}
+```
+
+```typescript
+// These filters are guararanteed to work with `Array.filter` since
+// we use its callback type explicitly
+type FilterFunction = Parameters<typeof Array["prototype"]["filter"]>[0];
+const booleanFilter: FilterFunction = (value) => !!value;
+const positiveFilter: FilterFunction = (value) =>
+  typeof value === "number" && value > 0;
+const array = [0, 1, null, 3, false, -1, ""]
+  .filter(booleanFilter)
+  .filter(positiveFilter);
+```
+
+- [TypeScript documentation on `Parameters`](https://www.typescriptlang.org/docs/handbook/utility-types.html#parameterstype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgZ4ko1MZgATZg4ALhggWwCMApgCcANDD5ce-YSQrUaMIQOQIhWYDADU4qjQC+VXTGRgADgJgBBVgAVgQ4NmXCQMALww7Dp8hcAeE3N0OCZWAD4YAHpI9wiAbU5uXkFRcUlk4QBdQ3lEFAwsAHNlAFVkKAARYF8CADp6+0KQLi9HZyEQALMBYJgq3ziAchKAFQBhQcyw2SMaaKYhJpgAC1BjZYs4dAAbbfQAd3xC426OWaiYt3iwAXt06VFz+YUcTGRlgEkIZgEAD3uUiInjEXsxqgIAPwA4QwAA+MCQPzg+AEzCB8jmIIUy3QqhAUKSDzhCO+AmREFR6JezwU2HwCF8+OhQmJiLJKLRwJeMBAAigmGYTMJKVZpPJlK5L2wQqkIvhbPFzGyGMUylUWH6AlqozGdQaixARCMBkoRnmIw2vPgqG2vg6CwshQQ9hdEF8qOM6Bg+3QQgA1t7UO8YAADSxCBxgWrI23CEM8-BQARmmL7CwIK1B1xQYC7PjAKABwIWP6mbaoKBB7ZgIzFmAAMRtdvrdAYWA8rR8-mLvXDkbiACJTEJ0MhR90B5lBzG7ZOwnEAAyZADcRn5EBAyHE6B2twgjdjQi4B+brYK7hgBAAbrmEAISFcYABCJ837Z31fydebmCmdAgINUCvAQT2EY8m2EFt8kYDxr1ve9YhOIIQjfO93DcDxBllYRBhgAAyPCYFQiwIgXNdMB-exIwvRcxAARjEHhdjEABmMQ4FzXkxAAWgYmAB0naMIKEAg+B3bY91AoQiCEw8CD-AC0GAqSiE-E0clwfBiCoIA)
 
 ### `ReturnType<Type>`
 
