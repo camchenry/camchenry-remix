@@ -839,3 +839,7 @@ type Uncapitalized = Uncapitalize<"TypeScript">; // => "typeScript"
 
 - [TypeScript documentation on `Uncapitalize`](https://www.typescriptlang.org/docs/handbook/utility-types.html#uncapitalizestringtype)
 - [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgA0YBeGAcjqYGUoAJ1T1kXKjV7MAqvSaCOMWfKihGAHhYA+CbQbMAMugDujBZyOnBqkBu26pMAMLB6qZMAA2il24+fUAC87HWo9JiVoV3cvRWkovy8gkKoAXyoMylx8YiogA)
+
+---
+
+If this article helped you or you have feedback on it, please let me know at [@cammchenry](https://twitter.com/cammchenry)! Happy coding and good luck!
