@@ -664,7 +664,41 @@ type VectorType = InstanceType<Vector>;
 
 ### `ThisParameterType<Type>`
 
-TODO
+The `ThisParameterType` utility type takes a function type and returns the type of the `this` parameter, if there is one. Otherwise, it returns `unknown`. It is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L329):
+
+```typescript
+type ThisParameterType<Type> = Type extends (
+  this: infer This,
+  ...args: never
+) => any
+  ? This
+  : unknown;
+```
+
+It allows you to extract the type of object that a function expects to be bound to. For example:
+
+```typescript
+// Function that acts as if it were a class method
+function vectorLength(this: { x: number; y: number }) {
+  return Math.sqrt(this.x ** 2 + this.y ** 2);
+}
+type Vector = ThisParameterType<typeof vectorLength>;
+// => { x: number; y: number; }
+const vector: Vector = { x: 3, y: 4 };
+// Bind an object to the function so that it can be called like a method
+const length = vectorLength.bind(vector);
+console.log(length()); // => 5
+```
+
+And for most functions that do not have a `this` parameter, it returns `unknown`:
+
+```typescript
+type NoThis = ThisParameterType<(x: number) => number>;
+// => unknown
+```
+
+- [TypeScript documentation on `ThisParameterType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#thisparametertypetype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYYB6WmAMSSjUxmQAthkZhWQfQajgxUvAO4BTAE5S+MKABtQg7FK7oAJlRqIUGLADcprdDIAyUiAHMuBLqhAAuMgA9XEBNgBGsgDQwYJ7efjIAviQU1DQwcsgIMlgAsjycAHQgAI4yyA6cTuluAFTFAEwwANQcBSDpYKVlRLow4S3IYAAO8gBqpsjmMAC8MAAqtQAKwDLA6siyo11SADwd3eiiJmaW1nacAHwt9MP7ZDAeMF6+sgDcQSHXMndtMVCYILxbAzKufdvDZwuAGZAsEYAAWVpHBgAIXwWj4WHQPgAVv0OOgavJ9KxDDAQJiuDwxLwoMAsH5FMAlEopAilKgANbyYA4DScbQtN4QD4wWm2LgAr7mKwCjI+eEEYUyZqvd7oWnpJToGwEfl7YgkY5DU4AVio7SWMAAcuhxk4AeaQFMZnMFktlgQLlcwiQdZdQrJ9jdoScYEhGRB0BIIFQXgbKLh8MQqEA)
 
 ### `OmitThisParameter<Type>`
 
