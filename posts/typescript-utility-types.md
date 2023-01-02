@@ -14,7 +14,7 @@ Utility types are helpers provided automatically by TypeScript to make common ty
 
 TypeScript lets you define [reusable types via the `type` keyword](https://www.typescriptlang.org/docs/handbook/declaration-files/by-example.html#reusable-types-type-aliases). There is nothing special about utility types, all of the types are reusable types that happen to be automatically included with every TypeScript installation. All of the definitions for each utility type are freely available on GitHub.
 
-## Utility Types
+## Value transformation types
 
 ### `Awaited<Type>`
 
@@ -58,6 +58,8 @@ const nonAsync: NonAsync = await "test"; // => "test" (string)
 
 - [TypeScript documentation on `Awaited`](https://www.typescriptlang.org/docs/handbook/utility-types.html#awaitedtype)
 - [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgDVgAbBZgXhgEEA7nmSMAJgB4ACgCd02VCEbiQyafgDmAPk0wA9LpjcdKtRHVUaUTCpgA3DlwBcrBzxjAhqZDBlyFjADppRhB0dltGAgByEw0oogsYKwhQ9kD2dHUCe05GBMpEuiYYADkQkVFDfk8KqVl5RTq-RogEbAAjRmltHX1DHVaOrsTkmwhysWcylTEqj2Efev8gkLCIgl8GwODU9YBGACYAZiJ8y2sw9MyCcZnRfMKGZhLMPnBoKsFhMWVVDV6DEYYLEzCNrN4IK93lAplDILBeFERCoomCUpcAhkspCIG94fkAL5UKi4fDEKhAA)
+
+## Object manipulation types
 
 ### `Partial<Type>`
 
@@ -376,6 +378,8 @@ function Button(props: Omit<ButtonAttributes, "type">) {
 - [TypeScript documentation on `Omit`](https://www.typescriptlang.org/docs/handbook/utility-types.html#omittype-keys)
 - [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?target=9&pretty=false#code/JYWwDg9gTgLgBAJQKYEMDG8BmUIjgcilQ3wFgAoClAZwE8A7NOTAV0ZmAnrhBWHoAUASjgBvCnDgxaYJHACq1JFDgBeMRMlxgAEwBcceixAAjZQG5Nk+ihBID1GFH4BzS+S1wkvYABsHTq7unmA01ADu0Ppwjs70bpoAvsFSMnKKygDqwDAAFhAsMAAKYZFQOmpwAPIgOQA8GVAANHAARKHUEVGtAHwpaFyOcCxKUAaN2XkFxaVRleIeWroGAIwATADMTVaGtvZtACpIQ42t24uS3nz+bSPKAAJIAB62YL5IAHQDIGdJ7pqaaSyOAAIUKMC4AEEYIETIVjvMdlwAMK+YBoADWBmEah6cAAbhBdClJED9q04TCuK04AAfNrUFgmWowGn01pEJSsklwHTAagoEzvHQAfgMJggEHeKHoPLQvjCADk9mKYoF4ilkppWOxONwwVTBGAcGBqAYavUDRD6NDYfDqC1WmTeiIFp4APTuuAHXJyAAGZL9cBQMOclLk-LgxqQA3omGALhYRB0LWoEDg4TkuBy2iwODweSQO09wbQaCQYBgSAqxogpuD9AquRQ5QGOgj8AhbUp1pp-Ckvrg30g9CQ9BgOyIMCT3DqPa4Yg+S9rpsSqVkqgp4OpcHdfSSFESFGP5B8giEFCAA)
 
+## Union manipulation types
+
 ### `Exclude<UnionType, ExcludedMembers>`
 
 The `Exclude` utility type accepts a union type and a union of types to remove from the passed in union type. The returned type is the union type without the specified types. `Exclude` is sort of like [`Array.filter`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/filter) or [`Omit`](#omittype-keys), but for union types. `Exclude` is the opposite of the [`Extract`](#extracttype-union) utility type. The `Exclude` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#L1584):
@@ -498,15 +502,19 @@ type PhoneNumber = NonNullable<User["phone"]>; // => string
 - [TypeScript documentation on `NonNullable`](https://www.typescriptlang.org/docs/handbook/utility-types.html#nonnullabletype)
 - [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgDVgAbBZgXhgDlMfBO3bAARu0YAeEMgBO+AOYwAPjAgJsYxnNUwkAE0Zx8jA3o0iAfAG4YAensxuVmLIURlajVp1UqNHRMMACqIDrOZAE0MKgGAFzqmtpyNtE0EMDYjInuSmnUMfQAFpiMAPy58vnRAL4FgQzMAAqlEIxCvrq8AhBCIuKSUmE6ANoARCVl4wC6tg5OLm7VnlS1-pRUuPjEVEA)
 
+## Function types
+
 ### `Parameters<Type>`
 
 TODO
 
-### `ConstructorParameters<Type>`
+### `ReturnType<Type>`
 
 TODO
 
-### `ReturnType<Type>`
+## Class / object-oriented types
+
+### `ConstructorParameters<Type>`
 
 TODO
 
@@ -525,6 +533,8 @@ TODO
 ### `ThisType<Type>`
 
 TODO
+
+## String manipulation types
 
 ### `Uppercase<StringType>`
 
