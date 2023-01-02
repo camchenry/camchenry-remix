@@ -606,7 +606,37 @@ const entries: Entries = [
 
 ### `ConstructorParameters<Type>`
 
-TODO
+The `ConstructorParameters` utility type takes a class type and returns an array of the types of the constructor's parameters. The [definition of `ConstructorParameters`](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1609C22-L1609C22) is almost exactly the same as [`Parameters`](#parameterstype), but it constrains the accepted types to be a constructable/instantiable type:
+
+```typescript
+type ConstructorParameters<Type extends abstract new (...args: any) => any> =
+  Type extends abstract new (...args: infer Params) => any ? Params : never;
+```
+
+It allows us to get the parameter types of any class we pass in:
+
+```typescript
+type DateParameters = ConstructorParameters<typeof Date>;
+// => [value: string | number | Date]
+type SetParameters = ConstructorParameters<typeof Set>;
+// => [iterable?: Iterable<unknown> | null | undefined]
+type RegexParameters = ConstructorParameters<typeof RegExp>;
+// => [pattern: string | RegExp, flags?: string | undefined]
+type FormatParameters = ConstructorParameters<typeof Intl.DateTimeFormat>;
+// => [locales?: string | string[] | undefined,
+//     options?: Intl.DateTimeFormatOptions | undefined]
+```
+
+It also works with any type that has a `new` constructor:
+
+```typescript
+type Vector = { new (x: number, y: number): { x: number; y: number } };
+type VectorParameters = ConstructorParameters<Vector>;
+// => [x: number, y: number]
+```
+
+- [TypeScript documentation on `ConstructorParameters`](https://www.typescriptlang.org/docs/handbook/utility-types.html#constructorparameterstype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?ssl=14&ssc=31&pln=12&pc=3#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgBFhlGAFYAJ2G0YceIGAF4YAYUwhkPBFGToe3PgKEgAPHSbo4rdowB8VGgHpTYwzADaAN2AAbBIwBcMGT3wBzGAB8YEAjYAEaMPH76HAC6JrQMzADKgir8gmEi4lIQHvKKyryp6lrxujBJyMbUMOaWNqhCwMEOjAD8bgCSDU2MGkgA1hDoAO4QVv6BDg4RSAAmjHD4jDMxVdrMAEqMXowAHilq6WKS0rK5SvtpwsU6epteAKI79JVmFqJW1vTsQhBuHt4RO6PegAGngDmAXhAbXcsgB-lm80Wy1iaxgADElLhkBd1EcsjkFOcCgcrmtSu0IMgHAA6NgcAAqqAEmJ42Je1TeHwc6CgjkY0L+cIgPn8-xF1ii0wgcwWECWINiNRoNHQ9DQ0hhlOpdIMTJZWPYAHl1RhstLZciVqj4jAAGqMInhcSkAKMIYwAg7NyBEJhMFgH1BUI8IhuV3egLBsIAbhggajfvCAF8YMmYzamPbHXlcYdMic5E681cHU7DBmqjV3jZI76QwGg0mVsmqG3KLh8MQqEA)
 
 ### `InstanceType<Type>`
 
