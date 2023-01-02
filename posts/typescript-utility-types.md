@@ -738,7 +738,59 @@ type NoThis = OmitThisParameter<(x: number) => number>;
 
 ### `ThisType<Type>`
 
-TODO
+The `ThisType` utility type is a special type that hints what the type of `this` in a function type should be. Its definition is empty, because it is treated as a special type by the TypeScript compiler. When the compiler sees this type, it knows to treat `this` as whatever the passed in `Type` is.
+
+For example, suppose that we have a user type:
+
+```typescript
+type User = {
+  id: number;
+  firstName: string;
+  lastName: string;
+};
+
+const user: User = {
+  id: 123,
+  firstName: "Test",
+  lastName: "User",
+};
+```
+
+We can create a function that extends this object with more behaviors:
+
+```typescript
+function addUserMethods<Methods extends Record<string, Function>>(
+  user: User,
+  // Note: ThisType is used to indicate that the methods should type `this`
+  // with the type of `User`
+  methods: Methods & ThisType<User>
+) {
+  // Casting is necessary here to get the correct type, since
+  // we've arbitrarily modified the object to add more properties
+  return { ...user, ...methods } as User & Methods;
+}
+```
+
+Then, when we go to use this function, we get a much improved developer experience since we do not need to specify any types in our additional methods:
+
+```typescript
+const newUser = addUserMethods(user, {
+  getFullName() {
+    // These properties correctly resolve because `this` is a `User`.
+    // This code would fail to compile without the `ThisType<User>`
+    return `${this.firstName} ${this.lastName}`;
+  },
+  generateEmail() {
+    return `${this.firstName[0]}${this.lastName}@example.com`;
+  },
+});
+
+console.log(newUser.getFullName()); // => "Test User"
+console.log(newUser.generateEmail()); // => "TUser@example.com"
+```
+
+- [TypeScript documentation on `ThisType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#thistypetype)
+- [Try out these examples in TypeScript Playground](https://www.typescriptlang.org/play?#code/IYZwngdgxgBAZgV2gFwJYHsIwLbFRACgEoYBvAWACgYZkwAHAUxgFURGAnGAXjKppqoAJgC4YEBNgBGnANz8BcVBxDIAcsGyMxqjvgDm86gIA2odZu0xdBozQC+VBVEyqYCdhzFtOPPscFRGABGACYAZgAaBRolFQstMQByABVGVSTogJgzVQ1EmCSfDkyFR0oFRBQMLGAhIWKAWUZkAAt0IRAAHma2jpAYRgAPZEYITpgAJUYXDiEumwh9SJgAMSQoNEwAPm2CGPdPb08sgRgAenOYNXRRsRTW1BAUhmYnw8YhWnQYfCFUKDAUa0VpAkHMLR9CYgdoIExfOhMGAAAzaT2RB0uMAA7qg2uDaK8YOg4CjihjspD2p0xL1qQMAGQwB5PF5MLrFbYKEgUbJYgDC5gMvwGEBm6RAwA4YBgrU4zGQP30LQJsw4M2QhKYKxA+CgjExV2xjCSADdmFKpHiOFLUCYZdgOqglJ8CegpAArDXfGB1L6O9UwegcdBMDhodIHdXIBAcLCkGAAOmTHk4K2Tiap-Rg9l9A2KMCZdP6dhzTmMLggbjF2ILvD9TRa9IIqY4K15Z2VyHWJhM+UYxH8ZxoWIe6WYwdDnAjAzVGvtMHVIHQJnNMBkgNTKLRIGRstAWuYJLJnj3wAQitwaEBvbAiYOI6uLNnHWY2PQcK+cDwJh9Lmw9B2m+eKwpqbTMMiz5sowHKeNsFLDouLSxlgyIACSkDuiZxHkli5hhWG5AkjD2AhAj2KcAjKmKNqjAAorgdqDh2w7RihKIEY8IDYcouFaAA2gADAAuvYnFPImRH9vYAACwyaPQJiMIm-5kQ4ZREOWNCVsuSmSeg+gEDWxSJl2PZ9pYxAkFi3DbDAABEaRuMU9nOK4K7KSYBlGYwtaeKZYycECjAMT+VkXFctkOSkxRyUMCl6f+rmUOU5aMYQmmUEAA)
 
 ## String manipulation types
 
