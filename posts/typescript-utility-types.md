@@ -281,7 +281,7 @@ const httpStatusCodes: Record<H> = {
 
 ### `Pick<Type, Keys>`
 
-The `Pick` utility type creates a subset of an object by _including_ specific properties. It accepts an object type and a union of keys, and returns a new object type with only the keys specified from the object type. `Pick` is the opoosite of the [`Omit`](#omittype-keys) utility type. The `Pick` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1571C2-L1572C3):
+The `Pick` utility type creates a subset of an object by _including_ specific properties. It accepts an object type and a union of keys, and returns a new object type with only the keys specified from the object type. `Pick` is the opposite of the [`Omit`](#omittype-keys) utility type. The `Pick` utility type is [defined as](https://github.com/microsoft/TypeScript/blob/12d7e4bdbf98a877d27df6e8b072d663c839c0b8/lib/lib.es5.d.ts#LL1571C2-L1572C3):
 
 ```typescript
 type Pick<Type, Keys extends keyof Type> = {
@@ -547,7 +547,7 @@ function getUtcDate(...args: Parameters<typeof Date["UTC"]>) {
 ```
 
 ```typescript
-// These filters are guararanteed to work with `Array.filter` since
+// These filters are guaranteed to work with `Array.filter` since
 // we use its callback type explicitly
 type FilterFunction = Parameters<typeof Array["prototype"]["filter"]>[0];
 const booleanFilter: FilterFunction = (value) => !!value;
