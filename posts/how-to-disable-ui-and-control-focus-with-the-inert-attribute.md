@@ -1,6 +1,6 @@
 ---
 title: "How to disable UI and control focus with the inert attribute"
-summary: "The inert attribute is a new accessibility primitive can be used to disable off-screen or non-interactable UI elements and prevent focus from moving to them."
+summary: "The inert attribute is a new accessibility primitive that can be used to disable off-screen or non-interactable UI elements and prevent focus from moving to them."
 publishedAt: "2023-05-13"
 tags:
   - html
