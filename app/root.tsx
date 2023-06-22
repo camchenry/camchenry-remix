@@ -8,7 +8,7 @@ import {
   useCatch,
   useMatches,
 } from "@remix-run/react";
-import { Button, Container, Input, Label } from "./components/styled";
+import { Container } from "./components/styled";
 import { defaultMeta } from "./meta";
 import styles from "./styles/app.css";
 
@@ -62,76 +62,6 @@ function Document({
     </html>
   );
 }
-
-const ConvertKitForm = () => (
-  <div>
-    <script async defer src="https://f.convertkit.com/ckjs/ck.5.js"></script>
-    <form
-      action="https://app.convertkit.com/forms/2644413/subscriptions"
-      className="seva-form formkit-form"
-      method="post"
-      data-sv-form="2644413"
-      data-uid="70189ff32a"
-      data-format="inline"
-      data-version="5"
-      data-options='{"settings":{"after_subscribe":{"action":"message","success_message":"Success! Now check your email to confirm your subscription.","redirect_url":""},"analytics":{"google":null,"facebook":null,"segment":null,"pinterest":null,"sparkloop":null,"googletagmanager":null},"modal":{"trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"powered_by":{"show":true,"url":"https://convertkit.com?utm_campaign=poweredby&amp;utm_content=form&amp;utm_medium=referral&amp;utm_source=dynamic"},"recaptcha":{"enabled":false},"return_visitor":{"action":"show","custom_content":""},"slide_in":{"display_in":"bottom_right","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15},"sticky_bar":{"display_in":"top","trigger":"timer","scroll_percentage":null,"timer":5,"devices":"all","show_once_every":15}},"version":"5"}'
-      min-width="400 500 600 700 800"
-    >
-      <div className="font-bold mb-2">Stay updated</div>
-      <p className="mb-4">
-        Subscribe to the mailing list to receive updates about new blog posts
-        and more.
-      </p>
-      <div data-style="clean">
-        <ul
-          className="formkit-alert formkit-alert-error"
-          data-element="errors"
-          data-group="alert"
-        />
-        <div
-          data-element="fields"
-          data-stacked="false"
-          className="seva-fields formkit-fields"
-        >
-          <div className="formkit-field">
-            <Label htmlFor="email_address" style={{ fontWeight: "normal" }}>
-              Email Address
-            </Label>
-            <Input
-              className="formkit-input mb-4"
-              name="email_address"
-              id="email_address"
-              required
-              type="email"
-            />
-          </div>
-          <div className="formkit-field">
-            <Label htmlFor="first_name" style={{ fontWeight: "normal" }}>
-              First Name
-            </Label>
-            <Input
-              id="first_name"
-              className="formkit-input mb-4"
-              name="fields[first_name]"
-              type="text"
-            />
-          </div>
-          <Button
-            data-element="submit"
-            className="formkit-submit formkit-submit"
-          >
-            <div className="formkit-spinner">
-              <div></div>
-              <div></div>
-              <div></div>
-            </div>
-            <span className="">Subscribe</span>
-          </Button>
-        </div>
-      </div>
-    </form>
-  </div>
-);
 
 const Twitter = () => (
   <a
@@ -223,15 +153,12 @@ export default function App() {
       </div>
       <footer className="container mx-auto p-3">
         <Container className="border-t border-gray-200 dark:border-gray-800">
-          <div className="grid grid-cols-2 mt-12 mb-8">
-            <div className="col-span-full md:col-span-1">
-              <div className="font-bold mb-4">Cam McHenry</div>
-              <div className="flex flex-grow mb-8">
-                <Twitter />
-                <GitHub />
-              </div>
+          <div className="mt-12 mb-8">
+            <div className="font-bold mb-4">Cam McHenry</div>
+            <div className="flex flex-grow mb-8">
+              <Twitter />
+              <GitHub />
             </div>
-            <ConvertKitForm />
           </div>
           <small className="text-gray-500 dark:text-gray-400">
             © Cam McHenry 2016-{new Date().getFullYear()}

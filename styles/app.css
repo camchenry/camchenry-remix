@@ -29,7 +29,3 @@ body {
 .prose a {
   text-decoration-color: var(--primary-color);
 }
-
-.formkit-powered-by-convertkit {
-  display: none;
-}
