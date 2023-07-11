@@ -152,17 +152,23 @@ export default function App() {
         <Outlet />
       </div>
       <footer className="container mx-auto p-3">
-        <Container className="border-t border-gray-200 dark:border-gray-800">
-          <div className="mt-12 mb-8">
-            <div className="font-bold mb-4">Cam McHenry</div>
-            <div className="flex flex-grow mb-8">
-              <Twitter />
-              <GitHub />
+        <Container className="border-t border-gray-200 dark:border-gray-800 flex gap-4">
+          <div>
+            <div className="mt-12 mb-8">
+              <div className="font-bold mb-4">Cam McHenry</div>
+              <div className="flex flex-grow mb-8">
+                <Twitter />
+                <GitHub />
+              </div>
             </div>
+            <small className="text-gray-500 dark:text-gray-400">
+              © Cam McHenry 2016-{new Date().getFullYear()}
+            </small>
           </div>
-          <small className="text-gray-500 dark:text-gray-400">
-            © Cam McHenry 2016-{new Date().getFullYear()}
-          </small>
+          <div className="mt-12 mb-8 text-gray-500 dark:text-gray-400">
+            <div className="font-bold mb-2">Other projects</div>
+            <a href="https://servicesignups.com">ServiceSignUps</a>
+          </div>
         </Container>
       </footer>
     </Document>
