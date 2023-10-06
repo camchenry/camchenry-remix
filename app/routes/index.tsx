@@ -85,22 +85,21 @@ export default function Index() {
           <H2 className="my-4">Featured work</H2>
           <ul className="my-4">
             <li>
-              🔥 A story about{" "}
-              <a href="/blog/how-serverless-saved-my-heating-bill">
-                How Serverless Saved Money on My Heating Bill
+              ⚡️{" "}
+              <a href="/blog/eslint-custom-rules">
+                How to write custom ESLint rules for your project
               </a>
             </li>
             <li>
-              🤖 An answer on{" "}
-              <a href="/blog/github-copilot">
-                Why I'm Not Worried About GitHub Copilot Taking My Software Job
+              🌈{" "}
+              <a href="/blog/typescript-union-type">
+                Everything You Need To Know About TypeScript Union Types
               </a>
             </li>
             <li>
-              🛠 Learn everything there is to know about TypeScript type guards
-              in{" "}
+              🛡️{" "}
               <a href="/blog/typescript-type-guards">
-                How To Do Anything in TypeScript With Type Guards
+                TypeScript Type Guards Explained
               </a>
             </li>
           </ul>
@@ -108,7 +107,6 @@ export default function Index() {
         <div id="intro-contact-links" className="md:text-lg my-4">
           <a href="https://twitter.com/cammchenry">Twitter</a>
           <a href="https://github.com/camchenry">GitHub</a>
-          <a href="https://camchenry.ck.page/mailing-list">Newsletter</a>
         </div>
       </Intro>
       <div className="max-w-prose mx-auto">
