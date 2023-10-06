@@ -1,5 +1,5 @@
 ---
-title: "A Complete Guide to TypeScript Utility Types"
+title: "TypeScript Utility Types Guide"
 summary: "Utility types are included with TypeScript to help with common typing tasks. In this article, we will see how utility types can be used to manipulate unions, objects, strings, and other types."
 publishedAt: "2023-01-02"
 tags:
