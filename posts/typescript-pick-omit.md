@@ -61,8 +61,8 @@ I recommend using a more robust implementation in your own applications, but we 
 
 Recommended library implementations:
 
-- [lodash.pick](https://lodash.com/docs/4.17.15#pick)
-- [ramda.pick](https://ramdajs.com/docs/#pick)
+- [Lodash.pick](https://lodash.com/docs/4.17.15#pick)
+- [Ramda.pick](https://ramdajs.com/docs/#pick)
 
 ### Examples of how to use `Pick`
 
