@@ -25,13 +25,6 @@ type User = {
   id: number;
   name: string;
   email: string;
-  password: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
 };
 
 type BasicUserInfo = Pick<User, "id" | "name">;
@@ -75,13 +68,6 @@ const user: User = {
   id: 1,
   name: "Grace Hopper",
   email: "gracehopper@example.com",
-  password: "da39a3ee5e6b4b0d3255bfef95601890afd80709",
-  address: {
-    street: "123 Example Ave",
-    city: "New York",
-    state: "NY",
-    zip: "12345",
-  },
 };
 const userWithName = pick(user, ["name"]);
 // => { name: "Grace Hopper" }
@@ -95,12 +81,6 @@ type User = {
   name: string;
   email: string;
   password: string;
-  address: {
-    street: string;
-    city: string;
-    state: string;
-    zip: string;
-  };
 };
 type UserWithName = Pick<User, "name">;
 // => { name: string }
@@ -117,8 +97,8 @@ const food = {
   calories: 500,
   ingredients: ["rice", "chicken", "vegetables", "spices"],
 };
-
 const foodIngredients = pick(food, ["name", "ingredients"]);
+// => { name: "Curry", ingredients: ["rice", "chicken", "vegetables", "spices"] }
 ```
 
 If we just want to pick properties from a type, we can use the `Pick` utility type instead:
@@ -131,11 +111,74 @@ type Food = {
   ingredients: string[];
 };
 type FoodIngredients = Pick<Food, "name" | "ingredients">;
+// => { name: string, ingredients: string[] }
 ```
 
 #### How to pick a single key/property from an array of objects
 
+Picking a single key from each object in an array is similar to picking a single key from an object, but now we have to iterate over the array:
+
+```ts
+const users: User[] = [
+  {
+    id: 1,
+    name: "Grace Hopper",
+    email: "gracehopper@example.com",
+  },
+  {
+    id: 2,
+    name: "Alan Turing",
+    email: "alanturing@example.com",
+  },
+];
+const userNames = users.map((user) => pick(user, ["name"]));
+// => [{ name: "Grace Hopper" }, { name: "Alan Turing" }]
+```
+
+For the type version, we can use the `Pick` utility type and the `number` index type:
+
+```ts
+type Users = {
+  id: number;
+  name: string;
+  email: string;
+}[];
+type UserNames = Pick<Users[number], "name">[];
+// => { name: string }[]
+```
+
 #### How to pick multiple keys/properties from an array of objects
+
+Once again, picking multiple keys from an array of objects is nearly identical to getting a single key. We just have to iterate and pass more properties/keys:
+
+```ts
+const users: User[] = [
+  {
+    id: 1,
+    name: "Grace Hopper",
+    email: "gracehopper@example.com",
+  },
+  {
+    id: 2,
+    name: "Alan Turing",
+    email: "alanturing@example.com",
+  },
+];
+const userNamesAndEmails = users.map((user) => pick(user, ["name", "email"]));
+// => [{ name: "Grace Hopper", email: "gracehopper@example.com" },
+//     { name: "Alan Turing", email: "alanturing@example.com" }]
+```
+
+And the types-only version (assuming we are given an array type) is:
+
+```ts
+type Users = {
+  id: number;
+  name: string;
+  email: string;
+}[];
+type UsersWithNameAndEmail = Pick<Users[number], "name" | "email">[];
+```
 
 ## Omit
 
