@@ -11,6 +11,7 @@ import {
 import { Container } from "./components/styled";
 import { defaultMeta } from "./meta";
 import styles from "./styles/app.css";
+import { Fathom } from "./components/Fathom";
 
 export const meta: MetaFunction = () => {
   return defaultMeta;
@@ -58,6 +59,7 @@ function Document({
           async
           src="//gc.zgo.at/count.js"
         ></script>
+        <Fathom />
       </body>
     </html>
   );
