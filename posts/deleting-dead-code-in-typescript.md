@@ -2,6 +2,7 @@
 title: "How to Delete Dead Code in TypeScript Projects"
 summary: "Deleting dead code is a worthwhile effort that reduces the amount of that code that has to be downloaded, compiled, and maintained. Using automated tools, we can simplify the process of identifying dead code and removing it."
 publishedAt: "2021-08-30"
+updatedAt: "2023-10-14"
 tags:
   - typescript
 type: "guide"
@@ -121,11 +122,7 @@ ts-unused-exports tsconfig.json --allowUnusedTypes
 
 Unfortunately, you will have to manually go through each result and determine whether to keep it or delete it. There is often a moderate false positive rate when it comes to finding dead code. **Not all unused code is dead code, but all dead code is unused code**.
 
-If any patterns emerge while identifying dead code, I recommend automating the process. Create scripts to combine the results
-from these tools. Filter it to remove any false positives. Then, automatically generate diffs to remove dead code. For small
-projects, this is probably overkill (and that's OK). For large projects,
-this is a [force multiplier](https://en.wikipedia.org/wiki/Force_multiplication) that will make everyone on your team
-more productive.
+If any patterns emerge while identifying dead code, I recommend automating the process. Create scripts to combine the results from these tools. Filter it to remove any false positives. Then, automatically generate diffs to remove dead code. For small projects, this is probably overkill (and that's OK). For large projects, this is a [force multiplier](https://en.wikipedia.org/wiki/Force_multiplication) that will make everyone on your team more productive.
 
 When deleting dead code, there are a couple exceptions that I always keep in mind:
 
@@ -170,13 +167,94 @@ When deleting dead code, there are a couple exceptions that I always keep in min
    }
    ```
 
+## Common problems
+
+### Many false positives due to barrel files
+
+If you run these tools on your codebase and find that there are many false positives (i.e., exported things which are not actually dead code), and those items are re-exported more than once, then you may have a problem with barrel files.
+
+Barrel files are files that export many things from other files. They are often used to simplify imports. For example, instead of writing this:
+
+```ts
+// file: src/components/button.ts
+export const Button = () => ()
+
+// file: src/components/avatar.ts
+export const Avatar = () => ()
+
+// file: src/index.ts
+import { Button } from "./components/button";
+import { Avatar } from "./components/avatar";
+//       ^-- have to import each component individually
+```
+
+You can instead write this:
+
+```ts
+// file: src/components/button.ts
+export const Button = () => ()
+
+// file: src/components/avatar.ts
+export const Avatar = () => ()
+
+// file: src/components/index.ts (BARREL FILE)
+export * from "./button";
+export * from "./avatar";
+
+// file: src/index.ts
+import { Button, Avatar } from "./components";
+//       ^-- can conveniently import all components from a single file
+```
+
+The tradeoff with barrels is that while they simplify the imports that you need to write, it dramatically increases the number of exports that you have. This can cause performance issues in very large projects [^1] and will also add unused exports, which are eventually flagged as dead code by tools like `ts-prune` and `ts-unused-exports`, even if a different version of the export _is_ actually used.
+
+As an example, given this project structure (with barrel file), but where we are not actually using the barrel file exports:
+
+```ts
+// file: src/components/button.ts
+export const Button = () => ()
+
+// file: src/components/avatar.ts
+export const Avatar = () => ()
+
+// file: src/components/index.ts (BARREL FILE)
+export * from "./button";
+export * from "./avatar";
+
+// file: src/index.ts
+import { Button } from "./components/button";
+import { Avatar } from "./components/avatar";
+//       ^-- NOTE: We have re-exported, but we are not using the barrel file
+```
+
+When we run `ts-prune` on this, we will get the following output:
+
+```text
+src/components/index.ts:1 - Avatar
+src/components/index.ts:1 - Button
+```
+
+At first glance, this makes it seem like Avatar and Button aren't being used. However, this is just due to us exporting these functions but never using the exports from the barrel file.
+
+#### How to fix
+
+To fix these issues, you have two main choices:
+
+1. Remove the export from the barrel file specifically (e.g., remove `export * from "./button"`)
+2. Remove the barrel file entirely (e.g., remove `src/components/index.ts`)
+
+My recommendation would be to remove the barrel file entirely, for a few reasons:
+
+1. It is easier to maintain. You don't have to worry about keeping the barrel file in sync with the other files.
+2. It is faster to parse/compile: the compiler doesn't have to parse the barrel file and all of its dependencies, and neither will other tools like linters or formatters.
+3. It reduces the total number of exports, which can improve performance in large projects [^1].
+
+[^1]: <https://marvinh.dev/blog/speeding-up-javascript-ecosystem-part-7/>
+
 ## Conclusion
 
-Deleting dead code is a worthwhile effort that can make working in a project faster and easier. Using the `ts-prune` and
-`ts-unused-export` tools, we can simplify the process of identifying dead code.
+Deleting dead code is a worthwhile effort that can make working in a project faster and easier. Using the `ts-prune` and `ts-unused-export` tools, we can simplify the process of identifying dead code.
 
-**If you are a junior developer**, automating the process of finding dead code and deleting it is a great senior-level
-task to learn how to do. Everyone on your team will appreciate having less code to download, compile, and understand. And
-it will help you understand your codebase better. You'll probably learn many other useful skills along the way too.
+Automating the process of finding dead code and deleting it is a great task to learn how to do. Everyone on your team will appreciate having less code to download, compile, and understand. In addition, it will speed up any tools that you use as they no longer have to parse it. And it will help you understand your codebase better. You'll probably learn many other useful skills along the way too.
 
 Good luck and happy hunting!
