@@ -32,6 +32,8 @@ are often used to fill this role.
 
 But, [Remix](https://remix.run) is not at all like other React frameworks.
 
+## Contents
+
 ## Remix
 
 Remix is a web application framework that gives you full control of the request and response

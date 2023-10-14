@@ -9,6 +9,8 @@ type: "guide"
 published: true
 ---
 
+## Contents
+
 ## What is the React Context API?
 
 React Context is one of the core React APIs that can be used anytime you are developing with React. Context allows us to create a piece of state that is globally shared among many different components.

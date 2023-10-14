@@ -8,6 +8,8 @@ type: guide # 'guide' or 'post' or 'til'
 published: true
 ---
 
+## Contents
+
 ## What are utility types?
 
 Utility types are helpers provided automatically by TypeScript to make common typing tasks easier. Since they are standard across _all_ TypeScript codebases, they are sort of like the "standard library of TypeScript."

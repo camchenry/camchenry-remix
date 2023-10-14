@@ -11,6 +11,8 @@ published: true
 
 Programming in TypeScript is all about creating models that help us to write safe code. Among those models, union types are one of the most useful, because they allow us to model mutually exclusive states like: low, medium, or high, one or none, on or off, and so on. In this article, I'll teach you what a union type is, when to use it, and tips on how to use it effectively.
 
+## Contents
+
 ## What is a union type in TypeScript?
 
 A [union type](https://www.typescriptlang.org/docs/handbook/2/everyday-types.html#union-types) (or "union" or "disjunction") is a set of types that are mutually exclusive. The type represents all of the possible types simultaneously. A union type is created with the union operator `|`, by listing out each type and separating them with a pipe character.

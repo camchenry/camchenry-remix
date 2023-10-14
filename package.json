@@ -52,6 +52,7 @@
     "remark-parse": "^10.0.1",
     "remark-parse-frontmatter": "^1.0.3",
     "remark-rehype": "^10.1.0",
+    "remark-toc": "^9.0.0",
     "tailwind-styled-components": "^2.1.8",
     "tailwindcss": "^3.1.4",
     "unified": "^10.1.1"

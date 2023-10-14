@@ -15,6 +15,8 @@ like `<input type="number">` or `<input type="text">`.
 `parseFloat` and `Number` are two of the most common ways to accomplish this task, but the differences between them
 are nuanced, so let's see how they are similar and how they differ.
 
+## Contents
+
 ## What's the Same
 
 At a glance, both `parseFloat` and the `Number` constructor generally do the same thing. They can each:

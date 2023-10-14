@@ -9,6 +9,8 @@ type: "guide"
 published: true
 ---
 
+## Contents
+
 ## What is dead code?
 
 "Dead code" is code that is never used. It is not referenced by any other code, it is not imported, it is not used in

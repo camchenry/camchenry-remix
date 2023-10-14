@@ -12,6 +12,8 @@ When you first encounter unions and enums in TypeScript, you might wonder what t
 
 In this article we'll look at their similarities and differences, and when you might want to use each of them.
 
+## Contents
+
 ## What are TypeScript unions?
 
 I've already written a comprehensive article on [everything you need to know about union types](./typescript-union-type). In short, union types are a way of modeling a discrete set of mutually exclusive types, or more simply put: unions model choices, where _only one choice can be made_.

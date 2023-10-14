@@ -20,6 +20,7 @@ export async function convertMarkdownToHtml(
   const { default: rehypeHighlight } = await import("rehype-highlight");
   const { default: remarkGfm } = await import("remark-gfm");
   const { default: remarkFootnotes } = await import("remark-footnotes");
+  const { default: remarkToc } = await import("remark-toc");
   const { default: rehypeAutoLinkHeadings } = await import(
     "rehype-autolink-headings"
   );
@@ -44,6 +45,7 @@ export async function convertMarkdownToHtml(
     .use(remarkParseFrontmatter)
     .use(remarkGfm)
     .use(remarkFootnotes)
+    .use(remarkToc, { heading: "Contents" })
     .use(remarkToRehype, { allowDangerousHtml: true })
     .use(rehypeSlug)
     .use(rehypeAutoLinkHeadings)

@@ -12,6 +12,8 @@ TypeScript is valuable because it enables us to write safe code. Because when ev
 
 However, **it is not always possible to know every type at compile time**, such as when accepting arbitrary data from an external API. To check types at run-time or differentiate between different types, we to need narrow the types using a type guard.
 
+## Contents
+
 ## What is narrowing?
 
 In TypeScript, [narrowing](https://www.typescriptlang.org/docs/handbook/2/narrowing.html) is the process of refining broad types into more narrow types. Narrowing is useful because it allows code to be liberal in the types that it accepts. Then, we can use type guards to narrow the type down to something more useful.

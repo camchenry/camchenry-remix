@@ -13,6 +13,8 @@ Objects are one of the most commonly used parts of JavaScript. As a result, they
 
 In this article, we're going to look at a particular kind of object manipulation: excluding or including properties ("keys") in an object. In TypeScript, this is done using the `Pick` and `Omit` utility types and allows you to change the type that represents an object. In JavaScript, we will create our own `pick` and `omit` functions that will allow us to do the same thing but to actual objects. Let's dive in!
 
+## Contents
+
 ## Pick
 
 In this guide, a "pick" refers to choosing some number of properties from an object and creating a new object with only those properties. A pick is the opposite of an [omit](#omit).
