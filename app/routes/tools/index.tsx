@@ -14,13 +14,6 @@ export default function ToolsIndex() {
       <ul className="flex flex-col space-y-4">
         <li>
           <PageCard
-            title="Crossword Maker"
-            summary="Automatically create a printable crossword puzzle from a list of words and hints that you provide."
-            url="https://crosswordsmaker.com"
-          />
-        </li>
-        <li>
-          <PageCard
             title="CacheCheck"
             summary="Check the HTTP caching headers for any website. Type in a URL to learn the details of how the HTTP caching for the page works and whether it will be cached or not."
             url="https://cachecheck.net"
