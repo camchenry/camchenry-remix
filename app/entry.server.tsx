@@ -316,58 +316,6 @@ export default async function handleRequest(
     });
   }
 
-  if (url.pathname.startsWith("/sitemap.xml")) {
-    const getDate = new Date().toISOString();
-
-    const staticPages = (
-      await globby([
-        // include
-        "./app/routes/**/*.tsx",
-        "./app/routes/*.tsx",
-        // exclude
-        "!./app/routes/**/$*", // skips dynamic routes
-        "!./app/routes/404.tsx",
-      ])
-    ).map((path) => {
-      return {
-        url: path,
-        lastmod: getDate,
-      };
-    });
-
-    const dynamicPages = [
-      ...(await getPosts()).map((post) => {
-        return {
-          url: `blog/${post.id}`,
-          lastmod: new Date(post.metadata.publishedAt).toISOString(),
-        };
-      }),
-    ];
-
-    const pages = [...staticPages, ...dynamicPages];
-
-    const formattedPages = pages.map(({ ...page }) => {
-      return {
-        ...page,
-        url: page.url
-          .replace("./app/routes/", "")
-          .replace(".tsx", "")
-          .replace(/\/index/g, ""),
-      };
-    });
-
-    const generatedSitemap = generateSitemap(formattedPages, {
-      hostname: "https://camchenry.com",
-    });
-
-    return new Response(generatedSitemap, {
-      headers: {
-        "Content-Type": "application/xml",
-        "Cache-Control": "public, max-age=2419200",
-      },
-    });
-  }
-
   const markup = ReactDOMServer.renderToString(
     <RemixServer context={remixContext} url={request.url} />
   );
