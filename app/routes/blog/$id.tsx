@@ -17,6 +17,7 @@ import { H1, Hr } from "../../components/styled";
 import { defaultMeta, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts.server";
 import styles from "../../styles/routes/blog/post.css";
+import { timeit } from "../../services/profiling.server";
 
 export const links: LinksFunction = () => {
   return [
@@ -44,7 +45,10 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const postId = params.id;
-  const postData = await getPost(postId, { onlyRenderMetadata: false });
+  const postData = await timeit(
+    () => getPost(postId, { onlyRenderMetadata: false }),
+    "getPost"
+  );
   if (!postData) {
     return redirect("/404");
   }

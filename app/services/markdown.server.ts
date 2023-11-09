@@ -41,7 +41,7 @@ export async function convertMarkdownToHtml(
 
   const processed = await unified()
     .use(remarkParse)
-    .use(remarkFrontmatter, ["yaml", "toml"])
+    .use(remarkFrontmatter, ["yaml"])
     .use(remarkParseFrontmatter)
     .use(remarkGfm)
     .use(remarkFootnotes)

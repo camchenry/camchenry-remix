@@ -2,6 +2,7 @@ import LRUCache from "lru-cache";
 import fs from "../fs";
 import path from "../path";
 import { convertMarkdownToHtml } from "./markdown.server";
+import { timeit } from "./profiling.server";
 
 const postCache = new LRUCache<
   { id: string; onlyRenderMetadata: boolean },
@@ -101,9 +102,9 @@ async function generatePostFromMarkdown(
     return null;
   }
   const file = fs.readFileSync(postPath);
-  const { html, frontmatter: metadata } = await convertMarkdownToHtml(
-    file.toString(),
-    { onlyRenderMetadata }
+  const { html, frontmatter: metadata } = await timeit(
+    () => convertMarkdownToHtml(file.toString(), { onlyRenderMetadata }),
+    `convertMarkdownToHtml(${postId})`
   );
   if (!isPostMetadata(metadata)) {
     throw new Error("Failed to parse post metadata");
@@ -133,7 +134,10 @@ export async function getPost(
     post = postCache.get({ id: postId, onlyRenderMetadata });
   } else {
     console.log(`CACHE MISS: ${postId}`);
-    post = await generatePostFromMarkdown(postId, { onlyRenderMetadata });
+    post = await timeit(
+      () => generatePostFromMarkdown(postId, { onlyRenderMetadata }),
+      `generatePostFromMarkdown(${postId})`
+    );
     if (post) {
       postCache.set({ id: postId, onlyRenderMetadata }, post);
     }
