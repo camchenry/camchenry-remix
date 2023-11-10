@@ -139,7 +139,7 @@ export default async function handleRequest(
     status: responseStatusCode,
     headers: {
       "Cache-Control":
-        "public, max-age=600, s-maxage=31536000, stale-while-revalidate=86400",
+        "public, max-age=21600, s-maxage=31536000, stale-while-revalidate=86400",
       ...Object.fromEntries(responseHeaders),
       "Content-Type": "text/html",
     },
