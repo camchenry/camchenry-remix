@@ -18,7 +18,6 @@ export const loader: LoaderFunction = async () => {
       "!./app/routes/**/\\[*\\].tsx",
     ])
   ).map((path) => {
-    console.log(path);
     return {
       url: path,
       lastmod: getDate,

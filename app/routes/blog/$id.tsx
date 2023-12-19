@@ -45,7 +45,6 @@ export const meta: MetaFunction = ({ data }: { data: PostData }) => {
 
 export const loader: LoaderFunction = async ({ params }) => {
   const postId = params.id;
-  console.log(postId);
   const postData = await timeit(
     () => getPost(postId, { onlyRenderMetadata: false }),
     "getPost"
