@@ -101,6 +101,8 @@ async function generatePostFromMarkdown(
   if (!postId) {
     return null;
   }
+  console.log(`[DEBUG]`, postPath);
+
   const file = fs.readFileSync(postPath);
   const { html, frontmatter: metadata } = await timeit(
     () => convertMarkdownToHtml(file.toString(), { onlyRenderMetadata }),
