@@ -73,12 +73,12 @@ export const generateImage = async ({
   const canvas = createCanvas(width, height);
   const ctx = canvas.getContext("2d");
 
-  const primaryColor = "#6ee7b7";
+  const primaryColor = "#0fb880";
 
   // Calculate font sizes and metrics
   ctx.font = `bold ${fontSize}px ${font}`;
   const titleLines = getLines(ctx, title, width - margin * 2);
-  const lineHeight = fontSize * 1.2;
+  const lineHeight = titleLines.length >= 4 ? fontSize * 1 : fontSize * 1.2;
   const textHeight = titleLines.length * lineHeight;
 
   ctx.save();
