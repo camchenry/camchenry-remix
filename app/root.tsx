@@ -167,10 +167,6 @@ export default function App() {
               © Cam McHenry 2016-{new Date().getFullYear()}
             </small>
           </div>
-          <div className="mt-12 mb-8 text-gray-500 dark:text-gray-400">
-            <div className="font-bold mb-2">Other projects</div>
-            <a href="https://servicesignups.com">ServiceSignUps</a>
-          </div>
         </Container>
       </footer>
     </Document>
