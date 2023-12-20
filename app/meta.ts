@@ -15,7 +15,7 @@ export type MetaFields =
 export const defaultTitle = "Cam McHenry";
 
 export const defaultDescription =
-  "Cam McHenry is passionate about building web applications and tools that make the world better.";
+  "I am a software engineer. I'm passionate about building great web applications and tools with JavaScript.";
 
 export const defaultMeta: Partial<Record<MetaFields, string>> = {
   title: defaultTitle,
