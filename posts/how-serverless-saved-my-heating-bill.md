@@ -8,7 +8,7 @@ tags:
 published: true
 ---
 
-<img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/13af599c-6ef7-48f1-2b86-5c9ff7178800/public" alt="A picture of burning money." width="650" height="433">
+<img src="/images/13af599c-6ef7-48f1-2b86-5c9ff7178800.avif" alt="A picture of burning money." width="650" height="433">
 
 Currently, it's winter in the Northeastern United States, where I live. That means it gets uncomfortably cold outside. That means one big thing for everyone living here: figuring out how to keep our homes warm without literally burning money.
 
@@ -49,7 +49,7 @@ So, I decided to use:
 Here is a diagram that shows the architecture of the application:
 
 <figure>
-  <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/43ccdeae-066d-4d9f-38ce-fc542f4c7c00/public" alt="Architecture diagram of the gas tracking application. The client interacts with the Remix application, which runs within Fly.io, via GET and POST requests to view the dashboard and fetch new data. The Remix application also interacts with the external services Browserless and Supabase to fetch the new data and store it." height="201" width="650" />
+  <img src="/images/43ccdeae-066d-4d9f-38ce-fc542f4c7c00.avif" alt="Architecture diagram of the gas tracking application. The client interacts with the Remix application, which runs within Fly.io, via GET and POST requests to view the dashboard and fetch new data. The Remix application also interacts with the external services Browserless and Supabase to fetch the new data and store it." height="201" width="650" />
   <figcaption>Architecture diagram of the gas tracking application, which shows how Remix coordinates rendering pages for our client, receiving fetch requests, scraping webpages, and updating the database.</figcaption>
 </figure>
 
@@ -88,7 +88,7 @@ Remix also comes with a Fly.io deployment template, which means you can deploy y
 Putting all of these serverless services together, I was able to build my gas-tracking application over a weekend (while on a bus!) and deploy it for my own personal use.
 
 <figure>
-  <img src="https://imagedelivery.net/lcL-zB88Cde3kVONd9dPuQ/67187615-d70d-46d3-6c01-53d7da41c300/public" alt="A picture of the gas tracking dashboard, which shows various metrics like current gas level, gas consumption per day, and number of days remaining until the tank is empty. There is also a chart that shows historical gas tank data from the last month." height="432" width="650" />
+  <img src="/images/67187615-d70d-46d3-6c01-53d7da41c300.avif" alt="A picture of the gas tracking dashboard, which shows various metrics like current gas level, gas consumption per day, and number of days remaining until the tank is empty. There is also a chart that shows historical gas tank data from the last month." height="432" width="650" />
   <figcaption>The dashboard for the gas tracking application, which helps me gauge how much heat is being used and how effectively different house work affects our heating bill.</figcaption>
 </figure>
 
