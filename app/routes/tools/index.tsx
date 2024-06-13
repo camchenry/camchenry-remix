@@ -1,10 +1,15 @@
 import PageCard from "../../components/PageCard";
 import React from "react";
-import type { LoaderFunction } from "@remix-run/node";
+import type { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Container, H1, H3 } from "../../components/styled";
+import { defaultMeta } from "../../meta";
 
 export const loader: LoaderFunction = async () => {
   return {};
+};
+
+export const meta: MetaFunction = () => {
+  return { ...defaultMeta, title: `Tools | ${defaultMeta.title}` };
 };
 
 export default function ToolsIndex() {

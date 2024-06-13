@@ -19,11 +19,19 @@ import {
   getTimeProfit,
 } from "./time-profit";
 import styles from "../../../../styles/routes/tools/worth-it-to-automate.css";
-import { LinksFunction } from "@remix-run/node";
+import { LinksFunction, MetaFunction } from "@remix-run/node";
+import { defaultMeta } from "../../../meta";
 
 type TimeProfitParameters = Parameters<typeof getTimeProfit>[0];
 
 export const links: LinksFunction = () => [{ rel: "stylesheet", href: styles }];
+
+export const meta: MetaFunction = () => {
+  return {
+    ...defaultMeta,
+    title: `Is it worth it to automate? | ${defaultMeta.title}`,
+  };
+};
 
 const WorthItDisplay = ({
   taskRepetitions,

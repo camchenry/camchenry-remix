@@ -14,7 +14,7 @@ import { useLoaderData } from "@remix-run/react";
 import highlightStyles from "../../../node_modules/highlight.js/styles/night-owl.css";
 import PostDate from "../../components/PostDate";
 import { H1, Hr } from "../../components/styled";
-import { defaultMeta, generateMeta } from "../../meta";
+import { defaultMeta, defaultTitle, generateMeta } from "../../meta";
 import { getPost, PostData } from "../../services/posts.server";
 import styles from "../../styles/routes/blog/post.css";
 import { timeit } from "../../services/profiling.server";
@@ -35,7 +35,9 @@ export const headers: HeadersFunction = ({ loaderHeaders }) => {
 
 export const meta: MetaFunction = ({ data }: { data: PostData }) => {
   return generateMeta({
-    title: data?.metadata?.title ?? defaultMeta.title,
+    title: data?.metadata?.title
+      ? `${data.metadata.title} | ${defaultTitle}`
+      : defaultTitle,
     description: data?.metadata?.summary ?? defaultMeta.description,
     image: `https://camchenry.com/social-image?id=${data.id}`,
     canonicalUrl: `https://camchenry.com/blog/${data.id}`,

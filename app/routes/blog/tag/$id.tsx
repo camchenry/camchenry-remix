@@ -1,12 +1,20 @@
-import { LoaderFunction } from "@remix-run/node";
+import { LoaderFunction, MetaFunction } from "@remix-run/node";
 import { Outlet, useLoaderData } from "@remix-run/react";
 import PageCard from "../../../components/PageCard";
 import { Container, H1 } from "../../../components/styled";
 import { getPosts, PostData } from "../../../services/posts.server";
+import { defaultMeta } from "../../../meta";
 
 type LoaderData = {
   id: string;
   posts: PostData[];
+};
+
+export const meta: MetaFunction = ({ params }) => {
+  return {
+    ...defaultMeta,
+    title: `#${params.id} | ${defaultMeta.title}`,
+  };
 };
 
 export const loader: LoaderFunction = async ({

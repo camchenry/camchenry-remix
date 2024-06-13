@@ -13,7 +13,7 @@ import { defaultMeta } from "./meta";
 import styles from "./styles/app.css";
 
 export const meta: MetaFunction = () => {
-  return defaultMeta;
+  return { defaultMeta };
 };
 
 export const links: LinksFunction = () => {
@@ -155,7 +155,6 @@ export default function App() {
         <Container className="border-t border-gray-200 dark:border-gray-800 flex gap-4">
           <div>
             <div className="mt-12 mb-8">
-              <div className="font-bold mb-4">Cam McHenry</div>
               <div className="flex flex-grow mb-8">
                 <Twitter />
                 <GitHub />
