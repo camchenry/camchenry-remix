@@ -16,24 +16,13 @@ export const links: LinksFunction = () => {
   return [{ rel: "stylesheet", href: stylesUrl }];
 };
 
-const getMessage = (messageId: string | null): string | undefined => {
-  if (messageId === "confirm-email-subscription") {
-    return "Your subscription has been confirmed. Thanks for subscribing!";
-  }
-};
-
 type LoaderData = {
   posts: PostData[];
-  message?: string;
 };
 
-export const loader: LoaderFunction = async ({
-  request,
-}): Promise<LoaderData> => {
+export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   const posts = await getPosts();
-  const messageId = new URL(request.url).searchParams.get("messageId");
-  const message = getMessage(messageId);
-  return { posts, message };
+  return { posts };
 };
 
 const Intro = tw.section`
@@ -57,14 +46,9 @@ const Intro = tw.section`
 `;
 
 export default function Index() {
-  const { posts, message } = useLoaderData<LoaderData>();
+  const { posts } = useLoaderData<LoaderData>();
   return (
     <div className="mb-10">
-      {message !== undefined && (
-        <div className="text-center bg-gradient-to-r from-green-400 to-green-600 rounded px-4 py-8 mb-4 text-xl text-white">
-          {message}
-        </div>
-      )}
       <Intro id="intro">
         <H1 className="mb-4 py-2 font-black lg:text-5xl text-green-500">
           👋 I'm Cam McHenry
