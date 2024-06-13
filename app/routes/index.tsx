@@ -22,7 +22,13 @@ type LoaderData = {
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
   const posts = await getPosts();
-  return { posts };
+  // Only return featured posts
+  const featuredIds = [
+    "eslint-custom-rules",
+    "typescript-type-guards",
+    "typescript-union-type",
+  ];
+  return { posts: posts.filter((post) => featuredIds.includes(post.id)) };
 };
 
 const Intro = tw.section`
@@ -57,7 +63,8 @@ export default function Index() {
           <p className="md:text-lg">
             I am a software engineer that is passionate about building great web
             applications. Currently, I work at{" "}
-            <a href="https://github.com/camchenry">GitHub</a>.
+            <a href="https://github.com/camchenry">GitHub</a> and I live in
+            State College, Pennsylvania.
           </p>
           <p className="md:text-lg">
             I often write about <a href="/blog/tag/typescript">TypeScript</a>{" "}
@@ -65,48 +72,27 @@ export default function Index() {
             write some useful <a href="/tools">tools</a>.
           </p>
         </div>
-        <div className="md:text-lg">
-          <H2 className="my-4">Featured work</H2>
-          <ul className="my-4">
-            <li>
-              ⚡️{" "}
-              <a href="/blog/eslint-custom-rules">
-                How to write custom ESLint rules for your project
-              </a>
-            </li>
-            <li>
-              🌈{" "}
-              <a href="/blog/typescript-union-type">
-                Everything You Need To Know About TypeScript Union Types
-              </a>
-            </li>
-            <li>
-              🛡️{" "}
-              <a href="/blog/typescript-type-guards">
-                TypeScript Type Guards Explained
-              </a>
-            </li>
-          </ul>
-        </div>
         <div id="intro-contact-links" className="md:text-lg my-4">
           <a href="https://twitter.com/cammchenry">Twitter</a>
           <a href="https://github.com/camchenry">GitHub</a>
         </div>
       </Intro>
       <div className="max-w-prose mx-auto">
-        <H2 className="mb-4">Posts</H2>
-        <ul className="flex flex-col space-y-4">
-          {posts.map((post) => (
-            <li key={post.id}>
-              <PageCard
-                url={`/blog/${post.id}`}
-                title={post.metadata.title}
-                summary={post.metadata.summary}
-                date={post.metadata.publishedAt}
-              />
-            </li>
-          ))}
-        </ul>
+        <div className="md:text-lg">
+          <H2 className="my-4">Featured work</H2>
+          <ul className="flex flex-col space-y-4">
+            {posts.map((post) => (
+              <li key={post.id}>
+                <PageCard
+                  url={`/blog/${post.id}`}
+                  title={post.metadata.title}
+                  summary={post.metadata.summary}
+                  date={post.metadata.publishedAt}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
