@@ -18,6 +18,7 @@ export const links: LinksFunction = () => {
 
 type LoaderData = {
   posts: PostData[];
+  recentPosts: PostData[];
 };
 
 export const loader: LoaderFunction = async (): Promise<LoaderData> => {
@@ -28,7 +29,17 @@ export const loader: LoaderFunction = async (): Promise<LoaderData> => {
     "typescript-type-guards",
     "typescript-union-type",
   ];
-  return { posts: posts.filter((post) => featuredIds.includes(post.id)) };
+  const recentPosts = posts
+    .sort(
+      (a, b) =>
+        new Date(b.metadata.publishedAt).getTime() -
+        new Date(a.metadata.publishedAt).getTime()
+    )
+    .slice(0, 3);
+  return {
+    posts: posts.filter((post) => featuredIds.includes(post.id)),
+    recentPosts,
+  };
 };
 
 const Intro = tw.section`
@@ -52,7 +63,7 @@ const Intro = tw.section`
 `;
 
 export default function Index() {
-  const { posts } = useLoaderData<LoaderData>();
+  const { posts, recentPosts } = useLoaderData<LoaderData>();
   return (
     <div className="mb-10">
       <Intro id="intro">
@@ -78,10 +89,25 @@ export default function Index() {
         </div>
       </Intro>
       <div className="max-w-prose mx-auto">
-        <div className="md:text-lg">
+        <div className="md:text-lg mb-8 lg:mb-24">
           <H2 className="my-4">Featured work</H2>
           <ul className="flex flex-col space-y-4">
             {posts.map((post) => (
+              <li key={post.id}>
+                <PageCard
+                  url={`/blog/${post.id}`}
+                  title={post.metadata.title}
+                  summary={post.metadata.summary}
+                  date={post.metadata.publishedAt}
+                />
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="md:text-lg">
+          <H2 className="my-4">Recent posts</H2>
+          <ul className="flex flex-col space-y-4">
+            {recentPosts.map((post) => (
               <li key={post.id}>
                 <PageCard
                   url={`/blog/${post.id}`}
