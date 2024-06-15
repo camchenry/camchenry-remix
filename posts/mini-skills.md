@@ -1,7 +1,7 @@
 ---
 title: "Mini-skills"
 summary: "Mini-skills are small, focused skills that can be learned and used within a short amount of time."
-publishedAt: "2024-06-15"
+publishedAt: "2024-06-14"
 tags: []
 type: post # 'guide' or 'post' or 'til'
 published: true
