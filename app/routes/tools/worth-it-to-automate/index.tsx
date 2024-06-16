@@ -18,7 +18,7 @@ import {
   getSecondsFromDuration,
   getTimeProfit,
 } from "./time-profit";
-import styles from "../../../../styles/routes/tools/worth-it-to-automate.css";
+import styles from "../../../styles/routes/tools/worth-it-to-automate.css";
 import { LinksFunction, MetaFunction } from "@remix-run/node";
 import { defaultMeta } from "../../../meta";
 

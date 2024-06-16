@@ -6,4 +6,6 @@ module.exports = {
   browserBuildDirectory: "public/build",
   publicPath: "/build/",
   serverBuildDirectory: "server/build",
+  tailwind: true,
+  postcss: true,
 };
