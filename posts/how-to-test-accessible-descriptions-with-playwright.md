@@ -6,7 +6,7 @@ tags:
   - accessibility
   - playwright
 type: til # 'guide' or 'post' or 'til'
-published: false
+published: true
 ---
 
 Playwright [recently added support for an assertion to check accessible descriptions and labels](https://github.com/microsoft/playwright/issues/18332), allowing you to more easily test the accessibility of elements in your web application. This is available in [Playwright version 1.44](https://playwright.dev/docs/release-notes#version-144) and up.
