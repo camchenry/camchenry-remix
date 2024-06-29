@@ -5,15 +5,13 @@
   "license": "",
   "scripts": {
     "new:post": "node scripts/new-post.js",
-    "build": "npm run build:css && remix build",
+    "build": "remix build",
     "dev": "remix dev",
     "start": "remix-serve server/build",
     "test": "jest --watch",
     "test:ci": "jest --ci",
     "lint": "eslint --ext js,jsx,ts,tsx app/**",
-    "lint:fix": "eslint --ext js,jsx,ts,tsx --fix app/**",
-    "watch:css": "postcss styles --base styles --dir app/styles -w",
-    "build:css": "postcss styles --base styles --dir app/styles --env production"
+    "lint:fix": "eslint --ext js,jsx,ts,tsx --fix app/**"
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.21",
