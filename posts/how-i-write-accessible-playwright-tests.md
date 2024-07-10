@@ -184,7 +184,7 @@ These are some of the practical tips that I have learned while writing tests for
 
 ## See also
 
-- [How to test accessible descriptions with Playwright](/posts/how-to-test-accessible-descriptions-with-playwright)
+- [How to test accessible descriptions with Playwright](./how-to-test-accessible-descriptions-with-playwright)
 - [ARIA in HTML (W3C)](https://www.w3.org/TR/html-aria)
 - [Foundations: accessible names and descriptions (TetraLogical)](https://tetralogical.com/blog/2023/04/05/accessible-names-and-descriptions/)
 - [Providing Accessible Names and Descriptions (ARIA APG)](https://www.w3.org/WAI/ARIA/apg/practices/names-and-descriptions/#composingeffectiveanduser-friendlyaccessiblenames)
