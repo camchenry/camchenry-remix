@@ -43,7 +43,7 @@ For example, some of these built-in locators are:
 
 - [`getByRole`](https://playwright.dev/docs/locators#locate-by-role)
 - [`getByText`](https://playwright.dev/docs/locators#locate-by-text)
-- [`getByLabelText`](https://playwright.dev/docs/locators#locate-by-label)
+- [`getByLabel`](https://playwright.dev/docs/locators#locate-by-label)
 - [`getByPlaceholderText`](https://playwright.dev/docs/locators#locate-by-placeholder)
 - [`getByAltText`](https://playwright.dev/docs/locators#locate-by-alt-text)
 
@@ -71,10 +71,10 @@ page.locator('[aria-label="Close"]');
 
 However, this suffers from a big problem: there are multiple ways an element can get an accessible name, not just `aria-label`. For example, the element could be switched to use the `aria-labelledby` attribute instead to make it so that it gets an accessible name from another element on the page. Semantically, there is no difference between using `aria-labelledby` and `aria-label`, but since our test locator specifically references `aria-label`, it would fail.
 
-Instead, I recommend using the `getByLabelText` locator, which checks for the accessible name of an element regardless of how it is defined:
+Instead, I recommend using the `getByLabel` locator, which checks for the accessible name of an element regardless of how it is defined:
 
 ```typescript
-page.getByLabelText("Close");
+page.getByLabel("Close");
 ```
 
 This locator will now work for all of the following examples:
