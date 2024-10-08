@@ -19,6 +19,13 @@ export default function ToolsIndex() {
       <ul className="flex flex-col space-y-4">
         <li>
           <PageCard
+            title="Simple Wealth Tools"
+            summary="Helpful tools for managing your personal finances and growing your wealth."
+            url="https://simplewealthtools.com"
+          />
+        </li>
+        <li>
+          <PageCard
             title="CacheCheck"
             summary="Check the HTTP caching headers for any website. Type in a URL to learn the details of how the HTTP caching for the page works and whether it will be cached or not."
             url="https://cachecheck.net"
