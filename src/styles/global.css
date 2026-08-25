@@ -3,7 +3,7 @@
   font-style: normal;
   font-weight: 400;
   font-display: fallback;
-  src: url("../assets/fonts/Inter-Regular.otf") format("opentype");
+  src: url("../assets/fonts/Inter-Regular.woff2") format("woff2");
 }
 
 @font-face {
@@ -11,7 +11,7 @@
   font-style: normal;
   font-weight: 700 900;
   font-display: fallback;
-  src: url("../assets/fonts/Inter-Bold.otf") format("opentype");
+  src: url("../assets/fonts/Inter-Bold.woff2") format("woff2");
 }
 
 @tailwind base;
