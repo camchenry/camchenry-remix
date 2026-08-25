@@ -338,4 +338,4 @@ complex state changes simpler and easier to test.
 
 Context is a simple, but powerful feature that can be used in any React project. In this post, we looked at the problems that Context solves, and how to use the React Context API to solve those problems. By adding TypeScript types, we can dramatically improve the type safety when using a context. Furthermore, we can also write a custom hook to ensure that we use the context consistently and safely, as well as make it easier to use.
 
-If this guide helped you understand how to use React Context and TypeScript better, let me know and tweet me at <a href="https://twitter.com/cammchenry">@cammchenry</a>!
+If this guide helped you understand how to use React Context and TypeScript better, let me know at <a href="https://bsky.app/profile/camchenry.com">@camchenry.com</a>!

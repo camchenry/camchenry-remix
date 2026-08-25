@@ -237,4 +237,4 @@ If you're interested in learning more about union types and the theory behind th
 - [Algebraic data types (Wikipedia)](https://en.wikipedia.org/wiki/Algebraic_data_type)
 - [Tagged union (Wikipedia)](https://en.wikipedia.org/wiki/Tagged_union)
 
-If this post helped you understand union types better, consider sending me a message to me ([@cammchenry](https://twitter.com/cammchenry)) and let me know what you thought. Happy coding!
+If this post helped you understand union types better, consider sending me a message to me ([@camchenry.com](https://bsky.app/profile/camchenry.com)) and let me know what you thought. Happy coding!

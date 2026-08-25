@@ -83,7 +83,7 @@ export default function Index() {
           </p>
         </div>
         <div id="intro-contact-links" className="md:text-lg my-4">
-          <a href="https://twitter.com/cammchenry">Twitter</a>
+          <a href="https://bsky.app/profile/camchenry.com">BlueSky</a>
           <a href="https://github.com/camchenry">GitHub</a>
         </div>
       </Intro>

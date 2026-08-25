@@ -594,13 +594,13 @@ type Sum = ReturnType<typeof add>; // => number
 One of the most useful aspects is that we can re-use the return types of built-in functions:
 
 ```typescript
-type Value = string | number
-type Entries = ReturnType<typeof Object.entries<Value>>
+type Value = string | number;
+type Entries = ReturnType<typeof Object.entries<Value>>;
 // => [string, Value][]
 const entries: Entries = [
-  ['key', 'value'],
-  ['key2', 123]
-]
+  ["key", "value"],
+  ["key2", 123],
+];
 ```
 
 - [TypeScript documentation on `ReturnType`](https://www.typescriptlang.org/docs/handbook/utility-types.html#returntypetype)
@@ -844,4 +844,4 @@ type Uncapitalized = Uncapitalize<"TypeScript">; // => "typeScript"
 
 ---
 
-If this article helped you or you have feedback on it, please let me know at [@cammchenry](https://twitter.com/cammchenry)! Happy coding and good luck!
+If this article helped you or you have feedback on it, please let me know at [@camchenry.com](https://bsky.app/profile/camchenry.com)! Happy coding and good luck!

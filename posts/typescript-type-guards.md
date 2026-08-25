@@ -609,6 +609,6 @@ To summarize the strengths of each type guard, here is a summary table.
 | Assertion function         | Assert invariants that should always be true                    |
 | Custom type guard function | Check that a type meets some arbitrary conditions               |
 
-If this article was helpful, let me know on Twitter at [@cammchenry](https://twitter.com/cammchenry)! If you enjoy guides like this, consider signing up for my mailing list to be notified when new posts are published.
+If this article was helpful, let me know at [@camchenry](https://bsky.app/profile/camchenry.com)!
 
 Good luck, and happy coding!
