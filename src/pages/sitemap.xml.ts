@@ -12,7 +12,9 @@ export const GET: APIRoute = async () => {
     { url: "blog", lastmod: generatedAt },
     ...posts.map((post) => ({
       url: `blog/${post.id}`,
-      lastmod: new Date(post.data.updatedAt ?? post.data.publishedAt).toISOString(),
+      lastmod: new Date(
+        post.data.updatedAt ?? post.data.publishedAt,
+      ).toISOString(),
     })),
     ...tags.map((tag) => ({ url: `blog/tag/${tag}`, lastmod: generatedAt })),
   ];

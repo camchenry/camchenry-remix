@@ -57,11 +57,7 @@ export async function generateSocialImage(title: string) {
 
   titleLines.forEach((text, index) => {
     ctx.fillStyle = "#000";
-    ctx.fillText(
-      text,
-      margin,
-      (height - textHeight) / 2 + index * lineHeight,
-    );
+    ctx.fillText(text, margin, (height - textHeight) / 2 + index * lineHeight);
   });
 
   const bottomOfTitleText = height / 2 + textHeight / 2 + 50;
