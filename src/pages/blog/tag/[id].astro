@@ -1,0 +1,47 @@
+---
+import { getCollection, type CollectionEntry } from "astro:content";
+import PageCard from "../../../components/PageCard.astro";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+import { defaultTitle } from "../../../lib/seo";
+
+export async function getStaticPaths() {
+  const posts = (await getCollection("blog")).sort((left, right) =>
+    right.data.publishedAt.localeCompare(left.data.publishedAt),
+  );
+  const tags = Array.from(new Set(posts.flatMap((post) => post.data.tags)));
+  return tags.map((id) => ({
+    params: { id },
+    props: { id, posts: posts.filter((post) => post.data.tags.includes(id)) },
+  }));
+}
+
+interface Props {
+  id: string;
+  posts: CollectionEntry<"blog">[];
+}
+
+const { id, posts } = Astro.props;
+---
+
+<BaseLayout title={`#${id} | ${defaultTitle}`}>
+  <div class="max-w-prose mx-auto my-4 lg:my-16">
+    <div class="my-4 md:my-16">
+      <h1 class="text-3xl font-bold mb-2 md:text-4xl md:text-center">#{id}</h1>
+      <div class="md:text-center">
+        {posts.length} {posts.length === 1 ? "post" : "posts"}
+      </div>
+    </div>
+    <div>
+      {
+        posts.map((post) => (
+          <PageCard
+            summary={post.data.summary}
+            date={post.data.publishedAt}
+            title={post.data.title}
+            url={`/blog/${post.id}`}
+          />
+        ))
+      }
+    </div>
+  </div>
+</BaseLayout>

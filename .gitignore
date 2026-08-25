@@ -1,9 +1,9 @@
 .DS_Store
 node_modules
 
-build
-/.cache
-/server/build
-/public/build
-
+.astro
+.dev.vars
+.wrangler
+dist
 .vercel
+.cache

@@ -1,0 +1,21 @@
+---
+import PostDate from "./PostDate.astro";
+
+interface Props {
+  title: string;
+  url: string;
+  summary: string;
+  date?: string;
+}
+
+const { url, title, summary, date } = Astro.props;
+---
+
+<div class="py-5">
+  <h3 class="text-xl">
+    <a href={url}>{title}</a>
+  </h3>
+  <p class="text-gray-600 dark:text-gray-400">
+    {date ? <><PostDate publishedAt={date} /> &mdash; {summary}</> : summary}
+  </p>
+</div>

@@ -1,0 +1,8 @@
+/rss.xml
+  Cache-Control: public, max-age=2419200
+
+/sitemap.xml
+  Cache-Control: public, max-age=86400
+
+/social-images/*
+  Cache-Control: public, max-age=2419200

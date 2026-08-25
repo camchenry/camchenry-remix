@@ -1,0 +1,96 @@
+---
+import { addDays, format } from "date-fns";
+import { getCollection, render, type CollectionEntry } from "astro:content";
+import PostDate from "../../components/PostDate.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { defaultTitle } from "../../lib/seo";
+import "highlight.js/styles/night-owl.css";
+import "../../styles/post.css";
+
+export async function getStaticPaths() {
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+interface Props {
+  post: CollectionEntry<"blog">;
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const canonicalUrl = `https://camchenry.com/blog/${post.id}`;
+const today = format(new Date(), "yyyy-MM-dd");
+const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
+const todos = {
+  title: post.data.title.toLowerCase().includes("todo"),
+  summary: post.data.summary.toLowerCase().includes("todo"),
+  date: post.data.published
+    ? new Date(post.data.publishedAt) > new Date()
+    : post.data.publishedAt !== today && post.data.publishedAt !== tomorrow,
+};
+---
+
+<BaseLayout
+  title={`${post.data.title} | ${defaultTitle}`}
+  description={post.data.summary}
+  image={`https://camchenry.com/social-image?id=${post.id}`}
+  canonicalUrl={canonicalUrl}
+  isArticle
+>
+  <div>
+    <div class="md:my-12 mx-auto max-w-3xl lg:max-w-4xl">
+      {
+        post.data.type === "til" && (
+          <div class="til text-sm md:text-center mb-2">Today I learned</div>
+        )
+      }
+      <h1
+        class="text-3xl mb-2 font-bold md:mb-4 md:text-4xl md:text-center"
+        style={todos.title ? "background: red" : undefined}
+      >
+        {post.data.title}
+      </h1>
+      <div
+        class="md:text-center"
+        style={todos.date ? "background: red" : undefined}
+      >
+        By Cam McHenry on <PostDate publishedAt={post.data.publishedAt} />
+        {
+          post.data.updatedAt && (
+            <span>
+              {" "}
+              (Updated on <PostDate publishedAt={post.data.updatedAt} />)
+            </span>
+          )
+        }
+      </div>
+      {
+        post.data.tags.length > 0 && (
+          <div class="md:text-center">
+            {post.data.tags.map((tag) => (
+              <a
+                class="mr-2 border-b border-green-300"
+                href={`/blog/tag/${tag}`}
+              >
+                #{tag}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </div>
+    <div class="mx-auto max-w-2xl mb-10">
+      <hr class="my-4 md:my-6 border-green-300" />
+      <p
+        class="prose dark:prose-invert mx-auto"
+        style={todos.summary ? "background: red" : undefined}
+      >
+        <span class="font-bold">Summary</span> ❧ {post.data.summary}
+      </p>
+      <hr class="my-4 md:my-6 border-green-300" />
+      <main class="prose dark:prose-invert mx-auto">
+        <Content />
+      </main>
+    </div>
+  </div>
+</BaseLayout>

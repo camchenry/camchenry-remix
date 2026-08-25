@@ -1,0 +1,13 @@
+---
+import { format } from "date-fns";
+
+interface Props {
+  publishedAt: string;
+}
+
+const { publishedAt } = Astro.props;
+const postDate = new Date(`${publishedAt}T12:00:00Z`);
+const formattedDate = format(postDate, "MMMM d, yyyy");
+---
+
+<time datetime={publishedAt}>{formattedDate}</time>

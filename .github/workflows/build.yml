@@ -1,15 +1,17 @@
 name: CI
 on: push
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.12.0
+          cache: npm
       - name: Install dependencies
-        run: npm install
-        env:
-          REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
-      - name: Run tests
-        run: npm run test:ci
-        env:
-          REMIX_TOKEN: ${{ secrets.REMIX_TOKEN }}
+        run: npm ci
+      - name: Check
+        run: npm run check
+      - name: Build
+        run: npm run build

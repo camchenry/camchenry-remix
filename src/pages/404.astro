@@ -1,0 +1,12 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+Astro.response.status = 404;
+---
+
+<BaseLayout title="404 Not Found | Cam McHenry">
+  <div class="text-center my-6 md:my-32">
+    <h1 class="text-4xl mb-4"><span class="font-bold">404</span> Not Found</h1>
+    <p>The link that you requested is either invalid or no longer exists.</p>
+  </div>
+</BaseLayout>

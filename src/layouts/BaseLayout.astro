@@ -1,0 +1,51 @@
+---
+import Footer from "../components/Footer.astro";
+import Navigation from "../components/Navigation.astro";
+import { defaultDescription, defaultTitle, type Seo } from "../lib/seo";
+import "../styles/global.css";
+
+interface Props extends Seo {}
+
+const {
+  title = defaultTitle,
+  description = defaultDescription,
+  image,
+  canonicalUrl,
+  isArticle = false,
+} = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <link rel="icon" href="/favicon.ico" />
+    {canonicalUrl && <link rel="canonical" href={canonicalUrl} />}
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content={isArticle ? "article" : "website"} />
+    {canonicalUrl && <meta property="og:url" content={canonicalUrl} />}
+    {image && <meta property="og:image" content={image} />}
+    <meta name="twitter:creator" content="@cammchenry" />
+    <meta name="twitter:card" content={image ? "summary_large_image" : "summary"} />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    {image && <meta name="twitter:image" content={image} />}
+  </head>
+  <body class="dark:bg-gray-900 dark:text-white">
+    <Navigation />
+    <div class="container mx-auto p-3">
+      <slot />
+    </div>
+    <Footer />
+    <script
+      is:inline
+      data-goatcounter="https://camchenry.goatcounter.com/count"
+      async
+      src="//gc.zgo.at/count.js"
+    ></script>
+  </body>
+</html>

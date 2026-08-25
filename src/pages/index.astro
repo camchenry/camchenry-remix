@@ -1,0 +1,76 @@
+---
+import PageCard from "../components/PageCard.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { featuredPostIds, getPosts } from "../lib/posts";
+import "../styles/index.css";
+
+const allPosts = await getPosts();
+const posts = allPosts.filter((post) => featuredPostIds.includes(post.id));
+const recentPosts = allPosts.slice(0, 3);
+---
+
+<BaseLayout>
+  <div class="mb-10">
+    <section
+      id="intro"
+      class="p-4 md:p-8 lg:p-16 mb-8 mx-auto lg:my-16 lg:mb-24 flex flex-col align-center justify-center max-w-3xl rounded rounded-lg border border-green-500 dark:border-green-700"
+    >
+      <h1 class="text-3xl mb-4 py-2 font-black lg:text-5xl text-green-500">
+        👋 I'm Cam McHenry
+      </h1>
+      <div class="my-4">
+        <p class="md:text-lg">
+          I am a software engineer that is passionate about building great web
+          applications. Currently, I work at <a href="https://github.com/camchenry"
+            >GitHub</a
+          > and I live in State College, Pennsylvania.
+        </p>
+        <p class="md:text-lg">
+          I often write about <a href="/blog/tag/typescript">TypeScript</a> and <a
+            href="/blog/tag/react">React</a
+          > in my blog.
+        </p>
+      </div>
+      <div id="intro-contact-links" class="md:text-lg my-4">
+        <a href="https://bsky.app/profile/camchenry.com">BlueSky</a>
+        <a href="https://github.com/camchenry">GitHub</a>
+      </div>
+    </section>
+    <div class="max-w-prose mx-auto">
+      <div class="md:text-lg mb-8 lg:mb-24">
+        <h2 class="text-2xl my-4">Featured work</h2>
+        <ul class="flex flex-col space-y-4">
+          {
+            posts.map((post) => (
+              <li>
+                <PageCard
+                  url={`/blog/${post.id}`}
+                  title={post.data.title}
+                  summary={post.data.summary}
+                  date={post.data.publishedAt}
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+      <div class="md:text-lg">
+        <h2 class="text-2xl my-4">Recent posts</h2>
+        <ul class="flex flex-col space-y-4">
+          {
+            recentPosts.map((post) => (
+              <li>
+                <PageCard
+                  url={`/blog/${post.id}`}
+                  title={post.data.title}
+                  summary={post.data.summary}
+                  date={post.data.publishedAt}
+                />
+              </li>
+            ))
+          }
+        </ul>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

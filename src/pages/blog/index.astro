@@ -1,0 +1,62 @@
+---
+import PageCard from "../../components/PageCard.astro";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getPosts } from "../../lib/posts";
+import { defaultTitle } from "../../lib/seo";
+import "../../styles/blog.css";
+
+const allPosts = await getPosts();
+const tils = allPosts.filter((post) => post.data.type === "til");
+const posts = allPosts.filter((post) => post.data.type !== "til");
+const tags = Array.from(new Set(posts.flatMap((post) => post.data.tags)));
+---
+
+<BaseLayout title={`Blog | ${defaultTitle}`}>
+  <div>
+    <h1 class="text-3xl mb-4">Blog</h1>
+    <section class="post-section">
+      <h2 class="text-2xl">Posts</h2>
+      <ul class="post-grid">
+        {
+          posts.map((post) => (
+            <li>
+              <PageCard
+                url={`/blog/${post.id}`}
+                title={post.data.title}
+                summary={post.data.summary}
+                date={post.data.publishedAt}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <section class="post-section">
+      <h2 class="text-2xl">Today I Learned (TIL)</h2>
+      <p class="max-w-prose text-lg py-4">
+        Today I learned posts are short posts about something I learned that
+        recently.
+      </p>
+      <ul class="post-grid">
+        {
+          tils.map((post) => (
+            <li>
+              <PageCard
+                url={`/blog/${post.id}`}
+                title={post.data.title}
+                summary={post.data.summary}
+                date={post.data.publishedAt}
+              />
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+    <section class="post-section">
+      <h2 class="text-2xl">Tags</h2>
+      <ul class="post-grid py-5">
+        {tags.map((tag) => <li><a href={`/blog/tag/${tag}`}>{tag}</a></li>)}
+      </ul>
+    </section>
+  </div>
+</BaseLayout>
