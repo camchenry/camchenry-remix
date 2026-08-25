@@ -118,9 +118,6 @@ const Navigation = () => (
       <li className="mr-4">
         <a href="/blog">Blog</a>
       </li>
-      <li>
-        <a href="/tools">Tools</a>
-      </li>
     </ul>
   </nav>
 );

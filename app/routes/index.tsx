@@ -79,8 +79,7 @@ export default function Index() {
           </p>
           <p className="md:text-lg">
             I often write about <a href="/blog/tag/typescript">TypeScript</a>{" "}
-            and <a href="/blog/tag/react">React</a> in my blog, and occasionally
-            write some useful <a href="/tools">tools</a>.
+            and <a href="/blog/tag/react">React</a> in my blog.
           </p>
         </div>
         <div id="intro-contact-links" className="md:text-lg my-4">
