@@ -12,8 +12,13 @@
   font-weight: bold;
 }
 
-.hljs {
-  background: none;
+.prose .astro-code {
+  background-color: var(--tw-prose-pre-bg) !important;
+}
+
+.astro-code code {
+  display: block;
+  overflow-x: auto;
 }
 
 .til {

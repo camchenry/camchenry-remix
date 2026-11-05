@@ -2,7 +2,6 @@ import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkToc from "remark-toc";
 
@@ -14,16 +13,15 @@ export default defineConfig({
     prerenderEnvironment: "node",
   }),
   markdown: {
-    syntaxHighlight: false,
+    syntaxHighlight: "shiki",
+    shikiConfig: {
+      theme: "night-owl",
+    },
     processor: unified({
       gfm: true,
       smartypants: false,
       remarkPlugins: [[remarkToc, { heading: "Contents" }]],
-      rehypePlugins: [
-        rehypeSlug,
-        rehypeAutolinkHeadings,
-        rehypeHighlight,
-      ],
+      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
     }),
   },
   session: false,

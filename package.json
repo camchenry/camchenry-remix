@@ -14,9 +14,7 @@
   "dependencies": {
     "@napi-rs/canvas": "^0.1.21",
     "enquirer": "^2.3.6",
-    "highlight.js": "^10.7.2",
     "rehype-autolink-headings": "^7.1.0",
-    "rehype-highlight": "^5.0.1",
     "rehype-slug": "^5.1.0",
     "remark-toc": "^9.0.0"
   },
