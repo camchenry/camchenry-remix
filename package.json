@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.21",
-    "@tailwindcss/typography": "^0.5.2",
     "autoprefixer": "^10.2.5",
     "date-fns": "^2.24.0",
     "enquirer": "^2.3.6",
@@ -24,8 +23,7 @@
     "rehype-raw": "^6.1.0",
     "rehype-slug": "^5.1.0",
     "remark-gfm": "^4.0.1",
-    "remark-toc": "^9.0.0",
-    "tailwindcss": "^3.4.17"
+    "remark-toc": "^9.0.0"
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
