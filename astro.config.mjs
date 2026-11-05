@@ -1,8 +1,7 @@
 import { defineConfig } from "astro/config";
 import cloudflare from "@astrojs/cloudflare";
-import { unified } from "@astrojs/markdown-remark";
+import { rehypeHeadingIds, unified } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
-import rehypeSlug from "rehype-slug";
 import remarkToc from "remark-toc";
 
 export default defineConfig({
@@ -21,7 +20,7 @@ export default defineConfig({
       gfm: true,
       smartypants: false,
       remarkPlugins: [[remarkToc, { heading: "Contents" }]],
-      rehypePlugins: [rehypeSlug, rehypeAutolinkHeadings],
+      rehypePlugins: [rehypeHeadingIds, rehypeAutolinkHeadings],
     }),
   },
   session: false,
