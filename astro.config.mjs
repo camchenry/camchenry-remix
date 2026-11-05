@@ -5,7 +5,6 @@ import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
 import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
-import remarkGfm from "remark-gfm";
 import remarkToc from "remark-toc";
 
 export default defineConfig({
@@ -18,9 +17,9 @@ export default defineConfig({
   markdown: {
     syntaxHighlight: false,
     processor: unified({
-      gfm: false,
+      gfm: true,
       smartypants: false,
-      remarkPlugins: [remarkGfm, [remarkToc, { heading: "Contents" }]],
+      remarkPlugins: [[remarkToc, { heading: "Contents" }]],
       rehypePlugins: [
         rehypeSlug,
         rehypeAutolinkHeadings,

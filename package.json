@@ -20,7 +20,6 @@
     "rehype-highlight": "^5.0.1",
     "rehype-raw": "^6.1.0",
     "rehype-slug": "^5.1.0",
-    "remark-gfm": "^4.0.1",
     "remark-toc": "^9.0.0"
   },
   "devDependencies": {
