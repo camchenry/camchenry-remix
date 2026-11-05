@@ -1,5 +1,4 @@
 ---
-import { addDays, format } from "date-fns";
 import { getCollection, render, type CollectionEntry } from "astro:content";
 import PostDate from "../../components/PostDate.astro";
 import BaseLayout from "../../layouts/BaseLayout.astro";
@@ -19,13 +18,23 @@ interface Props {
 const { post } = Astro.props;
 const { Content } = await render(post);
 const canonicalUrl = `https://camchenry.com/blog/${post.id}`;
-const today = format(new Date(), "yyyy-MM-dd");
-const tomorrow = format(addDays(new Date(), 1), "yyyy-MM-dd");
+function formatLocalDate(date: Date): string {
+  const year = String(date.getFullYear()).padStart(4, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+const now = new Date();
+const tomorrowDate = new Date(now);
+tomorrowDate.setDate(tomorrowDate.getDate() + 1);
+const today = formatLocalDate(now);
+const tomorrow = formatLocalDate(tomorrowDate);
 const todos = {
   title: post.data.title.toLowerCase().includes("todo"),
   summary: post.data.summary.toLowerCase().includes("todo"),
   date: post.data.published
-    ? new Date(post.data.publishedAt) > new Date()
+    ? new Date(post.data.publishedAt) > now
     : post.data.publishedAt !== today && post.data.publishedAt !== tomorrow,
 };
 ---
