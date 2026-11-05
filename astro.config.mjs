@@ -3,7 +3,6 @@ import cloudflare from "@astrojs/cloudflare";
 import { unified } from "@astrojs/markdown-remark";
 import rehypeAutolinkHeadings from "rehype-autolink-headings";
 import rehypeHighlight from "rehype-highlight";
-import rehypeRaw from "rehype-raw";
 import rehypeSlug from "rehype-slug";
 import remarkToc from "remark-toc";
 
@@ -24,7 +23,6 @@ export default defineConfig({
         rehypeSlug,
         rehypeAutolinkHeadings,
         rehypeHighlight,
-        rehypeRaw,
       ],
     }),
   },
