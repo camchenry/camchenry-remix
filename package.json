@@ -13,11 +13,9 @@
   },
   "dependencies": {
     "@napi-rs/canvas": "^0.1.21",
-    "autoprefixer": "^10.2.5",
     "date-fns": "^2.24.0",
     "enquirer": "^2.3.6",
     "highlight.js": "^10.7.2",
-    "postcss": "^8.3.0",
     "rehype-autolink-headings": "^7.1.0",
     "rehype-highlight": "^5.0.1",
     "rehype-raw": "^6.1.0",
@@ -30,7 +28,6 @@
     "@astrojs/cloudflare": "14.2.4",
     "@astrojs/markdown-remark": "7.2.4",
     "@types/node": "^22.19.2",
-    "cssnano": "^5.0.8",
     "astro": "7.2.6",
     "typescript": "^6.0.3",
     "wrangler": "4.125.0"
