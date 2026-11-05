@@ -15,7 +15,7 @@ const { url, title, summary, date } = Astro.props;
   <h3 class="text-xl">
     <a href={url}>{title}</a>
   </h3>
-  <p class="text-gray-600 dark:text-gray-400">
+  <p class="text-gray-600">
     {date ? <><PostDate publishedAt={date} /> &mdash; {summary}</> : summary}
   </p>
 </div>
