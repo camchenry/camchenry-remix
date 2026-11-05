@@ -9,10 +9,11 @@
 // - type
 //   - "post" (default) - general blog post
 //   - "guide"
+//   - "til"
 
-const fs = require("fs");
-const path = require("path");
-const { prompt } = require("enquirer");
+const fs = require("node:fs");
+const path = require("node:path");
+const { createInterface } = require("node:readline/promises");
 
 // Load post template from `templates/post.md`
 const postTemplate = fs.readFileSync(
@@ -20,36 +21,36 @@ const postTemplate = fs.readFileSync(
   "utf8"
 );
 
-/** @type {Parameters<typeof prompt>[0]} */
-const questions = [
-  {
-    type: "input",
-    name: "title",
-    message: "What is the title of the post?",
-  },
-  {
-    type: "input",
-    name: "tags",
-    message: "What are the tags of the post?",
-  },
-  {
-    type: "select",
-    name: "type",
-    message: "What is the type of the post?",
-    choices: ["post", "guide", "til"],
-  },
-];
+async function main() {
+  const prompt = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
+  const controller = new AbortController();
+  prompt.once("close", () => controller.abort());
+  const options = { signal: controller.signal };
 
-prompt(questions)
-  .then((answers) => {
-    const title = answers["title"];
-    const type = answers["type"];
+  try {
+    const title = await prompt.question("What is the title of the post? ", options);
+    const tags = await prompt.question("What are the tags of the post? ", options);
+    const postTypes = ["post", "guide", "til"];
+    let type = "";
+    do {
+      type =
+        (await prompt.question(
+          "What is the type of the post? (post/guide/til) [post]: ",
+          options
+        )).trim() || "post";
+      if (!postTypes.includes(type)) {
+        console.error("Please choose post, guide, or til.");
+      }
+    } while (!postTypes.includes(type));
+
     const slug = title
       .toLowerCase()
       .replace(/[^a-z0-9 ]/g, "")
       .replace(/ /g, "-");
     const date = new Date().toISOString().split("T")[0];
-    const tags = answers["tags"];
     const tagsList =
       "\n" +
       tags
@@ -64,5 +65,12 @@ prompt(questions)
 
     const postPath = path.join(__dirname, "..", "posts", `${slug}.md`);
     fs.writeFileSync(postPath, post);
-  })
-  .catch(console.error);
+  } finally {
+    prompt.close();
+  }
+}
+
+main().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
