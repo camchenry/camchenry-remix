@@ -23,5 +23,10 @@ export default defineConfig({
       rehypePlugins: [rehypeHeadingIds, rehypeAutolinkHeadings],
     }),
   },
+  vite: {
+    optimizeDeps: {
+      exclude: ["@napi-rs/canvas"],
+    },
+  },
   session: false,
 });
